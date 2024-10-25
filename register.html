@@ -37,29 +37,86 @@
             </li>
         </ul>
     </nav>
+    <br><br>
+    <div class="main-content">
+        <div class="register-section">
+            <h2>Register</h2>
+            <form id="registerForm" class="register-form">
+                <div class="form-group required">
+                    <label for="userType">UserType</label>
+                    <select id="userType" name="userType" required>
+                        <option value="customer">Customer</option>
+                        <option value="vehicleSalesperson">Vehicle Salesperson</option>
+                        <option value="insuranceSalesperson">Insurance Salesperson</option>
+                    </select>
+                    <div class="error-message"></div>
+                </div>
 
-    <div class="register-page">
-        <div class="register-container">
-            <h2>Create Account</h2>
-            <form class="register-form">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" required>
-    
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-    
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}">
-    
-                    <input type="checkbox" id="terms" name="terms" required>I agree to the terms and conditions
-                
-    
-                <button type="submit">Register</button>
+                <div class="form-group required">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                    <div class="error-message"></div>
+                </div>
+
+                <div class="form-group required">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message"></div>
+                </div>
+
+                <div class="form-group required">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" name="phone" required>
+                    <div class="error-message"></div>
+                </div>
+
+                <div class="form-group required">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    <div class="error-message"></div>
+                </div>
+
+                <div class="form-group required">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    <div class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address"></textarea>
+                    <div class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Preferred Contact</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preferredContact" value="email">
+                            Email
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preferredContact" value="phone">
+                            Phone
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preferredContact" value="sms">
+                            SMS
+                        </label>
+                    </div>
+                    <div class="error-message"></div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="register-btn">Register</button>
+                </div>
             </form>
-            <a href="login.html" class="trouble-link">Already have an account? Sign In</a>
+            <div id="successMessage" style="display: none;" class="success-message">
+                Registration Successful! Turning to login page......
+            </div>
         </div>
     </div>
-    </div>
+    <br><br>
     <footer class="footer">
         <div class="footer-section">
             <h3>Contact us</h3>
