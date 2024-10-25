@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Legend Motor Company</title>
     <link rel="stylesheet" href="index.css">
+    <script src="js/jquery-1.11.1.js"></script>
+    <script src="index.js"></script>
 </head>
 <body>
     <header class="header"></header>
@@ -29,7 +31,7 @@
                 </ul>
             </li>
             <li class="dropdown">
-                <a>Login/Register</a>
+                <a id="login-register" href="#">Login/Register</a>
                 <ul class="dropdown-content">
                     <li><a href="login.html">Login</a></li>
                     <li><a href="register.html">Register</a></li>
@@ -40,46 +42,21 @@
 
     <div class="content-container">
         <div class="photo">
-            <img src="images/large-photo.jpg" alt="Large Photo">
+            <img src="images/large-photo.jpg" alt="Large Photo" class="vehicle" data-id="1">
         </div>
         <div class="description">
-            <h2>Description Title</h2>
-            <p>This is a detailed description of the content. It provides an overview and additional information about the image displayed on the left side.</p>
+            <h2>Car Model 1</h2>
+            <p>This is a detailed description of the car.</p>
+            <button class="purchase-btn">Purchase</button>
         </div>
     </div>
-    <div class="content-container">
-        <div class="description">
-            <h2>Description Title</h2>
-            <p>This is a detailed description of the content. It provides an overview and additional information about the image displayed on the left side.</p>
-        </div>
-        <div class="photo">
-            <img src="images/large-photo.jpg" alt="Large Photo">
-        </div>
-    </div>
-    <div class="content-container">
-        <div class="photo">
-            <img src="images/large-photo.jpg" alt="Large Photo">
-        </div>
-        <div class="description">
-            <h2>Description Title</h2>
-            <p>This is a detailed description of the content. It provides an overview and additional information about the image displayed on the left side.</p>
-        </div>
-    </div>
-    <div class="content-container">
-        <div class="description">
-            <h2>Description Title</h2>
-            <p>This is a detailed description of the content. It provides an overview and additional information about the image displayed on the left side.</p>
-        </div>
-        <div class="photo">
-            <img src="images/large-photo.jpg" alt="Large Photo">
-        </div>
-    </div>
+
     <footer class="footer">
         <div class="footer-section">
             <h3>Contact us</h3>
             <p>Telephone: +852 2180000</p>
             <p>Email: Services@legendmotor.com</p>
-            <p>Address: No. 21 Yuen Wo Road,    Sha Tin, New Territories</p>
+            <p>Address: No. 21 Yuen Wo Road, Sha Tin, New Territories</p>
         </div>
         <div class="footer-section">
             <h3>Business Hours</h3>
