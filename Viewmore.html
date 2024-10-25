@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Legend Motor Company</title>
+        <link rel="stylesheet" href="Viewmore.css">
+        <script src="js/jquery-1.11.1.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#searchButton').click(function() {
+                    let input = $('#searchBar').val().toLowerCase();
+                    
+                    $('.product-card').each(function() {
+                        let title = $(this).find('h3').text().toLowerCase();
+                        if (title.includes(input)) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <header class="header"></header>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a href="index.html">Home</a>
+            </li>
+            <li class="dropdown">
+                <a href="#">View some more</a>
+                <ul class="dropdown-content">
+                    <li><a href="Viewmore.html">All</a></li>
+                    <li><a href="Viewmore.html">Type1</a></li>
+                    <li><a href="Viewmore.html">Type2</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#">Wish List</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">Consulting</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a>Login/Register</a>
+                <ul class="dropdown-content">
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="search-container">
+        <input type="text" id="searchBar" placeholder="Search vehicles...">
+        <button id="searchButton">Search</button>   
+    </div>
+
+    <div class="products-grid" id="productGrid">
+        <div class="product-card">
+            <img src="/4506_source/product1.jpg" alt="Car Image">
+            <h3>Aston Martin Valkyrie</h3>
+            <p>Year: 2017<br>Mileage: 0 Kilometer<br>Engine: 6.5 Litre Aston Martin V12</p>
+            <div class="price">HK$27,194,921</div>
+            <button class="details-button">Details</button>
+        </div>
+
+        <div class="product-card">
+            <img src="/4506_source/product2.jpg" alt="Car Image">
+            <h3>Ferrari 488</h3>
+            <p>Year: 2019<br>Mileage: 10,000 Kilometer<br>Engine: 3.9 Litre V8</p>
+            <div class="price">HK$5,000,000</div>
+            <button class="details-button">Details</button>
+        </div>
+
+
+    </div>
+    </body>
+</html>
