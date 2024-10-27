@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legend Motor Company - Purchase</title>
+    <link rel="stylesheet" href="purchase.css">
+    <script src="js/jquery-1.11.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".option-button").hover(
+                function() {
+                    $(this).css({
+                        "background-color": "#007bff",
+                        "color": "white",
+                        "border-color": "#007bff"
+                    });
+                },
+                function() {
+                    if (!$(this).hasClass("selected")) {
+                        $(this).css({
+                            "background-color": "white",
+                            "color": "black",
+                            "border-color": "#ccc"
+                        });
+                    }
+                }
+            );
+    
+            $(".option-button").click(function() {
+                $(this).siblings().removeClass("selected").css({
+                    "background-color": "white",
+                    "color": "black",
+                    "border-color": "#ccc"
+                });
+    
+                $(this).addClass("selected").css({
+                    "background-color": "#007bff",
+                    "color": "white",
+                    "border-color": "#007bff"
+                });
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <header class="header"></header>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a href="index.html">Home</a>
+            </li>
+            <li class="dropdown">
+                <a href="#">View some more</a>
+                <ul class="dropdown-content">
+                    <li><a href="Viewmore.html">All</a></li>
+                    <li><a href="Viewmore.html">Type1</a></li>
+                    <li><a href="Viewmore.html">Type2</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#">Wish List</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">Consulting</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a>Login/Register</a>
+                <ul class="dropdown-content">
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="purchase-container">
+        <div class="product-display">
+            <div class="carousel">
+                <img src="4506_source/product1.jpg" alt="Car Image" class="carousel-image">
+            </div>
+            <h3>Aston Martin Valkyrie</h3>
+            <p>Year: 2017<br>Mileage: 0 Kilometer<br>Engine: 6.5 Litre Aston Martin V12</p>
+            <div class="price">HK$27,194,921</div>
+        </div>
+
+        <div class="customization-options">
+            <h3>Customize Your Purchase</h3>
+            <div class="options-list">
+                <h4>Color</h4>
+                <div class="option-buttons">
+                    <button class="option-button">Gray</button>
+                    <button class="option-button">Blue</button>
+                    <button class="option-button">Purple</button>
+                    <button class="option-button">Starlight</button>
+                </div>
+
+                <h4>Tonnage</h4>
+                <div class="option-buttons">
+                    <button class="option-button">1.75 tons</button>
+                    <button class="option-button">3.5 tons</button>
+                    <button class="option-button">8 tons</button>
+                </div>
+
+                <h4>Warranty</h4>
+                <div class="option-buttons">
+                    <button class="option-button">1 Year</button>
+                    <button class="option-button">2 Years</button>
+                </div>
+            </div>
+
+            <!-- Purchase Button -->
+            <button class="buy-now-button">Confirm Purchase</button>
+        </div>
+    </div>
+</body>
+</html>
