@@ -8,6 +8,18 @@
     <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
+        var uNames = localStorage.getItem('uName');
+        var uName_r = localStorage.getItem('uName_r');
+            if(uNames) {
+                $('#login-register').text(uNames);
+                $('#login-register').siblings('.dropdown-content').hide();
+            } else {
+                $('#login-register').text('Login/Register');
+            }
+            if(uName_r){
+                $('#name').val(uName_r);
+                localStorage.removeItem('uName_r');
+            }
         $("#btnlogin").click(function(event){
             event.preventDefault();
             var uName = $("#name").val();
@@ -37,14 +49,14 @@
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#">Services</a>
+                <a href="#">Wish List</a>
                 <ul class="dropdown-content">
                     <li><a href="#">Consulting</a></li>
                     <li><a href="#">Support</a></li>
                 </ul>
             </li>
             <li class="dropdown">
-                <a>Login/Register</a>
+                <a id="login-register" href="login.html"></a>
                 <ul class="dropdown-content">
                     <li><a href="login.html">Login</a></li>
                     <li><a href="register.html">Register</a></li>

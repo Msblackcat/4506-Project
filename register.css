@@ -311,3 +311,12 @@ body, html {
     border-bottom: 1px solid #555;
     margin: 0 10px;
 }
+
+.error-message {
+    color: #ffffff;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    min-height: 20px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+}

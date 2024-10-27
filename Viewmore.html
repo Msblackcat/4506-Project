@@ -8,6 +8,39 @@
         <script src="js/jquery-1.11.1.js"></script>
         <script>
             $(document).ready(function() {
+                var uNames = localStorage.getItem('uName');
+                if(uNames) {
+                    $('#login-register').text(uNames);
+                    $('#login-register').removeAttr('href');
+                    $('#login-register').siblings('.dropdown-content').html('<li><a href="#" id="logout">Logout</a></li>');
+                
+                    $(document).on('click', '#logout', function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('uName');
+                        localStorage.removeItem('uName_r');
+                        localStorage.removeItem('userType');
+                        localStorage.removeItem('email');
+                        localStorage.removeItem('phone');
+                        window.location.href = 'index.html';
+                    });
+                } else {
+                    $('#login-register').text('Login/Register');
+                    $('#login-register').attr('href', 'login.html');
+                    $('#login-register').siblings('.dropdown-content').html(`
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="register.html">Register</a></li>
+                    `);
+                }
+            
+                $('.dropdown').hover(
+                    function() {
+                        $(this).children('.dropdown-content').show();
+                    },
+                    function() {
+                        $(this).children('.dropdown-content').hide();
+                    }
+                );
+                
                 $('#searchButton').click(function() {
                     input = $('#searchBar').val().toLowerCase();
                     
@@ -46,7 +79,7 @@
                 </ul>
             </li>
             <li class="dropdown">
-                <a>Login/Register</a>
+                <a id="login-register" href="login.html"></a>
                 <ul class="dropdown-content">
                     <li><a href="login.html">Login</a></li>
                     <li><a href="register.html">Register</a></li>
