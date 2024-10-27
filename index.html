@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="index.css">
     <script src="js/jquery-1.11.1.js">
     $(document).ready(function() {
-
+        var uNames = localStorage.getItem('uName');
+        if(uNames) {
+            $('#login-register').text(uNames);
+            $('#login-register').siblings('.dropdown-content').hide();
+        } else {
+            $('#login-register').text('Login/Register');
+        }
     });
     </script>
     <script src="index.js"></script>
@@ -35,7 +41,7 @@
                 </ul>
             </li>
             <li class="dropdown">
-                <a id="login-register" href="#">Login/Register</a>
+                <a id="login-register" href="login.html"></a>
                 <ul class="dropdown-content">
                     <li><a href="login.html">Login</a></li>
                     <li><a href="register.html">Register</a></li>

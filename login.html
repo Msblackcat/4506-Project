@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="login.css">
     <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            $("#btnlogin").click(function(){
-                var uName = $("#name").val();
-                var uType = $("#userType option:selected").text();
-                alert("Login Type:  " + uType +"\nUser Name:  " + uName);
-            });
-            });
+    $(document).ready(function() {
+        $("#btnlogin").click(function(event){
+            event.preventDefault();
+            var uName = $("#name").val();
+            var uType = $("#userType option:selected").text();
+            
+            localStorage.setItem('uName', uName);
+            
+            window.location.href = 'index.html';
+        });
+    });
     </script>
     <script src="login.js"></script>
 </head>
