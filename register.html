@@ -38,7 +38,7 @@
         </ul>
     </nav>
     <br><br>
-    <div class="main-content">
+    <div class="main-content" id = "registerpage">
         <div class="register-section">
             <h2>Register</h2>
             <form id="registerForm" class="register-form">
@@ -110,10 +110,11 @@
                 <div class="button-group">
                     <button type="submit" class="register-btn">Register</button>
                 </div>
+                <div class="or-divider">
+                    <span>Or</span>
+                </div>
             </form>
-            <div id="successMessage" style="display: none;" class="success-message">
-                Registration Successful! Turning to login page......
-            </div>
+            <button onclick="window.location.href='login.html'" class="create-account">Aleady have an account?</a>
         </div>
     </div>
     <br><br>

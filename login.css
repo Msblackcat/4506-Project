@@ -239,6 +239,12 @@ body, html {
     flex-direction: row;
 }
 
+.a{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
 .button-group {
     display: flex;
     justify-content: center;

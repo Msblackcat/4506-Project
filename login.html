@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Legend Motor Company</title>
     <link rel="stylesheet" href="login.css">
-    <script src="js/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#btnlogin").click(function(){
+                var uName = $("#name").val();
+                var uType = $("#userType option:selected").text();
+                alert("Login Type:  " + uType +"\nUser Name:  " + uName);
+            });
+            });
+    </script>
     <script src="login.js"></script>
 </head>
 <body>
@@ -39,34 +48,34 @@
             </li>
         </ul>
     </nav>
-    <main class="main-content">
-        <div class="login-section">
+    <main class="main-content" id = "loginpage">
+        <div class="login-section" id = "loginpage">
             <h2>Login</h2>
             <form class="login-form" id="loginForm">
                 <div class="form-group">
                     <label for="userType">UserType</label>
                     <select id="userType" name="userType" required>
                         <option value="customer">Customer</option>
-                        <option value="vehicleSalesperson">VehicleSalesperson</option>
-                        <option value="insuranceSalesperson">InsuranceSalesperson</option>
+                        <option value="vehicleSalesperson">Vehicle Salesperson</option>
+                        <option value="insuranceSalesperson">Insurance Salesperson</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="userName">Name</label>
+                    <input type="text" id="name" name="name" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
                 </div>
                 <div class="button-group">
-                    <button type="submit" class="login-btn">Login</button>
+                    <button onclick="window.location.href='index.html'" type="submit" class="login-btn" id = "btnlogin">Login</a></button>
                 </div>
                 <div class="or-divider">
                     <span>Or</span>
                 </div>
-                <button href="register.html" class="create-account">Create Account</button>
             </form>
+            <button onclick="window.location.href='register.html'" class="create-account">Create Account</a>
         </div>
     </main>
     <br><br>
