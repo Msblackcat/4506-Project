@@ -39,7 +39,13 @@
                     "color": "white",
                     "border-color": "#007bff"
                 });
+
+                var color = $(this).data("color");
+                if (color) {
+                    $(".carousel-image").attr("src", `4506_source/product1_${color}.png`);
+                }
             });
+
         });
     </script>
 
@@ -79,7 +85,7 @@
     <div class="purchase-container">
         <div class="product-display">
             <div class="carousel">
-                <img src="4506_source/product1.jpg" alt="Car Image" class="carousel-image">
+                <img src="4506_source/product1_black.png" alt="Car Image" class="carousel-image">
             </div>
             <h3>Aston Martin Valkyrie</h3>
             <p>Year: 2017<br>Mileage: 0 Kilometer<br>Engine: 6.5 Litre Aston Martin V12</p>
@@ -91,10 +97,9 @@
             <div class="options-list">
                 <h4>Color</h4>
                 <div class="option-buttons">
-                    <button class="option-button">Gray</button>
-                    <button class="option-button">Blue</button>
-                    <button class="option-button">Purple</button>
-                    <button class="option-button">Starlight</button>
+                    <button class="option-button" data-color="grey">Gray</button>
+                    <button class="option-button" data-color="black">Black</button>
+                    <button class="option-button" data-color="red">Red</button>
                 </div>
 
                 <h4>Tonnage</h4>

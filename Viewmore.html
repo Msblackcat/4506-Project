@@ -53,7 +53,26 @@
                         }
                     });
                 });
-            });
+
+                $('.details-button').click(function() {
+                    $('#detailsModal').fadeIn();
+                });
+
+
+                $('.close').click(function() {
+                    $('#detailsModal').fadeOut();
+                });
+
+
+                $(window).click(function(event) {
+                    if ($(event.target).is('#detailsModal')) {
+                        $('#detailsModal').fadeOut();
+                    }
+                });
+
+
+
+        });
         </script>
     </head>
     <body>
@@ -95,7 +114,7 @@
 
     <div class="products-grid" id="productGrid">
         <div class="product-card">
-            <img src="/4506_source/product1.jpg" alt="Car Image">
+            <img src="/4506_source/product1_black.png" alt="Car Image">
             <h3>Aston Martin Valkyrie</h3>
             <p>Year: 2017<br>Mileage: 0 Kilometer<br>Engine: 6.5 Litre Aston Martin V12</p>
             <div class="price">HK$27,194,921</div>
@@ -114,6 +133,18 @@
         </div>
 
 
+    </div>
+
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Vehicle Details</h3>
+            <p><strong>Seating Capacity:</strong> 4 seats</p>
+            <p><strong>Fuel Type:</strong> Petrol</p>
+            <p><strong>Transmission:</strong> Automatic</p>
+            <p><strong>Engine:</strong> 6.5 Litre V12</p>
+            <p><strong>Mileage:</strong> 0 Kilometer</p>
+        </div>
     </div>
     </body>
 </html>
