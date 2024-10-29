@@ -3,59 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legend Motor Company</title>
+    <title>Legend Motor Company - Login</title>
     <link rel="stylesheet" href="login.css">
     <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
     <script type="text/javascript">
-    $(document).ready(function() {
-        var uNames = localStorage.getItem('uName');
-        var uName_r = localStorage.getItem('uName_r');
-            if(uNames) {
-                $('#login-register').text(uNames);
-                $('#login-register').siblings('.dropdown-content').hide();
-            } else {
-                $('#login-register').text('Login/Register');
-            }
-            if(uName_r){
-                $('#name').val(uName_r);
-                localStorage.removeItem('uName_r');
-            }
-        $("#btnlogin").click(function(event){
-            event.preventDefault();
-            var uName = $("#name").val();
-            var uType = $("#userType option:selected").text();
-            
-            localStorage.setItem('uName', uName);
-            
-            window.location.href = 'index.html';
-            alert("Welcome: \nUser Name: " + uName + "\nUser Type: " + uType);
-        });
+$(document).ready(function() {
+    $('#userType').change(function() {
+        const selectedType = $(this).val();
+        $('#staffNumberGroup').remove();
+        updateLoginDescription(selectedType);
+
+        if (selectedType === 'vehicleSalesperson' || selectedType === 'insuranceSalesperson') {
+            const prefix = selectedType === 'vehicleSalesperson' ? 'VS' : 'IS';
+            const staffNumberField = `
+                <div class="form-group" id="staffNumberGroup">
+                    <label for="staffNumber">Staff Number</label>
+                    <input type="text" id="staffNumber" name="staffNumber" 
+                           placeholder="Format: ${prefix}1234" required>
+                    <div class="error-message"></div>
+                </div>`;
+            // Insert after email field
+            $('#email').closest('.form-group').after(staffNumberField);
+        }
     });
+
+    function updateLoginDescription(userType) {
+        const descriptions = {
+            customer: "Access your account to browse vehicles, request insurance quotes, and view your purchase history.",
+            vehicleSalesperson: "Login to manage customer orders, process sales inquiries, and interact with customers.",
+            insuranceSalesperson: "Access system to generate quotes, manage insurance offerings, and respond to customer inquiries."
+        };
+        $('#loginDescription').text(descriptions[userType]);
+    }
+
+    function validateLogin() {
+        let isValid = true;
+        const userType = $('#userType').val();
+        const email = $('#email').val();
+        const password = $('#password').val();
+
+        // Clear previous error messages
+        $('.error-message').text('');
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            $('#email').siblings('.error-message').text('Please enter a valid email address');
+            isValid = false;
+        }
+
+        // Password validation
+        if (password.length < 6) {
+            $('#password').siblings('.error-message').text('Password must be at least 6 characters long');
+            isValid = false;
+        }
+
+        // Staff number validation for sales personnel
+        if (userType === 'vehicleSalesperson' || userType === 'insuranceSalesperson') {
+            const staffNumber = $('#staffNumber').val();
+            const prefix = userType === 'vehicleSalesperson' ? 'VS' : 'IS';
+            const staffNumberRegex = new RegExp(`^${prefix}\\d{4}$`);
+
+            if (!staffNumber) {
+                $('#staffNumber').siblings('.error-message').text('Staff number is required');
+                isValid = false;
+            } else if (!staffNumberRegex.test(staffNumber)) {
+                $('#staffNumber').siblings('.error-message').text(
+                    `Staff number must be in format ${prefix}1234`
+                );
+                isValid = false;
+            }
+        }
+
+        return isValid;
+    }
+
+    // Handle login submission
+    $("#loginForm").submit(function(event) {
+        event.preventDefault();
+        
+        if (validateLogin()) {
+            const email = $("#email").val();
+            const userType = $("#userType").val();
+            const staffNumber = $("#staffNumber")?.val() || '';
+            const username = email.split('@')[0];
+
+            // Store user data in localStorage
+            localStorage.setItem('uName', username);
+            localStorage.setItem('email', email);
+            localStorage.setItem('userType', userType);
+            if (staffNumber) {
+                localStorage.setItem('staffNumber', staffNumber);
+            }
+
+            // Update the login/register button text
+            $('#login-register').text(username);
+            $('#login-register').siblings('.dropdown-content').hide();
+
+            // Show welcome message
+            alert(`Login Successful!\nWelcome ${username}\nRole: ${$("#userType option:selected").text()}`);
+
+            // Redirect based on user type
+            switch(userType) {
+                case 'customer':
+                    window.location.href = 'index.html';
+                    break;
+                case 'vehicleSalesperson':
+                    window.location.href = 'managerprocess.html';
+                    break;
+                case 'insuranceSalesperson':
+                    window.location.href = 'insurance-dashboard.html';
+                    break;
+                default:
+                    window.location.href = 'index.html';
+            }
+        }
+    });
+
+    // Initialize the form
+    updateLoginDescription('customer');
+});
     </script>
-    <script src="login.js"></script>
 </head>
 <body>
     <header class="header"></header>
     <nav class="navbar">
         <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
             <li class="dropdown">
-                <a href="index.html">Home</a>
-            </li>
-            <li class="dropdown">
-                <a href="#">View some more</a>
+                <a href="#">Vehicles</a>
                 <ul class="dropdown-content">
-                    <li><a href="Viewmore.html">All</a></li>
-                    <li><a href="Viewmore.html">Type1</a></li>
-                    <li><a href="Viewmore.html">Type2</a></li>
+                    <li><a href="Viewmore.html">All Vehicles</a></li>
+                    <li><a href="Viewmore.html">New Arrivals</a></li>
+                    <li><a href="Viewmore.html">Special Offers</a></li>
                 </ul>
             </li>
-            <li class="dropdown">
-                <a href="#">Wish List</a>
-                <ul class="dropdown-content">
-                    <li><a href="#">Consulting</a></li>
-                    <li><a href="#">Support</a></li>
-                </ul>
-            </li>
+            <li><a href="#">Insurance</a></li>
             <li class="dropdown">
                 <a id="login-register" href="login.html"></a>
                 <ul class="dropdown-content">
@@ -65,12 +148,15 @@
             </li>
         </ul>
     </nav>
-    <main class="main-content" id = "loginpage">
-        <div class="login-section" id = "loginpage">
-            <h2>Login</h2>
+
+    <main class="main-content">
+        <div class="login-section">
+            <h2>Login to Your Account</h2>
+            <p id="loginDescription" class="login-description"></p>
+            
             <form class="login-form" id="loginForm">
                 <div class="form-group">
-                    <label for="userType">UserType</label>
+                    <label for="userType">Select User Type</label>
                     <select id="userType" name="userType" required>
                         <option value="customer">Customer</option>
                         <option value="vehicleSalesperson">Vehicle Salesperson</option>
@@ -78,24 +164,26 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="userName">Name</label>
-                    <input type="text" id="name" name="name" required>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    <div class="error-message"></div>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <div class="error-message"></div>
                 </div>
                 <div class="button-group">
-                    <button onclick="window.location.href='index.html'" type="submit" class="login-btn" id = "btnlogin">Login</a></button>
+                    <button type="submit" class="login-btn">Login</button>
                 </div>
                 <div class="or-divider">
                     <span>Or</span>
                 </div>
             </form>
-            <button onclick="window.location.href='register.html'" class="create-account">Create Account</a>
+            <button onclick="window.location.href='register.html'" class="create-account">Create New Account</button>
         </div>
     </main>
-    <br><br>
+
     <footer class="footer">
         <div class="footer-section">
             <h3>Contact us</h3>

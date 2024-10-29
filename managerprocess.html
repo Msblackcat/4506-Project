@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management - Legend Motor Company</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="js/jquery-1.11.1.js"></script>    
+    <script>
+        $(document).ready(function() {
+            // Check if user is authorized
+            const userType = localStorage.getItem('userType');
+            if (userType !== 'vehiclesalesperson') {
+                alert('Unauthorized access');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Load orders from localStorage
+            function loadOrders() {
+                const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                const ordersContainer = $('#ordersContainer');
+                ordersContainer.empty();
+
+                orders.forEach((order, index) => {
+                    const orderCard = createOrderCard(order, index);
+                    ordersContainer.append(orderCard);
+                });
+            }
+
+            function createOrderCard(order, index) {
+                const statusClass = getStatusClass(order.status);
+                return `
+                    <div class="order-card" data-order-id="${index}">
+                        <div class="order-header">
+                            <h3>Order #${index + 1}</h3>
+                            <span class="${statusClass}">Status: ${order.status || 'Pending'}</span>
+                        </div>
+                        <div class="order-details">
+                            <div class="customer-info">
+                                <h4>Customer Information</h4>
+                                <p>Name: ${order.customerName}</p>
+                                <p>Email: ${order.customerEmail}</p>
+                                <p>Phone: ${order.customerPhone}</p>
+                            </div>
+                            <div class="vehicle-info">
+                                <h4>Vehicle Information</h4>
+                                <img src="${order.carImage}" alt="Vehicle Image" class="car-image">
+                                <p>Model: ${order.carName}</p>
+                                <p>Price: ${order.carPrice}</p>
+                            </div>
+                        </div>
+                        <div class="comment-section">
+                            <h4>Salesperson Comments</h4>
+                            <textarea class="comment-input" placeholder="Add your comments here...">${order.comments || ''}</textarea>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-save" onclick="saveComments(${index})">Save Comments</button>
+                            <button class="btn btn-accept" onclick="processOrder(${index}, 'accepted')">Accept Order</button>
+                            <button class="btn btn-deny" onclick="processOrder(${index}, 'denied')">Deny Order</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function getStatusClass(status) {
+                switch(status) {
+                    case 'accepted': return 'status-accepted';
+                    case 'denied': return 'status-denied';
+                    default: return 'status-pending';
+                }
+            }
+
+            window.saveComments = function(orderIndex) {
+                let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                const comments = $(`.order-card[data-order-id="${orderIndex}"] .comment-input`).val();
+                orders[orderIndex].comments = comments;
+                localStorage.setItem('orders', JSON.stringify(orders));
+                alert('Comments saved successfully!');
+            };
+
+            window.processOrder = function(orderIndex, status) {
+                let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                orders[orderIndex].status = status;
+                localStorage.setItem('orders', JSON.stringify(orders));
+                loadOrders();
+                alert(`Order ${status === 'accepted' ? 'accepted' : 'denied'} successfully!`);
+            };
+
+            // Initial load
+            loadOrders();
+        });
+    </script>
+</head>
+<body>
+    <header class="header"></header>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a href="index.html">Home</a>
+            </li>
+            <li class="dropdown">
+                <a href="#">View some more</a>
+                <ul class="dropdown-content">
+                    <li><a href="Viewmore.html">All</a></li>
+                    <li><a href="Viewmore.html">Type1</a></li>
+                    <li><a href="Viewmore.html">Type2</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#">Wish List</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">Consulting</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a id="login-register" href="login.html"></a>
+                <ul class="dropdown-content">
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div class="orders-container" id="ordersContainer">
+        
+    </div>
+
+    <footer class="footer">
+        <div class="footer-section">
+            <h3>Contact us</h3>
+            <p>Telephone: +852 2180000</p>
+            <p>Email: Services@legendmotor.com</p>
+            <p>Address: No. 21 Yuen Wo Road,    Sha Tin, New Territories</p>
+        </div>
+        <div class="footer-section">
+            <h3>Business Hours</h3>
+            <p>Monday - Friday: 09:00-21:00</p>
+            <p>Weekend: 10:00-20:00</p>
+        </div>
+        <div class="footer-section">
+            <h3>Follow us</h3>
+            <p>Facebook</p>
+            <p>Instagram</p>
+            <p>LINE</p>
+        </div>
+    </footer>
+</body>
+</html>

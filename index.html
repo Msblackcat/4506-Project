@@ -7,40 +7,65 @@
         <link rel="stylesheet" href="index.css">
         <script src="js/jquery-1.11.1.js"></script>
         <script>
-        $(document).ready(function() {
-            var uNames = localStorage.getItem('uName');
-            if(uNames) {
-                $('#login-register').text(uNames);
-                $('#login-register').removeAttr('href');
-                $('#login-register').siblings('.dropdown-content').html('<li><a href="#" id="logout">Logout</a></li>');
-            
-                $(document).on('click', '#logout', function(e) {
-                    e.preventDefault();
-                    localStorage.removeItem('uName');
-                    localStorage.removeItem('uName_r');
-                    localStorage.removeItem('userType');
-                    localStorage.removeItem('email');
-                    localStorage.removeItem('phone');
-                    window.location.href = 'index.html';
-                });
-            } else {
-                $('#login-register').text('Login/Register');
-                $('#login-register').attr('href', 'login.html');
-                $('#login-register').siblings('.dropdown-content').html(`
+            $(document).ready(function() {
+    function checkLoginState() {
+        // Changed from 'loggedInUser' to 'uName' to match login page
+        const username = localStorage.getItem('uName');
+        if(username) {
+            updateNavigation(username);
+        }
+    }
+
+    function updateNavigation(username) {
+        const loginRegisterLi = $('.dropdown:last');
+        
+        if (username) {
+            loginRegisterLi.html(`
+                <a href="#" class="user-profile">${username} ▼</a>
+                <ul class="dropdown-content">
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
+                </ul>
+            `);
+        } else {
+            loginRegisterLi.html(`
+                <a id="login-register" href="login.html">Login/Register</a>
+                <ul class="dropdown-content">
                     <li><a href="login.html">Login</a></li>
                     <li><a href="register.html">Register</a></li>
-                `);
-            }
-        
-            $('.dropdown').hover(
-                function() {
-                    $(this).children('.dropdown-content').show();
-                },
-                function() {
-                    $(this).children('.dropdown-content').hide();
-                }
-            );
-        });
+                </ul>
+            `);
+        }
+    }
+
+    function handleLogout(event) {
+        event.preventDefault();
+        // Clear all relevant localStorage items
+        localStorage.removeItem('uName');
+        localStorage.removeItem('userType');
+        localStorage.removeItem('email');
+        localStorage.removeItem('permissions');
+        localStorage.removeItem('staffNumber');
+        localStorage.removeItem('username');
+        updateNavigation(null);
+        window.location.href = 'index.html';
+    }
+
+    $('.dropdown').hover(
+        function() {
+            $(this).children('.dropdown-content').show();
+        },
+        function() {
+            $(this).children('.dropdown-content').hide();
+        }
+    );
+
+    // Check login state when page loads
+    checkLoginState();
+
+    // Add logout handler to window
+    window.handleLogout = handleLogout;
+});
         </script>
         <script src="index.js"></script>
     </head>
@@ -66,13 +91,13 @@
                     <li><a href="#">Support</a></li>
                 </ul>
             </li>
-                <li class="dropdown">
-                    <a id="login-register" href="login.html"></a>
-                    <ul class="dropdown-content">
-                        <li><a href="login.html">Login</a></li>
-                        <li><a href="register.html">Register</a></li>
-                    </ul>
-                </li>
+            <li class="dropdown">
+                <a id="login-register" href="login.html">Login/Register</a>
+                <ul class="dropdown-content">
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 
