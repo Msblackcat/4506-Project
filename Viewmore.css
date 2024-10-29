@@ -275,6 +275,20 @@ body, html {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.modal-left {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.modal-right {
+    flex: 2;
+}
+
+.modal-image {
+    width: 100%;
+    border-radius: 8px;
+}
+
 
 .close {
     position: absolute;

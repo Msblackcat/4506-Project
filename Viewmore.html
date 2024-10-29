@@ -55,6 +55,26 @@
                 });
 
                 $('.details-button').click(function() {
+                    var imagePath = $(this).data('image');
+                    var seating = $(this).data('seating');
+                    var fuel = $(this).data('fuel');
+                    var transmission = $(this).data('transmission');
+                    var engine = $(this).data('engine');
+                    var mileage = $(this).data('mileage');
+
+                    $('#modalDetails').html(`
+                        <div class="modal-left">
+                        <img src="${imagePath}" alt="Car Image" class="modal-image">
+                        </div>
+                        <h3>Vehicle Details</h3>
+                        <p><strong>Seating Capacity:</strong> ${seating}</p>
+                        <p><strong>Fuel Type:</strong> ${fuel}</p>
+                        <p><strong>Transmission:</strong> ${transmission}</p>
+                        <p><strong>Engine:</strong> ${engine}</p>
+                        <p><strong>Mileage:</strong> ${mileage}</p>
+            `);
+
+
                     $('#detailsModal').fadeIn();
                 });
 
@@ -64,7 +84,7 @@
                 });
 
 
-                $(window).click(function(event) {
+                $(window).click(function() {
                     if ($(event.target).is('#detailsModal')) {
                         $('#detailsModal').fadeOut();
                     }
@@ -118,17 +138,63 @@
             <h3>Aston Martin Valkyrie</h3>
             <p>Year: 2017<br>Mileage: 0 Kilometer<br>Engine: 6.5 Litre Aston Martin V12</p>
             <div class="price">HK$27,194,921</div>
-            <button class="details-button">Details</button>
+            <button 
+            class="details-button" 
+            data-image="/4506_source/product1_black.png"
+            data-seating="4 seats" 
+            data-fuel="Petrol" 
+            data-transmission="Automatic" 
+            data-engine="6.5 Litre V12" 
+            data-mileage="0 Kilometer"> Details </button>
             <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
 
         </div>
 
         <div class="product-card">
-            <img src="/4506_source/product2.jpg" alt="Car Image">
+            <img src="/4506_source/product2_black.png" alt="Car Image">
             <h3>Ferrari 488</h3>
             <p>Year: 2019<br>Mileage: 10,000 Kilometer<br>Engine: 3.9 Litre V8</p>
             <div class="price">HK$5,000,000</div>
-            <button class="details-button">Details</button>
+            <button 
+            class="details-button" 
+            data-image="/4506_source/product2_black.png"
+            data-seating="2 seats" 
+            data-fuel="Petrol" 
+            data-transmission="Manual" 
+            data-engine="3.9 Litre V8" 
+            data-mileage="10,000 Kilometer"> Details </button>
+            <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
+        </div>
+
+        <div class="product-card">
+            <img src="/4506_source/product3_blue.png" alt="Car Image"><br>
+            <br><h3>Ferrari 488</h3>
+            <p>Year: 2019<br>Mileage: 10,000 Kilometer<br>Engine: 3.9 Litre V8</p>
+            <div class="price">HK$7,000,000</div>
+            <button 
+            class="details-button" 
+            data-image="/4506_source/product3_blue.png"
+            data-seating="4 seats" 
+            data-fuel="Petrol" 
+            data-transmission="Automatic" 
+            data-engine="6.5 Litre V12" 
+            data-mileage="0 Kilometer">Details</button>
+            <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
+        </div>
+
+        <div class="product-card">
+            <img src="/4506_source/toyota_gray.jpg" alt="Car Image">
+            <h3>Ferrari 488</h3>
+            <p>Year: 2019<br>Mileage: 10,000 Kilometer<br>Engine: 3.9 Litre V8</p>
+            <div class="price">HK$7,000,000</div>
+            <button 
+            class="details-button"
+            data-image="/4506_source/toyota_gray.jpg"
+            data-seating="4 seats" 
+            data-fuel="Petrol" 
+            data-transmission="Automatic" 
+            data-engine="6.5 Litre V12" 
+            data-mileage="0 Kilometer">Details</button>
             <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
         </div>
 
@@ -138,12 +204,14 @@
     <div id="detailsModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
+            <div id="modalDetails">
             <h3>Vehicle Details</h3>
             <p><strong>Seating Capacity:</strong> 4 seats</p>
             <p><strong>Fuel Type:</strong> Petrol</p>
             <p><strong>Transmission:</strong> Automatic</p>
             <p><strong>Engine:</strong> 6.5 Litre V12</p>
             <p><strong>Mileage:</strong> 0 Kilometer</p>
+            </div>
         </div>
     </div>
     </body>
