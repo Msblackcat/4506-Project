@@ -44,7 +44,73 @@
                 if (color) {
                     $(".carousel-image").attr("src", `4506_source/${color}.png`);
                 }
+
+                if ($(this).data("payment") === "Visa") {
+                    $("#credit-card-info").show();
+                } else {
+                    $("#credit-card-info").hide();
+                }
             });
+
+            $(".buy-now-button").click(function() {
+                var productName = $(".product-display h3").text();
+                var color = $(".option-button[data-color].selected").text();
+                var tonnage = $(".option-buttons").eq(1).find(".selected").text();
+                var insurance = $("#insurance-company").val();
+                var warranty = $(".option-button[data-warranty].selected").text();
+                var paymentMethod = $(".option-button[data-payment].selected").text();
+                var cardNumber = $("#card-number").val();
+                var cardExpiry = $("#card-expiry").val();
+                var cardCVV = $("#card-cvv").val();
+
+                if (!color || !tonnage || !insurance || !warranty || !paymentMethod) {
+                    alert("Please complete all fields before confirming your purchase.");
+                    return;
+                }
+
+                if (paymentMethod === "Visa" && (!cardNumber || !cardExpiry || !cardCVV)) {
+                    alert("Please enter your credit card details for Visa payment.");
+                    return;
+                }
+                
+
+                let receiptHtml = `
+                    <div class="receipt">
+                        <h2>Purchase Receipt</h2>
+                        <p><strong>Product:</strong> ${productName}</p>
+                        <p><strong>Color:</strong> ${color}</p>
+                        <p><strong>Tonnage:</strong> ${tonnage}</p>
+                        <p><strong>Insurance Company:</strong> ${insurance}</p>
+                        <p><strong>Warranty:</strong> ${warranty}</p>
+                        <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                        <button class="close-receipt-button">Close Receipt</button>
+                    </div>
+                `;
+                
+                // Append receipt to body or show in modal
+                $("body").append(receiptHtml);
+                $(".receipt").css({
+                    "position": "fixed",
+                    "top": "10%",
+                    "left": "50%",
+                    "transform": "translate(-50%, 0)",
+                    "background-color": "white",
+                    "padding": "20px",
+                    "border-radius": "8px",
+                    "box-shadow": "0 4px 8px rgba(0, 0, 0, 0.2)",
+                    "width": "80%",
+                    "max-width": "400px",
+                    "text-align": "left",
+                    "z-index": "1000"
+                });
+
+                $(".close-receipt-button").click(function() {
+                    $(".receipt").remove();
+                    window.location.href = "Viewmore.html";
+                });
+            });
+
+            
 
         });
     </script>
@@ -110,14 +176,33 @@
                     <button class="option-button">8 tons</button>
                 </div>
 
+                <h4>Insurance Company</h4>
+                <input type="text" id="insurance-company" placeholder="Enter your insurance company" class="input-field">
+
                 <h4>Warranty</h4>
                 <div class="option-buttons">
-                    <button class="option-button">1 Year</button>
-                    <button class="option-button">2 Years</button>
+                    <button class="option-button" data-warranty="1 Year">1 Year</button>
+                    <button class="option-button" data-warranty="2 Year">2 Years</button>
                 </div>
+
+                <h4>Payment</h4>
+                <div class="option-buttons">
+                    <button class="option-button" data-payment="Visa">Visa</button>
+                    <button class="option-button" data-payment="Cash">Cash</button>
+                    <button class="option-button" data-payment="FPS">FPS</button>                    
+                </div>
+
+                <div id="credit-card-info" style="display: none;">
+                    <h4>Credit Card Information</h4>
+                    <input type="text" id="card-number" placeholder="Card Number" class="input-field">
+                    <input type="text" id="card-expiry" placeholder="Expiry Date (MM/YY)" class="input-field">
+                    <input type="text" id="card-cvv" placeholder="CVV" class="input-field">
+                </div>
+
+                
             </div>
 
-            <!-- Purchase Button -->
+            <br>
             <button class="buy-now-button">Confirm Purchase</button>
         </div>
     </div>

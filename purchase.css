@@ -142,6 +142,20 @@ body, html {
     border-radius: 8px;
 }
 
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #007bff;
+}
 
 
 
@@ -198,4 +212,38 @@ body, html {
     background-color: #007bff;
     color: white;
     border-color: #007bff;
+}
+
+.receipt {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.5;
+}
+
+.receipt h2 {
+    text-align: center;
+    color: #333;
+}
+
+.receipt p {
+    margin: 10px 0;
+    font-size: 1em;
+    color: #555;
+}
+
+.receipt button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    text-align: center;
+}
+
+.receipt button:hover {
+    background-color: #218838;
 }
