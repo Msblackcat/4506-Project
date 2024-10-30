@@ -57,11 +57,47 @@ $(document).ready(function() {
     );
 
     $('#searchButton').click(function() {
-        let input = $('#searchBar').val().toLowerCase();
-        
+
+        var searchValue = $('#searchBar').val().toLowerCase();
+
+
         $('.product-card').each(function() {
-            let title = $(this).find('h3').text().toLowerCase();
-            if (title.includes(input)) {
+
+            var title = $(this).find('h3').text().toLowerCase();
+            var matchesSearch = title.includes(searchValue);
+            if (matchesSearch) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+
+    $('#brandFilter, #priceFilter').change(function(){
+        var selectedBrand = $('#brandFilter').val();
+        var selectedPriceRange = $('#priceFilter').val();
+
+        $('.product-card').each(function() {
+
+            var brand = $(this).data('brand');
+            var priceText = $(this).find('.price').text().replace(/[^0-9]/g, '');
+            var price = parseInt(priceText, 10);
+
+
+            var matchesBrand = !selectedBrand || brand === selectedBrand;
+            var matchesPrice = true;
+
+            if (selectedPriceRange) {
+                if (selectedPriceRange === "0-5000000") {
+                    matchesPrice = price < 5000000;
+                } else if (selectedPriceRange === "5000000-10000000") {
+                    matchesPrice = price >= 5000000 && price <= 10000000;
+                } else if (selectedPriceRange === "10000000") {
+                    matchesPrice = price > 10000000;
+                }
+            }
+
+            if (matchesBrand && matchesPrice) {
                 $(this).show();
             } else {
                 $(this).hide();
@@ -141,12 +177,27 @@ $(document).ready(function() {
         </nav>
 
         <div class="search-container">
+
+            <select id="brandFilter" class="filter-dropdown">
+                <option value="">Brand</option>
+                <option value="Aston Martin">Aston Martin</option>
+                <option value="Ferrari">Ferrari</option>
+                <option value="Toyota">Toyota</option>
+            </select>
+
+            <select id="priceFilter" class="filter-dropdown">
+                <option value="">Price</option>
+                <option value="0-5000000">Below HK$5,000,000</option>
+                <option value="5000000-10000000">HK$5,000,000 - HK$10,000,000</option>
+                <option value="10000000">Above HK$10,000,000</option>
+            </select>
+
             <input type="text" id="searchBar" placeholder="Search vehicles...">
             <button id="searchButton">Search</button>   
         </div>
 
         <div class="products-grid" id="productGrid">
-            <div class="product-card">
+            <div class="product-card" data-brand="Aston Martin">
                 <img src="/4506_source/product1_black.png" alt="Car Image">
                 <h3>Aston Martin Valkyrie</h3>
                 <p>Year: 2017<br>Mileage: 0 Kilometer<br>Engine: 6.5 Litre Aston Martin V12</p>
@@ -162,9 +213,9 @@ $(document).ready(function() {
                 <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
             </div>
 
-            <div class="product-card">
+            <div class="product-card" data-brand="Ferrari">
                 <img src="/4506_source/product2_black.png" alt="Car Image">
-                <h3>Ferrari 488</h3>
+                <h3>Ferrari 477</h3>
                 <p>Year: 2019<br>Mileage: 10,000 Kilometer<br>Engine: 3.9 Litre V8</p>
                 <div class="price">HK$5,000,000</div>
                 <button 
@@ -178,7 +229,7 @@ $(document).ready(function() {
                 <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
             </div>
 
-            <div class="product-card">
+            <div class="product-card" data-brand="Ferrari">
                 <img src="/4506_source/product3_blue.png" alt="Car Image"><br>
                 <br><h3>Ferrari 488</h3>
                 <p>Year: 2019<br>Mileage: 10,000 Kilometer<br>Engine: 3.9 Litre V8</p>
@@ -194,9 +245,9 @@ $(document).ready(function() {
                 <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
             </div>
 
-            <div class="product-card">
+            <div class="product-card" data-brand="Toyota">
                 <img src="/4506_source/toyota_gray.jpg" alt="Car Image">
-                <h3>Ferrari 488</h3>
+                <h3>Toyota 568</h3>
                 <p>Year: 2019<br>Mileage: 10,000 Kilometer<br>Engine: 3.9 Litre V8</p>
                 <div class="price">HK$7,000,000</div>
                 <button 
