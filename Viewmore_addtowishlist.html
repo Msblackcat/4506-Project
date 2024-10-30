@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legend Motor Company - Purchase</title>
+    <link rel="stylesheet" href="Viewmore_addtowishlist.css">
+    <script src="js/jquery-1.11.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".option-button").hover(
+                function() {
+                    $(this).css({
+                        "background-color": "#007bff",
+                        "color": "white",
+                        "border-color": "#007bff"
+                    });
+                },
+                function() {
+                    if (!$(this).hasClass("selected")) {
+                        $(this).css({
+                            "background-color": "white",
+                            "color": "black",
+                            "border-color": "#ccc"
+                        });
+                    }
+                }
+            );
+    
+            $(".option-button").click(function() {
+                $(this).siblings().removeClass("selected").css({
+                    "background-color": "white",
+                    "color": "black",
+                    "border-color": "#ccc"
+                });
+    
+                $(this).addClass("selected").css({
+                    "background-color": "#007bff",
+                    "color": "white",
+                    "border-color": "#007bff"
+                });
+
+                var color = $(this).data("color");
+                if (color) {
+                    $(".carousel-image").attr("src", `4506_source/${color}.png`);
+                }
+
+                if ($(this).data("payment") === "Visa") {
+                    $("#credit-card-info").show();
+                } else {
+                    $("#credit-card-info").hide();
+                }
+            });
+
+            $(".buy-now-button").click(function() {
+                var productName = $(".product-display h3").text();
+                var color = $(".option-button[data-color].selected").text();
+                var coverage = $(".option-button[data-coverage].selected").text();
+                var insurance = $("#insurance-company").val();
+                var warranty = $(".option-button[data-warranty].selected").text();
+                var paymentMethod = $(".option-button[data-payment].selected").text();
+                var cardNumber = $("#card-number").val();
+                var cardExpiry = $("#card-expiry").val();
+                var cardCVV = $("#card-cvv").val();
+            
+            });
+        });
+        function addToCart(button) {
+            const color = $(".option-button[data-color].selected").text() || "Black";
+            const coverage = $(".option-button[data-coverage].selected").text();
+            const insurance = $("#insurance-company").val();
+            const warranty = $(".option-button[data-warranty].selected").text();
+
+            if (!color || !coverage || !insurance || !warranty) {
+                alert("Please complete all fields before adding to wishlist.");
+                return;
+            }
+
+            const wishlistItem = {
+                id: Date.now(),
+                name: "Aston Martin Valkyrie",
+                year: "2017",
+                mileage: "0 Kilometer", 
+                engine: "6.5 Litre Aston Martin V12",
+                price: "HK$27,194,921",
+                image: $(".carousel-image").attr("src"),
+                color: color,
+                coverage: coverage,
+                insurance: insurance,
+                warranty: warranty
+            };
+
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            wishlist.push(wishlistItem);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+
+            alert("Item added to wishlist successfully!");
+            window.location.href = "wishlist.html";
+        }
+    </script>
+
+</head>
+<body>
+    <header class="header"></header>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a href="index.html">Home</a>
+            </li>
+            <li class="dropdown">
+                <a href="Viewmore.html">View some more</a>
+                <ul class="dropdown-content">
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="wishlist.html">Wish List</a>
+                <ul class="dropdown-content">
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="histroy.html">Histroy</a>
+                <ul class="dropdown-content">
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a id="login-register" href="login.html">Login/Register</a>
+                <ul class="dropdown-content">
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="purchase-container">
+        <div class="product-display">
+            <div class="carousel">
+                <img src="4506_source/product1_black.png" alt="Car Image" class="carousel-image">
+            
+            <h3>Aston Martin Valkyrie</h3>
+            <p>Year: 2017<br>Mileage: 0 Kilometer<br>Engine: 6.5 Litre Aston Martin V12</p>
+            <div class="price">HK$27,194,921</div>
+            </div>
+        </div>
+
+        <div class="customization-options">
+            <h3>Customize Your Purchase</h3>
+            <div class="options-list">
+                <h4>Color</h4>
+                <div class="option-buttons">
+                    <button class="option-button" data-color="product1_grey">Gray</button>
+                    <button class="option-button" data-color="product1_black">Black</button>
+                    <button class="option-button" data-color="product1_red">Red</button>
+                </div>
+
+                <h4>Coverage preferences</h4>
+                <div class="option-buttons">
+                    <button class="option-button" data-coverage="rearview mirror">rearview mirror</button>
+                    <button class="option-button" data-coverage="Tire">Tire</button>
+                </div>
+
+                <h4>Insurance Company</h4>
+                <input type="text" id="insurance-company" placeholder="Enter your insurance company" class="input-field">
+
+                <h4>Warranty</h4>
+                <div class="option-buttons">
+                    <button class="option-button" data-warranty="1 Year">1 Year</button>
+                    <button class="option-button" data-warranty="2 Year">2 Years</button>
+                </div>
+            </div>
+
+            <br>
+            <button class="buy-now-button" onclick="addToCart(this)">Add To The List</button>
+        </div>
+    </div>
+</body>
+</html>

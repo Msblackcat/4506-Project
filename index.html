@@ -7,65 +7,114 @@
         <link rel="stylesheet" href="index.css">
         <script src="js/jquery-1.11.1.js"></script>
         <script>
-            $(document).ready(function() {
-    function checkLoginState() {
-        // Changed from 'loggedInUser' to 'uName' to match login page
-        const username = localStorage.getItem('uName');
-        if(username) {
-            updateNavigation(username);
-        }
-    }
-
-    function updateNavigation(username) {
-        const loginRegisterLi = $('.dropdown:last');
+        function addToCart(container) {
+            // Check if user is logged in
+            const username = localStorage.getItem('uName');
+            if (!username) {
+                alert('Please login to add items to wishlist');
+                window.location.href = 'login.html';
+                return;
+            }
         
-        if (username) {
-            loginRegisterLi.html(`
-                <a href="#" class="user-profile">${username} ▼</a>
-                <ul class="dropdown-content">
-                    <li><a href="profile.html">Profile</a></li>
-                    <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
-                </ul>
-            `);
-        } else {
-            loginRegisterLi.html(`
-                <a id="login-register" href="login.html">Login/Register</a>
-                <ul class="dropdown-content">
-                    <li><a href="login.html">Login</a></li>
-                    <li><a href="register.html">Register</a></li>
-                </ul>
-            `);
+            const productImg = container.querySelector('.vehicle');
+            const productDetails = container.querySelector('.description');
+            
+            // Create item object
+            const item = {
+                id: parseInt(productImg.dataset.id),
+                image: productImg.src,
+                name: productDetails.querySelector('h3').innerText,
+                year: productDetails.querySelector('p').innerText.split('\n')[0].split(': ')[1],
+                mileage: productDetails.querySelector('p').innerText.split('\n')[1].split(': ')[1],
+                engine: productDetails.querySelector('p').innerText.split('\n')[2].split(': ')[1],
+                price: productDetails.querySelector('.price').innerText
+            };
+        
+            console.log('Adding item:', item); // Debug log
+        
+            // Get existing wishlist or create new array
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            
+            // Check if item already exists in wishlist
+            if (!wishlist.some(wishlistItem => wishlistItem.id === item.id)) {
+                wishlist.push(item);
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                
+                // Animation
+                const flyingImg = productImg.cloneNode();
+                flyingImg.classList.add('flying-item');
+                
+                const startPos = productImg.getBoundingClientRect();
+                const wishlistBtn = document.querySelector('.nav-links li:nth-child(3) a');
+                const endPos = wishlistBtn.getBoundingClientRect();
+                
+                flyingImg.style.position = 'fixed';
+                flyingImg.style.top = startPos.top + 'px';
+                flyingImg.style.left = startPos.left + 'px';
+                flyingImg.style.width = startPos.width + 'px';
+                flyingImg.style.height = startPos.height + 'px';
+                
+                document.body.appendChild(flyingImg);
+                
+                setTimeout(() => {
+                    flyingImg.style.top = endPos.top + 'px';
+                    flyingImg.style.left = endPos.left + 'px';
+                    flyingImg.style.width = '50px';
+                    flyingImg.style.height = '50px';
+                    flyingImg.style.opacity = '0.5';
+                    
+                    wishlistBtn.classList.add('wishlist-animation');
+                    
+                    setTimeout(() => {
+                        flyingImg.remove();
+                        wishlistBtn.classList.remove('wishlist-animation');
+                    }, 800);
+                }, 0);
+            } else {
+                alert('This item is already in your wishlist!');
+            }
         }
-    }
+            </script>
+        <script>
+        $(document).ready(function() {
+            // Check login state immediately
+            checkLoginState();
+                
+            function checkLoginState() {
+                const username = localStorage.getItem('uName');
+                if (!username) {
+                    alert('Please login to view your wishlist');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                updateNavigation(username);
+                loadWishlistItems();
+            }
+        
+            function updateNavigation(username) {
+                const loginRegisterLi = $('.dropdown:last');
+                loginRegisterLi.html(`
+                    <a href="#" class="user-profile">${username} ▼</a>
+                    <ul class="dropdown-content">
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
+                    </ul>
+                `);
+            }
+        });
 
-    function handleLogout(event) {
-        event.preventDefault();
-        // Clear all relevant localStorage items
-        localStorage.removeItem('uName');
-        localStorage.removeItem('userType');
-        localStorage.removeItem('email');
-        localStorage.removeItem('permissions');
-        localStorage.removeItem('staffNumber');
-        localStorage.removeItem('username');
-        updateNavigation(null);
-        window.location.href = 'index.html';
-    }
-
-    $('.dropdown').hover(
-        function() {
-            $(this).children('.dropdown-content').show();
-        },
-        function() {
-            $(this).children('.dropdown-content').hide();
+        function handleLogout(event) {
+            event.preventDefault();
+            localStorage.removeItem('uName');
+            localStorage.removeItem('userType');
+            localStorage.removeItem('email');
+            localStorage.removeItem('permissions');
+            localStorage.removeItem('staffNumber');
+            localStorage.removeItem('username');
+            localStorage.removeItem('wishlist');
+            window.location.href = 'index.html';
         }
-    );
 
-    // Check login state when page loads
-    checkLoginState();
-
-    // Add logout handler to window
-    window.handleLogout = handleLogout;
-});
         </script>
         <script src="index.js"></script>
     </head>
@@ -79,16 +128,16 @@
             <li class="dropdown">
                 <a href="Viewmore.html">View some more</a>
                 <ul class="dropdown-content">
-                    <li><a href="Viewmore.html">All</a></li>
-                    <li><a href="Viewmore.html">Type1</a></li>
-                    <li><a href="Viewmore.html">Type2</a></li>
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#">Wish List</a>
+                <a href="wishlist.html">Wish List</a>
                 <ul class="dropdown-content">
-                    <li><a href="#">Consulting</a></li>
-                    <li><a href="#">Support</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="histroy.html">Histroy</a>
+                <ul class="dropdown-content">
                 </ul>
             </li>
             <li class="dropdown">
@@ -100,15 +149,17 @@
             </li>
         </ul>
     </nav>
-
-    <div class="content-container">
+    <div>
+        <h1>Top Sales</h1>
+    </div> 
+    <div class="content-container" onclick="addToCart(this)">
         <div class="photo">
-            <img src="images/large-photo.jpg" alt="Large Photo" class="vehicle" data-id="1">
+            <img src="/4506_source/product1_black.png" alt="Large Photo" class="vehicle" data-id="1">
         </div>
         <div class="description">
-            <h2>Car Model 1</h2>
-            <p>This is a detailed description of the car.</p>
-            <button class="purchase-btn">Purchase</button>
+            <h3>Aston Martin Valkyrie</h3>
+            <p>Year: 2017<br>Mileage: 0 Kilometer<br>Engine: 6.5 Litre Aston Martin V12</p>
+                <div class="price">HK$27,194,921</div>
         </div>
     </div>
 

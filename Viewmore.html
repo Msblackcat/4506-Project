@@ -7,35 +7,101 @@
         <link rel="stylesheet" href="Viewmore.css">
         <script src="js/jquery-1.11.1.js"></script>
         <script>
-$(document).ready(function() {
-    function checkLoginState() {
-        const username = localStorage.getItem('loggedInUser');
-        if(username) {
-            updateNavigation(username); 
-        }
+            function addToCart(button) {
+    // Check if user is logged in
+    const username = localStorage.getItem('uName');
+    if (!username) {
+        alert('Please login to add items to wishlist');
+        window.location.href = 'login.html';
+        return;
     }
 
-    function updateNavigation(username) {
-        if (username) {
-            const loginRegisterLi = $('li.dropdown:last');
-            loginRegisterLi.html(`
-                <a href="#" class="user-profile">${username} ▼</a>
-                <ul class="dropdown-content">
-                    <li><a href="profile.html">Profile</a></li>
-                    <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
-                </ul>
-            `);
-        } else {
-            const loginRegisterLi = $('li.dropdown:last');
-            loginRegisterLi.html(`
-                <a id="login-register" href="login.html">Login/Register</a>
-                <ul class="dropdown-content">
-                    <li><a href="login.html">Login</a></li>
-                    <li><a href="register.html">Register</a></li>
-                </ul>
-            `);
-        }
+    // Get the product card container
+    const productCard = button.closest('.product-card');
+    
+    // Create item object
+    const item = {
+        id: Date.now(), // Using timestamp as a simple unique ID
+        image: productCard.querySelector('img').src,
+        name: productCard.querySelector('h3').innerText,
+        // Split the paragraph text into lines and extract information
+        year: productCard.querySelector('p').innerText.split('\n')[0].split(': ')[1],
+        mileage: productCard.querySelector('p').innerText.split('\n')[1].split(': ')[1],
+        engine: productCard.querySelector('p').innerText.split('\n')[2].split(': ')[1],
+        price: productCard.querySelector('.price').innerText
+    };
+
+    console.log('Adding item:', item); // Debug log
+
+    // Get existing wishlist or create new array
+    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    
+    // Check if item already exists in wishlist
+    if (!wishlist.some(wishlistItem => wishlistItem.name === item.name)) {
+        wishlist.push(item);
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        
+        // Animation
+        const flyingImg = productCard.querySelector('img').cloneNode();
+        flyingImg.classList.add('flying-item');
+        
+        const startPos = productCard.querySelector('img').getBoundingClientRect();
+        const wishlistBtn = document.querySelector('.nav-links li:nth-child(3) a');
+        const endPos = wishlistBtn.getBoundingClientRect();
+        
+        flyingImg.style.position = 'fixed';
+        flyingImg.style.top = startPos.top + 'px';
+        flyingImg.style.left = startPos.left + 'px';
+        flyingImg.style.width = startPos.width + 'px';
+        flyingImg.style.height = startPos.height + 'px';
+        flyingImg.style.zIndex = '1000';
+        flyingImg.style.transition = 'all 0.8s ease';
+        
+        document.body.appendChild(flyingImg);
+        
+        setTimeout(() => {
+            flyingImg.style.top = endPos.top + 'px';
+            flyingImg.style.left = endPos.left + 'px';
+            flyingImg.style.width = '50px';
+            flyingImg.style.height = '50px';
+            flyingImg.style.opacity = '0.5';
+            
+            wishlistBtn.classList.add('wishlist-animation');
+            
+            setTimeout(() => {
+                flyingImg.remove();
+                wishlistBtn.classList.remove('wishlist-animation');
+                alert('Item added to wishlist successfully!');
+            }, 800);
+        }, 0);
+    } else {
+        alert('This item is already in your wishlist!');
     }
+}
+        </script>
+        <script>
+        $(document).ready(function() {
+            function checkLoginState() {
+                const username = localStorage.getItem('uName');
+                if(username) {
+                    updateNavigation(username);
+                } else {
+                    window.location.href = 'login.html';
+                }
+            }
+
+            function updateNavigation(username) {
+                const loginRegisterLi = $('.dropdown:last');
+                if (username) {
+                    loginRegisterLi.html(`
+                        <a href="#" class="user-profile">${username} ▼</a>
+                        <ul class="dropdown-content">
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
+                        </ul>
+                    `);
+                }
+            }
 
     function handleLogout(event) {
         event.preventDefault();
@@ -152,18 +218,18 @@ $(document).ready(function() {
                     <a href="index.html">Home</a>
                 </li>
                 <li class="dropdown">
-                    <a href="#">View some more</a>
+                    <a href="Viewmore.html">View some more</a>
                     <ul class="dropdown-content">
-                        <li><a href="Viewmore.html">All</a></li>
-                        <li><a href="Viewmore.html">Type1</a></li>
-                        <li><a href="Viewmore.html">Type2</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#">Wish List</a>
+                    <a href="wishlist.html">Wish List</a>
                     <ul class="dropdown-content">
-                        <li><a href="#">Consulting</a></li>
-                        <li><a href="#">Support</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="histroy.html">Histroy</a>
+                    <ul class="dropdown-content">
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -208,7 +274,8 @@ $(document).ready(function() {
                 data-fuel="Petrol" 
                 data-transmission="Automatic" 
                 data-engine="6.5 Litre V12" 
-                data-mileage="0 Kilometer">Details</button>
+                data-mileage="0 Kilometer">Details</button><br>
+                <button class="cart-button" onclick="addToCart(this)"></i>Add to WishList</button><br>
                 <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
             </div>
 
@@ -224,7 +291,8 @@ $(document).ready(function() {
                 data-fuel="Petrol" 
                 data-transmission="Manual" 
                 data-engine="3.9 Litre V8" 
-                data-mileage="10,000 Kilometer">Details</button>
+                data-mileage="10,000 Kilometer">Details</button><br>
+                <button class="cart-button" onclick="addToCart(this)"></i>Add to WishList</button><br>
                 <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
             </div>
 
@@ -240,7 +308,8 @@ $(document).ready(function() {
                 data-fuel="Petrol" 
                 data-transmission="Automatic" 
                 data-engine="6.5 Litre V12" 
-                data-mileage="0 Kilometer">Details</button>
+                data-mileage="0 Kilometer">Details</button><br>
+                <button class="cart-button" onclick="addToCart(this)"></i>Add to WishList</button><br>
                 <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
             </div>
             
@@ -256,7 +325,8 @@ $(document).ready(function() {
                 data-fuel="Petrol" 
                 data-transmission="Automatic" 
                 data-engine="6.5 Litre V12" 
-                data-mileage="0 Kilometer">Details</button>
+                data-mileage="0 Kilometer">Details</button><br>
+                <button class="cart-button" onclick="addToCart(this)"></i>Add to WishList</button><br>
                 <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
             </div>
 
@@ -272,7 +342,8 @@ $(document).ready(function() {
                 data-fuel="Petrol" 
                 data-transmission="Automatic" 
                 data-engine="6.5 Litre V12" 
-                data-mileage="0 Kilometer">Details</button>
+                data-mileage="0 Kilometer">Details</button><br>
+                <button class="cart-button" onclick="addToCart(this)"></i>Add to WishList</button><br>
                 <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
             </div>
         </div>

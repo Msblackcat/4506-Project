@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Wishlist - Legend Motor Company</title>
+        <link rel="stylesheet" href="wishlist.css">
+        <script src="js/jquery-1.11.1.js"></script>
+        <script>
+        $(document).ready(function() {
+            function checkLoginState() {
+                const username = localStorage.getItem('uName');
+                if(username) {
+                    updateNavigation(username);
+                    loadWishlistItems();
+                } else {
+                    window.location.href = 'login.html';
+                }
+            }
+
+            function updateNavigation(username) {
+                const loginRegisterLi = $('.dropdown:last');
+                if (username) {
+                    loginRegisterLi.html(`
+                        <a href="#" class="user-profile">${username} ▼</a>
+                        <ul class="dropdown-content">
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
+                        </ul>
+                    `);
+                }
+            }
+
+            function loadWishlistItems() {
+                const wishlistItems = JSON.parse(localStorage.getItem('wishlist')) || [];
+                const container = $('.wishlist-container');
+
+                if (wishlistItems.length === 0) {
+                    container.html(`
+                        <div class="empty-wishlist">
+                            <h2>Your wishlist is empty</h2>
+                            <p>Browse our collection and add some cars to your wishlist!</p>
+                            <a href="index.html" class="purchase-btn">Browse Cars</a>
+                        </div>
+                    `);
+                    return;
+                }
+
+                container.empty();
+                wishlistItems.forEach(item => {
+                    container.append(`
+                        <div class="wishlist-item" data-id="${item.id}">
+                            <div class="wishlist-photo">
+                                <img src="${item.image}" alt="${item.name}">
+                            </div>
+                            <div class="wishlist-details">
+                                <div>
+                                    <h3>${item.name}</h3>
+                                    <p>Year: ${item.year}</p>
+                                    <p>Mileage: ${item.mileage}</p>
+                                    <p>Engine: ${item.engine}</p>
+                                    <div class="price">${item.price}</div>
+                                </div>
+                                <div class="wishlist-actions">
+                                    <button class="remove-btn" onclick="removeFromWishlist(${item.id})">Remove</button>
+                                    <button class="purchase-btn" onclick="purchaseItem(${item.id})">Purchase</button>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                });
+            }
+
+            $('.dropdown').hover(
+                function() {
+                    $(this).children('.dropdown-content').show();
+                },
+                function() {
+                    $(this).children('.dropdown-content').hide();
+                }
+            );
+
+            checkLoginState();
+            window.handleLogout = handleLogout;
+        });
+
+        function removeFromWishlist(itemId) {
+            const item = $(`.wishlist-item[data-id="${itemId}"]`);
+            item.addClass('delete-animation');
+            
+            setTimeout(() => {
+                let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+                wishlist = wishlist.filter(item => item.id !== itemId);
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                
+                item.remove();
+                
+                if (wishlist.length === 0) {
+                    $('.wishlist-container').html(`
+                        <div class="empty-wishlist">
+                            <h2>Your wishlist is empty</h2>
+                            <p>Browse our collection and add some cars to your wishlist!</p>
+                            <a href="index.html" class="purchase-btn">Browse Cars</a>
+                        </div>
+                    `);
+                }
+            }, 500);
+        }
+
+        function purchaseItem(itemId) {
+            // Here you would typically redirect to a purchase/checkout page
+            alert('Redirecting to purchase page...');
+            // window.location.href = `purchase.html?id=${itemId}`;
+        }
+
+        function handleLogout(event) {
+            event.preventDefault();
+            localStorage.removeItem('uName');
+            localStorage.removeItem('userType');
+            localStorage.removeItem('email');
+            localStorage.removeItem('permissions');
+            localStorage.removeItem('staffNumber');
+            localStorage.removeItem('username');
+            window.location.href = 'index.html';
+        }
+        </script>
+    </head>
+<body>
+    <header class="header"></header>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a href="index.html">Home</a>
+            </li>
+            <li class="dropdown">
+                <a href="Viewmore.html">View some more</a>
+                <ul class="dropdown-content">
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="wishlist.html">Wish List</a>
+                <ul class="dropdown-content">
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="Histroy.html">History</a>
+                <ul class="dropdown-content">
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a id="login-register" href="login.html">Login/Register</a>
+                <ul class="dropdown-content">
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <h1>My Wishlist</h1>
+        <div class="wishlist-container">
+            <!-- Wishlist items will be dynamically inserted here -->
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-section">
+            <h3>Contact us</h3>
+            <p>Telephone: +852 2180000</p>
+            <p>Email: Services@legendmotor.com</p>
+            <p>Address: No. 21 Yuen Wo Road, Sha Tin, New Territories</p>
+        </div>
+        <div class="footer-section">
+            <h3>Business Hours</h3>
+            <p>Monday - Friday: 09:00-21:00</p>
+            <p>Weekend: 10:00-20:00</p>
+        </div>
+        <div class="footer-section">
+            <h3>Follow us</h3>
+            <p>Facebook</p>
+            <p>Instagram</p>
+            <p>LINE</p>
+        </div>
+    </footer>
+</body>
+</html>

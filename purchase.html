@@ -8,13 +8,37 @@
     <script src="js/jquery-1.11.1.js"></script>
     <script>
         $(document).ready(function() {
+            // Load purchase data from localStorage
+            const loadPurchaseData = () => {
+                const purchaseData = JSON.parse(localStorage.getItem('currentPurchase'));
+                if (purchaseData && purchaseData.item) {
+                    const item = purchaseData.item;
+                    
+                    // Update product display
+                    $('.carousel-image').attr('src', item.image);
+                    $('.product-display h3').text(item.name);
+                    $('.product-display p').html(
+                        `Year: ${item.year}<br>
+                        Mileage: ${item.mileage}<br>
+                        Engine: ${item.engine}`
+                    );
+                    $('.price').text(item.price);
+                } else {
+                    alert('No purchase data found');
+                    window.location.href = 'wishlist.html';
+                }
+            };
+
+            // Button hover effects
             $(".option-button").hover(
                 function() {
-                    $(this).css({
-                        "background-color": "#007bff",
-                        "color": "white",
-                        "border-color": "#007bff"
-                    });
+                    if (!$(this).hasClass("selected")) {
+                        $(this).css({
+                            "background-color": "#007bff",
+                            "color": "white",
+                            "border-color": "#007bff"
+                        });
+                    }
                 },
                 function() {
                     if (!$(this).hasClass("selected")) {
@@ -27,6 +51,7 @@
                 }
             );
     
+            // Option button click handling
             $(".option-button").click(function() {
                 $(this).siblings().removeClass("selected").css({
                     "background-color": "white",
@@ -40,49 +65,85 @@
                     "border-color": "#007bff"
                 });
 
-                var color = $(this).data("color");
-                if (color) {
-                    $(".carousel-image").attr("src", `4506_source/${color}.png`);
-                }
-
                 if ($(this).data("payment") === "Visa") {
-                    $("#credit-card-info").show();
+                    $("#credit-card-info").slideDown();
                 } else {
-                    $("#credit-card-info").hide();
+                    $("#credit-card-info").slideUp();
                 }
             });
 
+            // Purchase confirmation
             $(".buy-now-button").click(function() {
-                var productName = $(".product-display h3").text();
-                var color = $(".option-button[data-color].selected").text();
-                var coverage = $(".option-button[data-coverage].selected").text();
-                var insurance = $("#insurance-company").val();
-                var warranty = $(".option-button[data-warranty].selected").text();
-                var paymentMethod = $(".option-button[data-payment].selected").text();
-                var cardNumber = $("#card-number").val();
-                var cardExpiry = $("#card-expiry").val();
-                var cardCVV = $("#card-cvv").val();
+                const purchaseData = JSON.parse(localStorage.getItem('currentPurchase'));
+                const color = $(".option-button[data-color].selected").text();
+                const coverage = $(".option-button[data-coverage].selected").text();
+                const insurance = $("#insurance-company").val();
+                const warranty = $(".option-button[data-warranty].selected").text();
+                const paymentMethod = $(".option-button[data-payment].selected").text();
+                const cardNumber = $("#card-number").val();
+                const cardExpiry = $("#card-expiry").val();
+                const cardCVV = $("#card-cvv").val();
 
+                // Validation
                 if (!color || !coverage || !insurance || !warranty || !paymentMethod) {
                     alert("Please complete all fields before confirming your purchase.");
                     return;
                 }
 
-                if (paymentMethod === "Visa" && (!cardNumber || !cardExpiry || !cardCVV)) {
-                    alert("Please enter your credit card details for Visa payment.");
-                    return;
+                if (paymentMethod === "Visa") {
+                    if (!cardNumber || !cardExpiry || !cardCVV) {
+                        alert("Please enter your credit card details for Visa payment.");
+                        return;
+                    }
+                    if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ''))) {
+                        alert("Please enter a valid 16-digit card number.");
+                        return;
+                    }
+                    if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+                        alert("Please enter expiry date in MM/YY format.");
+                        return;
+                    }
+                    if (!/^\d{3}$/.test(cardCVV)) {
+                        alert("Please enter a valid 3-digit CVV.");
+                        return;
+                    }
                 }
-                
 
+                // Create final purchase record
+                const finalPurchase = {
+                    ...purchaseData,
+                    color,
+                    coverage,
+                    insurance,
+                    warranty,
+                    paymentMethod,
+                    purchaseDate: new Date().toISOString(),
+                    transactionId: 'TRX' + Math.random().toString(36).substr(2, 9)
+                };
+
+                // Save to purchase history
+                const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
+                purchaseHistory.push(finalPurchase);
+                localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
+
+                // Remove item from wishlist
+                let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+                wishlist = wishlist.filter(item => item.id !== purchaseData.item.id);
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+
+                // Show receipt
                 let receiptHtml = `
                     <div class="receipt">
                         <h2>Purchase Receipt</h2>
-                        <p><strong>Product:</strong> ${productName}</p>
+                        <p><strong>Transaction ID:</strong> ${finalPurchase.transactionId}</p>
+                        <p><strong>Product:</strong> ${purchaseData.item.name}</p>
                         <p><strong>Color:</strong> ${color}</p>
-                        <p><strong>Coverage preferences:</strong> ${coverage}</p>
+                        <p><strong>Coverage:</strong> ${coverage}</p>
                         <p><strong>Insurance Company:</strong> ${insurance}</p>
                         <p><strong>Warranty:</strong> ${warranty}</p>
                         <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                        <p><strong>Price:</strong> ${purchaseData.item.price}</p>
+                        <p><strong>Purchase Date:</strong> ${new Date().toLocaleDateString()}</p>
                         <button class="close-receipt-button">Close Receipt</button>
                     </div>
                 `;
@@ -90,71 +151,75 @@
                 $("body").append(receiptHtml);
                 $(".receipt").css({
                     "position": "fixed",
-                    "top": "10%",
+                    "top": "50%",
                     "left": "50%",
-                    "transform": "translate(-50%, 0)",
+                    "transform": "translate(-50%, -50%)",
                     "background-color": "white",
                     "padding": "20px",
                     "border-radius": "8px",
                     "box-shadow": "0 4px 8px rgba(0, 0, 0, 0.2)",
                     "width": "80%",
-                    "max-width": "400px",
+                    "max-width": "500px",
                     "text-align": "left",
                     "z-index": "1000"
                 });
 
                 $(".close-receipt-button").click(function() {
                     $(".receipt").remove();
-                    window.location.href = "Viewmore.html";
+                    window.location.href = "index.html";
                 });
             });
 
-            
-
+            // Check login state and load purchase data
+            const username = localStorage.getItem('uName');
+            if (!username) {
+                window.location.href = 'login.html';
+            } else {
+                loadPurchaseData();
+            }
         });
     </script>
-
 </head>
 <body>
-    <header class="header"></header>
-    <nav class="navbar">
-        <ul class="nav-links">
-            <li class="dropdown">
-                <a href="index.html">Home</a>
-            </li>
-            <li class="dropdown">
-                <a href="#">View some more</a>
-                <ul class="dropdown-content">
-                    <li><a href="Viewmore.html">All</a></li>
-                    <li><a href="Viewmore.html">Type1</a></li>
-                    <li><a href="Viewmore.html">Type2</a></li>
-                </ul>
-            </li>
-            <li class="dropdown">
-                <a href="#">Wish List</a>
-                <ul class="dropdown-content">
-                    <li><a href="#">Consulting</a></li>
-                    <li><a href="#">Support</a></li>
-                </ul>
-            </li>
-            <li class="dropdown">
-                <a>Login/Register</a>
-                <ul class="dropdown-content">
-                    <li><a href="login.html">Login</a></li>
-                    <li><a href="register.html">Register</a></li>
-                </ul>
-            </li>
-        </ul>
+   <header class="header"></header>
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="index.html">Home</a>
+                </li>
+                <li class="dropdown">
+                    <a href="Viewmore.html">View some more</a>
+                    <ul class="dropdown-content">
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="wishlist.html">Wish List</a>
+                    <ul class="dropdown-content">
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="histroy.html">Histroy</a>
+                    <ul class="dropdown-content">
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a id="login-register" href="login.html">Login/Register</a>
+                    <ul class="dropdown-content">
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="register.html">Register</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
     </nav>
 
     <div class="purchase-container">
         <div class="product-display">
             <div class="carousel">
-                <img src="4506_source/product1_black.png" alt="Car Image" class="carousel-image">
-            
-            <h3>Aston Martin Valkyrie</h3>
-            <p>Year: 2017<br>Mileage: 0 Kilometer<br>Engine: 6.5 Litre Aston Martin V12</p>
-            <div class="price">HK$27,194,921</div>
+                <img src="" alt="Car Image" class="carousel-image">
+                <h3></h3>
+                <p></p>
+                <div class="price"></div>
             </div>
         </div>
 
@@ -167,40 +232,37 @@
                     <button class="option-button" data-color="product1_black">Black</button>
                     <button class="option-button" data-color="product1_red">Red</button>
                 </div>
-
+        
                 <h4>Coverage preferences</h4>
                 <div class="option-buttons">
-                    <button class="option-button" data-coverage="rearview mirror">rearview mirror</button>
+                    <button class="option-button" data-coverage="rearview mirror">Rearview Mirror</button>
                     <button class="option-button" data-coverage="Tire">Tire</button>
                 </div>
-
+        
                 <h4>Insurance Company</h4>
                 <input type="text" id="insurance-company" placeholder="Enter your insurance company" class="input-field">
-
+        
                 <h4>Warranty</h4>
                 <div class="option-buttons">
                     <button class="option-button" data-warranty="1 Year">1 Year</button>
                     <button class="option-button" data-warranty="2 Year">2 Years</button>
                 </div>
-
+        
                 <h4>Payment</h4>
                 <div class="option-buttons">
                     <button class="option-button" data-payment="Visa">Visa</button>
                     <button class="option-button" data-payment="Cash">Cash</button>
                     <button class="option-button" data-payment="FPS">FPS</button>                    
                 </div>
-
+        
                 <div id="credit-card-info" style="display: none;">
                     <h4>Credit Card Information</h4>
-                    <input type="text" id="card-number" placeholder="Card Number" class="input-field">
-                    <input type="text" id="card-expiry" placeholder="Expiry Date (MM/YY)" class="input-field">
-                    <input type="text" id="card-cvv" placeholder="CVV" class="input-field">
+                    <input type="text" id="card-number" placeholder="Card Number" class="input-field" maxlength="16">
+                    <input type="text" id="card-expiry" placeholder="Expiry Date (MM/YY)" class="input-field" maxlength="5">
+                    <input type="password" id="card-cvv" placeholder="CVV" class="input-field" maxlength="3">
                 </div>
-
-                
             </div>
-
-            <br>
+        
             <button class="buy-now-button">Confirm Purchase</button>
         </div>
     </div>
