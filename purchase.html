@@ -55,7 +55,7 @@
             $(".buy-now-button").click(function() {
                 var productName = $(".product-display h3").text();
                 var color = $(".option-button[data-color].selected").text();
-                var tonnage = $(".option-buttons").eq(1).find(".selected").text();
+                var coverage = $(".option-button[data-coverage].selected").text();
                 var insurance = $("#insurance-company").val();
                 var warranty = $(".option-button[data-warranty].selected").text();
                 var paymentMethod = $(".option-button[data-payment].selected").text();
@@ -63,7 +63,7 @@
                 var cardExpiry = $("#card-expiry").val();
                 var cardCVV = $("#card-cvv").val();
 
-                if (!color || !tonnage || !insurance || !warranty || !paymentMethod) {
+                if (!color || !coverage || !insurance || !warranty || !paymentMethod) {
                     alert("Please complete all fields before confirming your purchase.");
                     return;
                 }
@@ -79,7 +79,7 @@
                         <h2>Purchase Receipt</h2>
                         <p><strong>Product:</strong> ${productName}</p>
                         <p><strong>Color:</strong> ${color}</p>
-                        <p><strong>Tonnage:</strong> ${tonnage}</p>
+                        <p><strong>Coverage preferences:</strong> ${coverage}</p>
                         <p><strong>Insurance Company:</strong> ${insurance}</p>
                         <p><strong>Warranty:</strong> ${warranty}</p>
                         <p><strong>Payment Method:</strong> ${paymentMethod}</p>
@@ -87,7 +87,6 @@
                     </div>
                 `;
                 
-                // Append receipt to body or show in modal
                 $("body").append(receiptHtml);
                 $(".receipt").css({
                     "position": "fixed",
@@ -169,11 +168,10 @@
                     <button class="option-button" data-color="product1_red">Red</button>
                 </div>
 
-                <h4>Tonnage</h4>
+                <h4>Coverage preferences</h4>
                 <div class="option-buttons">
-                    <button class="option-button">1.75 tons</button>
-                    <button class="option-button">3.5 tons</button>
-                    <button class="option-button">8 tons</button>
+                    <button class="option-button" data-coverage="rearview mirror">rearview mirror</button>
+                    <button class="option-button" data-coverage="Tire">Tire</button>
                 </div>
 
                 <h4>Insurance Company</h4>
