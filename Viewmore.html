@@ -56,7 +56,7 @@ $(document).ready(function() {
         }
     );
 
-    $('#searchButton').click(function() {
+    $("#searchBar").on("keyup",function(){
 
         var searchValue = $('#searchBar').val().toLowerCase();
 
@@ -193,7 +193,6 @@ $(document).ready(function() {
             </select>
 
             <input type="text" id="searchBar" placeholder="Search vehicles...">
-            <button id="searchButton">Search</button>   
         </div>
 
         <div class="products-grid" id="productGrid">
@@ -244,12 +243,28 @@ $(document).ready(function() {
                 data-mileage="0 Kilometer">Details</button>
                 <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
             </div>
-
+            
             <div class="product-card" data-brand="Toyota">
                 <img src="/4506_source/toyota_gray.jpg" alt="Car Image">
                 <h3>Toyota 568</h3>
                 <p>Year: 2019<br>Mileage: 10,000 Kilometer<br>Engine: 3.9 Litre V8</p>
                 <div class="price">HK$7,000,000</div>
+                <button 
+                class="details-button"
+                data-image="/4506_source/toyota_gray.jpg"
+                data-seating="4 seats" 
+                data-fuel="Petrol" 
+                data-transmission="Automatic" 
+                data-engine="6.5 Litre V12" 
+                data-mileage="0 Kilometer">Details</button>
+                <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
+            </div>
+
+            <div class="product-card" data-brand="Aston Martin">
+                <img src="/4506_source/Aston Martin_black.jpg" alt="Car Image">
+                <h3>Aston Martin 888</h3>
+                <p>Year: 2019<br>Mileage: 10,000 Kilometer<br>Engine: 3.9 Litre V8</p>
+                <div class="price">HK$500,000</div>
                 <button 
                 class="details-button"
                 data-image="/4506_source/toyota_gray.jpg"
