@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Legend Motor Company - Insurance</title>
+        <link rel="stylesheet" href="Insurance.css">
+        <script src="js/jquery-1.11.1.js"></script>
+        <script>
+            function selectPlan(planName) {
+                localStorage.setItem('selectedInsurancePlan', planName);
+                alert('Plan selected: ' + planName);
+                window.location.href = 'Purchase.html';
+            }
+        </script>
+        <script>
+        $(document).ready(function() {
+            // Check login state immediately
+            checkLoginState();
+                
+            function checkLoginState() {
+                const username = localStorage.getItem('uName');
+                updateNavigation(username);
+            }
+        
+            function updateNavigation(username) {
+                const loginRegisterLi = $('.dropdown:last');
+                loginRegisterLi.html(`
+                    <a href="#" class="user-profile">${username} ▼</a>
+                    <ul class="dropdown-content">
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
+                    </ul>
+                `);
+            }
+        });
+
+        function handleLogout(event) {
+            event.preventDefault();
+            localStorage.removeItem('uName');
+            localStorage.removeItem('userType');
+            localStorage.removeItem('email');
+            localStorage.removeItem('permissions');
+            localStorage.removeItem('staffNumber');
+            localStorage.removeItem('username');
+            localStorage.removeItem('wishlist');
+            window.location.href = 'index.html';
+        }
+
+        </script>
+    </head>
+<body>
+    <header class="header"></header>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a id="login-register" href="login.html">Login/Register</a>
+                <ul class="dropdown-content">
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div>
+        <h1>Insurance</h1>
+    </div> 
+
+    <section class="insurance-plans">
+        <div class="plan-card">
+            <h2 class="plan-title">Basic Coverage</h2>
+            <div class="plan-price">From $800/year</div>
+            <ul class="plan-features">
+                <li>Third-party liability coverage</li>
+                <li>Basic collision coverage</li>
+                <li>24/7 roadside assistance</li>
+                <li>Basic medical coverage</li>
+            </ul>
+            <button class="submit-btn" onclick="selectPlan('Basic Coverage')">Get Quote</button>
+        </div>
+
+        <div class="plan-card">
+            <h2 class="plan-title">Premium Coverage</h2>
+            <div class="plan-price">From $1,200/year</div>
+            <ul class="plan-features">
+                <li>All Basic Coverage features</li>
+                <li>Comprehensive collision coverage</li>
+                <li>Natural disaster protection</li>
+                <li>Enhanced medical coverage</li>
+                <li>Rental car coverage</li>
+            </ul>
+            <button class="submit-btn" onclick="selectPlan('Premium Coverage')">Get Quote</button>
+        </div>
+
+        <div class="plan-card">
+            <h2 class="plan-title">Ultimate Coverage</h2>
+            <div class="plan-price">From $1,800/year</div>
+            <ul class="plan-features">
+                <li>All Premium Coverage features</li>
+                <li>Zero depreciation</li>
+                <li>Personal accident cover</li>
+                <li>Engine protection</li>
+                <li>No claim bonus protection</li>
+                <li>Key replacement coverage</li>
+            </ul>
+            <button class="submit-btn" onclick="scrollToForm('Ultimate Coverage')">Get Quote</button>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="footer-section">
+            <h3>Contact us</h3>
+            <p>Telephone: +852 2180000</p>
+            <p>Email: Services@legendmotor.com</p>
+            <p>Address: No. 21 Yuen Wo Road, Sha Tin, New Territories</p>
+        </div>
+        <div class="footer-section">
+            <h3>Business Hours</h3>
+            <p>Monday - Friday: 09:00-21:00</p>
+            <p>Weekend: 10:00-20:00</p>
+        </div>
+        <div class="footer-section">
+            <h3>Follow us</h3>
+            <p>Facebook</p>
+            <p>Instagram</p>
+            <p>LINE</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -18,15 +18,35 @@ $(document).ready(function() {
 
     $('#userType').change(function() {
         const selectedType = $(this).val();
-        const staffNumberField = `
-            <div class="form-group" required id="staffNumberGroup">
-                <label for="staffNumber">Staff Number</label>
-                <input type="text" id="staffNumber" name="staffNumber" required>
-            </div>`;
+        let staffNumberField;
+        
+        if (selectedType === 'vehicleSalesperson') {
+            staffNumberField = `
+                <div class="form-group" required id="staffNumberGroup">
+                    <label for="staffNumber">Staff Number</label>
+                    <input type="text" id="staffNumber" name="staffNumber" required
+                           placeholder="VS1234"
+                           title="Enter your staff number in format: VS followed by 4 digits">
+                    <div class="error-message"></div>
+                </div>`;
+        } else if (selectedType === 'insuranceSalesperson') {
+            staffNumberField = `
+                <div class="form-group" required id="staffNumberGroup">
+                    <label for="staffNumber">Staff Number</label>
+                    <input type="text" id="staffNumber" name="staffNumber" required
+                           placeholder="IS1234"
+                           title="Enter your staff number in format: IS followed by 4 digits">
+                    <div class="error-message"></div>
+                </div>`;
+        }
+
         const insuranceCompanyName = `
             <div class="form-group" required id="insurancecompany">
                 <label for="insurancecompany">Company Name</label>
-                <input type="text" id="insurancecompany" name="insurancecompany" required>
+                <input type="text" id="insurancecompany" name="insurancecompany" required
+                       placeholder="Enter your insurance company name"
+                       title="Enter the name of your insurance company">
+                <div class="error-message"></div>
             </div>`;
 
         $('#staffNumberGroup').remove();
@@ -36,7 +56,7 @@ $(document).ready(function() {
             $(staffNumberField).insertAfter('#userType').closest('.form-group');
         }
         if (selectedType === 'insuranceSalesperson'){
-            $(insuranceCompanyName).insertAfter('#userType').closest('.form-group');
+            $(insuranceCompanyName).insertAfter('#staffNumberGroup').closest('.form-group');
         }
     });
 

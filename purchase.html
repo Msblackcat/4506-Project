@@ -7,8 +7,20 @@
     <link rel="stylesheet" href="purchase.css">
     <script src="js/jquery-1.11.1.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the selected plan from localStorage
+            const selectedPlan = localStorage.getItem('selectedInsurancePlan');
+            const insurancePlanButton = document.getElementById('insurancePlanButton');
+            
+            // Update button text if a plan was selected
+            if (selectedPlan) {
+                insurancePlanButton.textContent = selectedPlan;
+                insurancePlanButton.style.backgroundColor = '#4CAF50'; // Optional: change button color to indicate selection
+            }
+        });
+        </script>
+    <script>
         $(document).ready(function() {
-            // Load purchase data from localStorage
             const loadPurchaseData = () => {
                 const purchaseData = JSON.parse(localStorage.getItem('currentPurchase'));
                 if (purchaseData && purchaseData.item) {
@@ -29,7 +41,6 @@
                 }
             };
 
-            // Button hover effects
             $(".option-button").hover(
                 function() {
                     if (!$(this).hasClass("selected")) {
@@ -85,7 +96,7 @@
                 const cardCVV = $("#card-cvv").val();
 
                 // Validation
-                if (!color || !coverage || !insurance || !warranty || !paymentMethod) {
+                if (!color || !insurance || !warranty || !paymentMethod) {
                     alert("Please complete all fields before confirming your purchase.");
                     return;
                 }
@@ -113,8 +124,8 @@
                 const finalPurchase = {
                     ...purchaseData,
                     color,
-                    coverage,
                     insurance,
+                    insurancePlan: localStorage.getItem('selectedInsurancePlan') || 'No plan selected',
                     warranty,
                     paymentMethod,
                     purchaseDate: new Date().toISOString(),
@@ -138,8 +149,8 @@
                         <p><strong>Transaction ID:</strong> ${finalPurchase.transactionId}</p>
                         <p><strong>Product:</strong> ${purchaseData.item.name}</p>
                         <p><strong>Color:</strong> ${color}</p>
-                        <p><strong>Coverage:</strong> ${coverage}</p>
                         <p><strong>Insurance Company:</strong> ${insurance}</p>
+                        <p><strong>Insurance Plan:</strong> ${localStorage.getItem('selectedInsurancePlan') || 'No plan selected'}</p>
                         <p><strong>Warranty:</strong> ${warranty}</p>
                         <p><strong>Payment Method:</strong> ${paymentMethod}</p>
                         <p><strong>Price:</strong> ${purchaseData.item.price}</p>
@@ -226,21 +237,20 @@
         <div class="customization-options">
             <h3>Customize Your Purchase</h3>
             <div class="options-list">
+                <h4>Coverage Plan(select first)</h4>
+                <button class="option-button" id="insurancePlanButton" onclick="window.location.href = 'Insurance.html'">Click here to select</button>
+                    
+                <h4>Insurance Company</h4>
+                <input type="text" id="insurance-company" placeholder="Enter your insurance company" class="input-field">
+                
+                
+
                 <h4>Color</h4>
                 <div class="option-buttons">
                     <button class="option-button" data-color="product1_grey">Gray</button>
                     <button class="option-button" data-color="product1_black">Black</button>
                     <button class="option-button" data-color="product1_red">Red</button>
                 </div>
-        
-                <h4>Coverage preferences</h4>
-                <div class="option-buttons">
-                    <button class="option-button" data-coverage="rearview mirror">Rearview Mirror</button>
-                    <button class="option-button" data-coverage="Tire">Tire</button>
-                </div>
-        
-                <h4>Insurance Company</h4>
-                <input type="text" id="insurance-company" placeholder="Enter your insurance company" class="input-field">
         
                 <h4>Warranty</h4>
                 <div class="option-buttons">

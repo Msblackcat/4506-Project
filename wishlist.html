@@ -100,7 +100,7 @@
                         <div class="empty-wishlist">
                             <h2>Your wishlist is empty</h2>
                             <p>Browse our collection and add some cars to your wishlist!</p>
-                            <a href="index.html" class="purchase-btn">Browse Cars</a>
+                            <a href="index.html" class="purchase-btn" onclick="purchaseItem("this)">Browse Cars</a>
                         </div>
                     `);
                 }
@@ -108,9 +108,7 @@
         }
 
         function purchaseItem(itemId) {
-            // Here you would typically redirect to a purchase/checkout page
-            alert('Redirecting to purchase page...');
-            // window.location.href = `purchase.html?id=${itemId}`;
+            window.location.href = 'purchase.html';
         }
 
         function handleLogout(event) {

@@ -82,16 +82,11 @@
                 
             function checkLoginState() {
                 const username = localStorage.getItem('uName');
-                if (!username) {
-                    alert('Please login to view your wishlist');
-                    window.location.href = 'login.html';
-                    return;
-                }
                 updateNavigation(username);
-                loadWishlistItems();
             }
         
             function updateNavigation(username) {
+                if(username){
                 const loginRegisterLi = $('.dropdown:last');
                 loginRegisterLi.html(`
                     <a href="#" class="user-profile">${username} ▼</a>
@@ -100,6 +95,7 @@
                         <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
                     </ul>
                 `);
+                }
             }
         });
 
