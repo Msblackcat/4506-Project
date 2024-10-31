@@ -85,101 +85,116 @@
 
             // Purchase confirmation
             $(".buy-now-button").click(function() {
-                const purchaseData = JSON.parse(localStorage.getItem('currentPurchase'));
-                const color = $(".option-button[data-color].selected").text();
-                const coverage = $(".option-button[data-coverage].selected").text();
-                const insurance = $("#insurance-company").val();
-                const warranty = $(".option-button[data-warranty].selected").text();
-                const paymentMethod = $(".option-button[data-payment].selected").text();
-                const cardNumber = $("#card-number").val();
-                const cardExpiry = $("#card-expiry").val();
-                const cardCVV = $("#card-cvv").val();
+    const purchaseData = JSON.parse(localStorage.getItem('currentPurchase'));
+    const color = $(".option-button[data-color].selected").text();
+    const coverage = $(".option-button[data-coverage].selected").text();
+    const insurance = $("#insurance-company").val();
+    const warranty = $(".option-button[data-warranty].selected").text();
+    const paymentMethod = $(".option-button[data-payment].selected").text();
+    const cardNumber = $("#card-number").val();
+    const cardExpiry = $("#card-expiry").val();
+    const cardCVV = $("#card-cvv").val();
 
-                // Validation
-                if (!color || !insurance || !warranty || !paymentMethod) {
-                    alert("Please complete all fields before confirming your purchase.");
-                    return;
-                }
+    // Validation
+    if (!color || !insurance || !warranty || !paymentMethod) {
+        alert("Please complete all fields before confirming your purchase.");
+        return;
+    }
 
-                if (paymentMethod === "Visa") {
-                    if (!cardNumber || !cardExpiry || !cardCVV) {
-                        alert("Please enter your credit card details for Visa payment.");
-                        return;
-                    }
-                    if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ''))) {
-                        alert("Please enter a valid 16-digit card number.");
-                        return;
-                    }
-                    if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
-                        alert("Please enter expiry date in MM/YY format.");
-                        return;
-                    }
-                    if (!/^\d{3}$/.test(cardCVV)) {
-                        alert("Please enter a valid 3-digit CVV.");
-                        return;
-                    }
-                }
+    if (paymentMethod === "Visa") {
+        if (!cardNumber || !cardExpiry || !cardCVV) {
+            alert("Please enter your credit card details for Visa payment.");
+            return;
+        }
+        if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ''))) {
+            alert("Please enter a valid 16-digit card number.");
+            return;
+        }
+        if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+            alert("Please enter expiry date in MM/YY format.");
+            return;
+        }
+        if (!/^\d{3}$/.test(cardCVV)) {
+            alert("Please enter a valid 3-digit CVV.");
+            return;
+        }
+    }
 
-                // Create final purchase record
-                const finalPurchase = {
-                    ...purchaseData,
-                    color,
-                    insurance,
-                    insurancePlan: localStorage.getItem('selectedInsurancePlan') || 'No plan selected',
-                    warranty,
-                    paymentMethod,
-                    purchaseDate: new Date().toISOString(),
-                    transactionId: 'TRX' + Math.random().toString(36).substr(2, 9)
-                };
+    // Create history record
+    const historyRecord = {
+        id: 'PUR' + Date.now(),
+        date: new Date().toISOString(),
+        item: purchaseData.item,
+        color: color,
+        insurance: insurance,
+        insurancePlan: localStorage.getItem('selectedInsurancePlan') || 'No plan selected',
+        warranty: warranty,
+        paymentMethod: paymentMethod,
+        transactionId: 'TRX' + Math.random().toString(36).substr(2, 9),
+        total: purchaseData.item.price,
+        username: localStorage.getItem('uName')
+    };
 
-                // Save to purchase history
-                const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
-                purchaseHistory.push(finalPurchase);
-                localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
+    // Save to purchase history
+    let purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
+    purchaseHistory.push(historyRecord);
+    localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
 
-                // Remove item from wishlist
-                let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-                wishlist = wishlist.filter(item => item.id !== purchaseData.item.id);
-                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    // Remove from wishlist
+    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    wishlist = wishlist.filter(item => item.id !== purchaseData.item.id);
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
 
-                // Show receipt
-                let receiptHtml = `
-                    <div class="receipt">
-                        <h2>Purchase Receipt</h2>
-                        <p><strong>Transaction ID:</strong> ${finalPurchase.transactionId}</p>
-                        <p><strong>Product:</strong> ${purchaseData.item.name}</p>
-                        <p><strong>Color:</strong> ${color}</p>
-                        <p><strong>Insurance Company:</strong> ${insurance}</p>
-                        <p><strong>Insurance Plan:</strong> ${localStorage.getItem('selectedInsurancePlan') || 'No plan selected'}</p>
-                        <p><strong>Warranty:</strong> ${warranty}</p>
-                        <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-                        <p><strong>Price:</strong> ${purchaseData.item.price}</p>
-                        <p><strong>Purchase Date:</strong> ${new Date().toLocaleDateString()}</p>
-                        <button class="close-receipt-button">Close Receipt</button>
-                    </div>
-                `;
-                
-                $("body").append(receiptHtml);
-                $(".receipt").css({
-                    "position": "fixed",
-                    "top": "50%",
-                    "left": "50%",
-                    "transform": "translate(-50%, -50%)",
-                    "background-color": "white",
-                    "padding": "20px",
-                    "border-radius": "8px",
-                    "box-shadow": "0 4px 8px rgba(0, 0, 0, 0.2)",
-                    "width": "80%",
-                    "max-width": "500px",
-                    "text-align": "left",
-                    "z-index": "1000"
-                });
+    // Show receipt
+    const receiptHtml = `
+        <div class="receipt-overlay">
+            <div class="receipt">
+                <h2>Purchase Receipt</h2>
+                <p><strong>Transaction ID:</strong> ${historyRecord.transactionId}</p>
+                <p><strong>Product:</strong> ${purchaseData.item.name}</p>
+                <p><strong>Color:</strong> ${color}</p>
+                <p><strong>Insurance Company:</strong> ${insurance}</p>
+                <p><strong>Insurance Plan:</strong> ${historyRecord.insurancePlan}</p>
+                <p><strong>Warranty:</strong> ${warranty}</p>
+                <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                <p><strong>Price:</strong> ${purchaseData.item.price}</p>
+                <p><strong>Purchase Date:</strong> ${new Date().toLocaleDateString()}</p>
+                <button class="close-receipt-button">Close Receipt</button>
+            </div>
+        </div>
+    `;
+    
+    $("body").append(receiptHtml);
+    
+    // Style the receipt overlay
+    $(".receipt-overlay").css({
+        "position": "fixed",
+        "top": "0",
+        "left": "0",
+        "width": "100%",
+        "height": "100%",
+        "background-color": "rgba(0, 0, 0, 0.5)",
+        "display": "flex",
+        "justify-content": "center",
+        "align-items": "center",
+        "z-index": "1000"
+    });
 
-                $(".close-receipt-button").click(function() {
-                    $(".receipt").remove();
-                    window.location.href = "index.html";
-                });
-            });
+    $(".receipt").css({
+        "background-color": "white",
+        "padding": "20px",
+        "border-radius": "8px",
+        "box-shadow": "0 4px 8px rgba(0, 0, 0, 0.2)",
+        "width": "80%",
+        "max-width": "500px",
+        "text-align": "left"
+    });
+
+    $(".close-receipt-button").click(function() {
+        $(".receipt-overlay").remove();
+        window.location.href = "histroy.html";
+    });
+});
 
             // Check login state and load purchase data
             const username = localStorage.getItem('uName');
@@ -276,5 +291,24 @@
             <button class="buy-now-button">Confirm Purchase</button>
         </div>
     </div>
+    <footer class="footer">
+        <div class="footer-section">
+            <h3>Contact us</h3>
+            <p>Telephone: +852 2180000</p>
+            <p>Email: Services@legendmotor.com</p>
+            <p>Address: No. 21 Yuen Wo Road, Sha Tin, New Territories</p>
+        </div>
+        <div class="footer-section">
+            <h3>Business Hours</h3>
+            <p>Monday - Friday: 09:00-21:00</p>
+            <p>Weekend: 10:00-20:00</p>
+        </div>
+        <div class="footer-section">
+            <h3>Follow us</h3>
+            <p>Facebook</p>
+            <p>Instagram</p>
+            <p>LINE</p>
+        </div>
+    </footer>
 </body>
 </html>
