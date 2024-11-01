@@ -8,7 +8,7 @@
         <script src="js/jquery-1.11.1.js"></script>
         <script>
             function addToCart(button) {
-    // Check if user is logged in
+
     const username = localStorage.getItem('uName');
     if (!username) {
         alert('Please login to add items to wishlist');
@@ -16,32 +16,31 @@
         return;
     }
 
-    // Get the product card container
+
     const productCard = button.closest('.product-card');
     
-    // Create item object
+
     const item = {
-        id: Date.now(), // Using timestamp as a simple unique ID
+        id: Date.now(),
         image: productCard.querySelector('img').src,
         name: productCard.querySelector('h3').innerText,
-        // Split the paragraph text into lines and extract information
         year: productCard.querySelector('p').innerText.split('\n')[0].split(': ')[1],
         mileage: productCard.querySelector('p').innerText.split('\n')[1].split(': ')[1],
         engine: productCard.querySelector('p').innerText.split('\n')[2].split(': ')[1],
         price: productCard.querySelector('.price').innerText
     };
 
-    console.log('Adding item:', item); // Debug log
+    console.log('Adding item:', item);
 
-    // Get existing wishlist or create new array
+
     let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
     
-    // Check if item already exists in wishlist
+
     if (!wishlist.some(wishlistItem => wishlistItem.name === item.name)) {
         wishlist.push(item);
         localStorage.setItem('wishlist', JSON.stringify(wishlist));
         
-        // Animation
+
         const flyingImg = productCard.querySelector('img').cloneNode();
         flyingImg.classList.add('flying-item');
         
@@ -239,7 +238,7 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="histroy.html">Histroy</a>
+                    <a href="history.html">Histroy</a>
                     <ul class="dropdown-content">
                     </ul>
                 </li>
@@ -338,7 +337,7 @@
                 data-engine="6.5 Litre V12" 
                 data-mileage="0 Kilometer">Details</button><br>
                 <button class="cart-button" onclick="addToCart(this)"></i>Add to WishList</button><br>
-                <button class="buy-button" onclick="location.href='purchase.html'">Buy Now</button>
+                <button class="buy-button" onclick="buyNow(this)">Buy Now</button>
             </div>
 
             <div class="product-card" data-brand="Aston Martin">

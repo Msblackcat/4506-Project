@@ -8,7 +8,7 @@
         <script src="js/jquery-1.11.1.js"></script>
         <script>
         function addToCart(container) {
-            // Check if user is logged in
+
             const username = localStorage.getItem('uName');
             if (!username) {
                 alert('Please login to add items to wishlist');
@@ -19,7 +19,7 @@
             const productImg = container.querySelector('.vehicle');
             const productDetails = container.querySelector('.description');
             
-            // Create item object
+
             const item = {
                 id: parseInt(productImg.dataset.id),
                 image: productImg.src,
@@ -30,17 +30,17 @@
                 price: productDetails.querySelector('.price').innerText
             };
         
-            console.log('Adding item:', item); // Debug log
+            console.log('Adding item:', item);
         
-            // Get existing wishlist or create new array
+
             let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
             
-            // Check if item already exists in wishlist
+
             if (!wishlist.some(wishlistItem => wishlistItem.id === item.id)) {
                 wishlist.push(item);
                 localStorage.setItem('wishlist', JSON.stringify(wishlist));
                 
-                // Animation
+
                 const flyingImg = productImg.cloneNode();
                 flyingImg.classList.add('flying-item');
                 
@@ -77,7 +77,7 @@
             </script>
         <script>
         $(document).ready(function() {
-            // Check login state immediately
+
             checkLoginState();
                 
             function checkLoginState() {
@@ -132,7 +132,7 @@
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="histroy.html">Histroy</a>
+                <a href="history.html">Histroy</a>
                 <ul class="dropdown-content">
                 </ul>
             </li>

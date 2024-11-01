@@ -24,7 +24,7 @@
             }
 
             updateProgress(step) {
-                // Update steps
+
                 this.steps.forEach((stepEl, index) => {
                     if (index < step) {
                         stepEl.classList.add('active');
@@ -33,7 +33,7 @@
                     }
                 });
 
-                // Update progress bar
+
                 const progress = ((step - 1) / (this.totalSteps - 1)) * 100;
                 this.progressBar.style.width = `${progress}%`;
             }
@@ -46,17 +46,17 @@
             }
 
             start() {
-                // Reset any existing timeouts
+
                 this.timeouts.forEach(timeout => clearTimeout(timeout));
                 this.timeouts = [];
                 
-                // Initial state
+
                 this.currentStep = 1;
                 this.updateProgress(1);
                 
-                let timeLeft = 10; // Initial countdown for Processing
+                let timeLeft = 10;
 
-                // Update to Processing after purchase
+
                 const processingInterval = setInterval(() => {
                     this.updateTimer(timeLeft, 'Processing');
                     timeLeft--;
@@ -66,8 +66,8 @@
                         this.currentStep = 2;
                         this.updateProgress(2);
                         
-                        // Start Delivering countdown
-                        timeLeft = 10; // 10 seconds for delivering
+
+                        timeLeft = 10;
                         const deliveringInterval = setInterval(() => {
                             this.updateTimer(timeLeft, 'Delivering');
                             timeLeft--;
@@ -77,8 +77,8 @@
                                 this.currentStep = 3;
                                 this.updateProgress(3);
 
-                                // Start Completed countdown
-                                timeLeft = 60; // 60 seconds until completed
+
+                                timeLeft = 60;
                                 const completedInterval = setInterval(() => {
                                     this.updateTimer(timeLeft, 'Completed');
                                     timeLeft--;
@@ -128,7 +128,7 @@
                 try {
                     purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
                     
-                    // Validate the data structure
+
                     if (!Array.isArray(purchaseHistory)) {
                         throw new Error('Invalid purchase history format');
                     }
@@ -144,71 +144,25 @@
                 }
 
                 let historyHTML = '';
-                purchaseHistory.forEach((purchase, index) => {
-                    // Validate required purchase data
-                    if (!validatePurchaseData(purchase)) {
-                        console.error('Invalid purchase data:', purchase);
-                        return;
-                    }
-
-                    const purchaseDate = new Date(purchase.purchaseDate).toLocaleDateString();
-                    const safeImageUrl = purchase.item.image || 'placeholder-image.jpg';
-
-                    historyHTML += `
-                        <div class="history-item" data-transaction="${purchase.transactionId}">
-                            <img src="${safeImageUrl}" alt="${escapeHtml(purchase.item.name)}" onerror="this.src='placeholder-image.jpg'">
-                            <div class="history-details">
-                                <div class="transaction-id">
-                                    Transaction ID: ${escapeHtml(purchase.transactionId)}
-                                </div>
-                                <div class="purchase-date">
-                                    Purchase Date: ${purchaseDate}
-                                </div>
-                                <div class="car-details">
-                                    <h3>${escapeHtml(purchase.item.name)}</h3>
-                                    <p>Year: ${escapeHtml(purchase.item.year)}</p>
-                                    <p>Mileage: ${escapeHtml(purchase.item.mileage)}</p>
-                                    <p>Engine: ${escapeHtml(purchase.item.engine)}</p>
-                                    <p>Price: ${escapeHtml(purchase.item.price)}</p>
-                                </div>
-                                <div class="purchase-details">
-                                    <h3>Purchase Details</h3>
-                                    <p>Color: ${escapeHtml(purchase.color)}</p>
-                                    <p>Coverage: ${escapeHtml(purchase.coverage)}</p>
-                                    <p>Insurance: ${escapeHtml(purchase.insurance)}</p>
-                                    <p>Warranty: ${escapeHtml(purchase.warranty)}</p>
-                                    <p>Payment Method: ${escapeHtml(purchase.paymentMethod)}</p>
-                                </div>
-                                <div class="status-timeline" id="timeline-${index}">
-                                    <div class="timeline-steps">
-                                        <div class="progress-bar"></div>
-                                        <div class="step active" data-step="1">
-                                            <i class="fas fa-shopping-cart"></i>
-                                            <span class="step-label">Purchased</span>
-                                        </div>
-                                        <div class="step" data-step="2">
-                                            <i class="fas fa-cog"></i>
-                                            <span class="step-label">Processing</span>
-                                        </div>
-                                        <div class="step" data-step="3">
-                                            <i class="fas fa-truck"></i>
-                                            <span class="step-label">Delivering</span>
-                                        </div>
-                                        <div class="step" data-step="4">
-                                            <i class="fas fa-check"></i>
-                                            <span class="step-label">Completed</span>
-                                        </div>
-                                    </div>
-                                    <div class="timer">Processing...</div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                purchaseHistory.forEach((purchase) => {
+            historyHTML += `
+                <div class="history-item">
+                    <div class="transaction-id">Transaction ID: ${purchase.transactionId}</div>
+                    <div class="purchase-date">Purchase Date: ${new Date(purchase.purchaseDate).toLocaleString()}</div>
+                    <div class="car-details">
+                        <h3>${purchase.item.name}</h3>
+                        <p>Color: ${purchase.item.color}</p>
+                        <p>Insurance: ${purchase.insurance}</p>
+                        <p>Warranty: ${purchase.warranty}</p>
+                        <p>Payment Method: ${purchase.paymentMethod}</p>
+                    </div>
+                </div>
+            `;
                 });
 
                 historyContainer.html(historyHTML);
 
-                // Initialize timers for each purchase
+
                 purchaseHistory.forEach((_, index) => {
                     const deliveryTimer = new DeliveryTimer(`timeline-${index}`);
                     deliveryTimer.start();
@@ -249,7 +203,7 @@
                     .replace(/'/g, "&#039;");
             }
 
-            // Check login state and display history
+
             const username = localStorage.getItem('uName');
             if (!username) {
                 window.location.href = 'login.html';
@@ -257,7 +211,7 @@
                 displayPurchaseHistory();
             }
 
-            // Update navigation
+
             function updateNavigation(username) {
                 const loginRegisterLi = $('.dropdown:last');
                 if (username) {
@@ -284,6 +238,8 @@
             localStorage.removeItem('wishlist');
             window.location.href = 'index.html';
         }
+
+        displayPurchaseHistory();
     </script>
     </head>
 <body>

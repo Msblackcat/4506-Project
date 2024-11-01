@@ -9,7 +9,6 @@
     <script>
     $(document).ready(function() {
         function checkLoginState() {
-            // Changed from 'loggedInUser' to 'uName' to match login page
             const username = localStorage.getItem('uName');
             if(username) {
                 updateNavigation(username);
@@ -40,7 +39,6 @@
 
         function handleLogout(event) {
             event.preventDefault();
-            // Clear all relevant localStorage items
             localStorage.removeItem('uName');
             localStorage.removeItem('userType');
             localStorage.removeItem('email');
@@ -60,10 +58,8 @@
             }
         );
         
-        // Check login state when page loads
         checkLoginState();
         
-        // Add logout handler to window
         window.handleLogout = handleLogout;
         });
     </script>

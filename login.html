@@ -22,7 +22,7 @@ $(document).ready(function() {
                            placeholder="Format: ${prefix}1234" required>
                     <div class="error-message"></div>
                 </div>`;
-            // Insert after email field
+
             $('#email').closest('.form-group').after(staffNumberField);
         }
     });
@@ -42,23 +42,21 @@ $(document).ready(function() {
         const email = $('#email').val();
         const password = $('#password').val();
 
-        // Clear previous error messages
+
         $('.error-message').text('');
 
-        // Email validation
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             $('#email').siblings('.error-message').text('Please enter a valid email address');
             isValid = false;
         }
 
-        // Password validation
         if (password.length < 6) {
             $('#password').siblings('.error-message').text('Password must be at least 6 characters long');
             isValid = false;
         }
 
-        // Staff number validation for sales personnel
         if (userType === 'vehicleSalesperson' || userType === 'insuranceSalesperson') {
             const staffNumber = $('#staffNumber').val();
             const prefix = userType === 'vehicleSalesperson' ? 'VS' : 'IS';
@@ -78,7 +76,6 @@ $(document).ready(function() {
         return isValid;
     }
 
-    // Handle login submission
     $("#loginForm").submit(function(event) {
         event.preventDefault();
         
@@ -88,7 +85,6 @@ $(document).ready(function() {
             const staffNumber = $("#staffNumber")?.val() || '';
             const username = email.split('@')[0];
 
-            // Store user data in localStorage
             localStorage.setItem('uName', username);
             localStorage.setItem('email', email);
             localStorage.setItem('userType', userType);
@@ -96,14 +92,13 @@ $(document).ready(function() {
                 localStorage.setItem('staffNumber', staffNumber);
             }
 
-            // Update the login/register button text
             $('#login-register').text(username);
             $('#login-register').siblings('.dropdown-content').hide();
 
-            // Show welcome message
+
             alert(`Login Successful!\nWelcome ${username}\nRole: ${$("#userType option:selected").text()}`);
 
-            // Redirect based on user type
+
             switch(userType) {
                 case 'customer':
                     window.location.href = 'index.html';
@@ -120,7 +115,7 @@ $(document).ready(function() {
         }
     });
 
-    // Initialize the form
+
     updateLoginDescription('customer');
 });
     </script>
@@ -143,7 +138,7 @@ $(document).ready(function() {
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="histroy.html">Histroy</a>
+                <a href="history.html">Histroy</a>
                 <ul class="dropdown-content">
                 </ul>
             </li>

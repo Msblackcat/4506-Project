@@ -8,38 +8,18 @@
     <script src="js/jquery-1.11.1.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get the selected plan from localStorage
             const selectedPlan = localStorage.getItem('selectedInsurancePlan');
             const insurancePlanButton = document.getElementById('insurancePlanButton');
             
-            // Update button text if a plan was selected
             if (selectedPlan) {
                 insurancePlanButton.textContent = selectedPlan;
-                insurancePlanButton.style.backgroundColor = '#4CAF50'; // Optional: change button color to indicate selection
+                insurancePlanButton.style.backgroundColor = '#4CAF50';
             }
         });
         </script>
     <script>
         $(document).ready(function() {
-            const loadPurchaseData = () => {
-                const purchaseData = JSON.parse(localStorage.getItem('currentPurchase'));
-                if (purchaseData && purchaseData.item) {
-                    const item = purchaseData.item;
-                    
-                    // Update product display
-                    $('.carousel-image').attr('src', item.image);
-                    $('.product-display h3').text(item.name);
-                    $('.product-display p').html(
-                        `Year: ${item.year}<br>
-                        Mileage: ${item.mileage}<br>
-                        Engine: ${item.engine}`
-                    );
-                    $('.price').text(item.price);
-                } else {
-                    alert('No purchase data found');
-                    window.location.href = 'wishlist.html';
-                }
-            };
+            
 
             $(".option-button").hover(
                 function() {
@@ -62,7 +42,6 @@
                 }
             );
     
-            // Option button click handling
             $(".option-button").click(function() {
                 $(this).siblings().removeClass("selected").css({
                     "background-color": "white",
@@ -81,129 +60,110 @@
                 } else {
                     $("#credit-card-info").slideUp();
                 }
+
+                var color = $(this).data("color");
+                if (color) {
+                    $(".carousel-image").attr("src", `4506_source/${color}.png`);
+                }
             });
 
-            // Purchase confirmation
+
             $(".buy-now-button").click(function() {
-    const purchaseData = JSON.parse(localStorage.getItem('currentPurchase'));
-    const color = $(".option-button[data-color].selected").text();
-    const coverage = $(".option-button[data-coverage].selected").text();
-    const insurance = $("#insurance-company").val();
-    const warranty = $(".option-button[data-warranty].selected").text();
-    const paymentMethod = $(".option-button[data-payment].selected").text();
-    const cardNumber = $("#card-number").val();
-    const cardExpiry = $("#card-expiry").val();
-    const cardCVV = $("#card-cvv").val();
+                const productName = $(".product-display h3").text() || "Aston Martin Valkyrie";
+                const color = $(".option-button[data-color].selected").text();
+                const insurance = $("#insurance-company").val();
+                const warranty = $(".option-button[data-warranty].selected").text();
+                const paymentMethod = $(".option-button[data-payment].selected").text();
+                const transactionId = 'TRX' + Date.now();
+                const purchaseDate = new Date().toISOString();
 
-    // Validation
-    if (!color || !insurance || !warranty || !paymentMethod) {
-        alert("Please complete all fields before confirming your purchase.");
-        return;
-    }
+                if (!color || !insurance || !warranty || !paymentMethod) {
+                    alert("Please complete all fields before confirming your purchase.");
+                    return;
+                }
 
-    if (paymentMethod === "Visa") {
-        if (!cardNumber || !cardExpiry || !cardCVV) {
-            alert("Please enter your credit card details for Visa payment.");
-            return;
-        }
-        if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ''))) {
-            alert("Please enter a valid 16-digit card number.");
-            return;
-        }
-        if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
-            alert("Please enter expiry date in MM/YY format.");
-            return;
-        }
-        if (!/^\d{3}$/.test(cardCVV)) {
-            alert("Please enter a valid 3-digit CVV.");
-            return;
-        }
-    }
+                if (paymentMethod === "Visa") {
+                    const cardNumber = $("#card-number").val();
+                    const cardExpiry = $("#card-expiry").val();
+                    const cardCVV = $("#card-cvv").val();
 
-    // Create history record
-    const historyRecord = {
-        id: 'PUR' + Date.now(),
-        date: new Date().toISOString(),
-        item: purchaseData.item,
-        color: color,
-        insurance: insurance,
-        insurancePlan: localStorage.getItem('selectedInsurancePlan') || 'No plan selected',
-        warranty: warranty,
-        paymentMethod: paymentMethod,
-        transactionId: 'TRX' + Math.random().toString(36).substr(2, 9),
-        total: purchaseData.item.price,
-        username: localStorage.getItem('uName')
-    };
+                    if (!cardNumber || !cardExpiry || !cardCVV) {
+                        alert("Please enter your credit card details for Visa payment.");
+                        return;
+                    }
+                }
 
-    // Save to purchase history
-    let purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
-    purchaseHistory.push(historyRecord);
-    localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
+                const purchaseData = {
+                    transactionId,
+                    purchaseDate,
+                    item: {
+                        name: productName,
+                        color: color,
+                    },
+                    insurance: insurance,
+                    warranty: warranty,
+                    paymentMethod: paymentMethod,
+                };
 
-    // Remove from wishlist
-    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-    wishlist = wishlist.filter(item => item.id !== purchaseData.item.id);
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
 
-    // Show receipt
-    const receiptHtml = `
-        <div class="receipt-overlay">
-            <div class="receipt">
-                <h2>Purchase Receipt</h2>
-                <p><strong>Transaction ID:</strong> ${historyRecord.transactionId}</p>
-                <p><strong>Product:</strong> ${purchaseData.item.name}</p>
-                <p><strong>Color:</strong> ${color}</p>
-                <p><strong>Insurance Company:</strong> ${insurance}</p>
-                <p><strong>Insurance Plan:</strong> ${historyRecord.insurancePlan}</p>
-                <p><strong>Warranty:</strong> ${warranty}</p>
-                <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-                <p><strong>Price:</strong> ${purchaseData.item.price}</p>
-                <p><strong>Purchase Date:</strong> ${new Date().toLocaleDateString()}</p>
-                <button class="close-receipt-button">Close Receipt</button>
-            </div>
-        </div>
-    `;
-    
-    $("body").append(receiptHtml);
-    
-    // Style the receipt overlay
-    $(".receipt-overlay").css({
-        "position": "fixed",
-        "top": "0",
-        "left": "0",
-        "width": "100%",
-        "height": "100%",
-        "background-color": "rgba(0, 0, 0, 0.5)",
-        "display": "flex",
-        "justify-content": "center",
-        "align-items": "center",
-        "z-index": "1000"
-    });
+                let purchaseHistory = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
+                purchaseHistory.push(purchaseData);
+                localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
 
-    $(".receipt").css({
-        "background-color": "white",
-        "padding": "20px",
-        "border-radius": "8px",
-        "box-shadow": "0 4px 8px rgba(0, 0, 0, 0.2)",
-        "width": "80%",
-        "max-width": "500px",
-        "text-align": "left"
-    });
+                let receiptHtml = `
+                    <div class="receipt-overlay">
+                        <div class="receipt">
+                            <h2>Purchase Receipt</h2>
+                            <p><strong>Transaction ID:</strong> ${transactionId}</p>
+                            <p><strong>Purchase Date:</strong> ${purchaseDate}</p>
+                            <p><strong>Product:</strong> ${productName}</p>
+                            <p><strong>Color:</strong> ${color}</p>
+                            <p><strong>Insurance Company:</strong> ${insurance}</p>
+                            <p><strong>Warranty:</strong> ${warranty}</p>
+                            <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                            <button class="close-receipt-button">Close Receipt</button>
+                        </div>
+                    </div>
+                `;
 
-    $(".close-receipt-button").click(function() {
-        $(".receipt-overlay").remove();
-        window.location.href = "histroy.html";
-    });
-});
+            $("body").append(receiptHtml);
 
-            // Check login state and load purchase data
+
+            $(".receipt-overlay").css({
+                "position": "fixed",
+                "top": "0",
+                "left": "0",
+                "width": "100%",
+                "height": "100%",
+                "background-color": "rgba(0, 0, 0, 0.5)",
+                "display": "flex",
+                "justify-content": "center",
+                "align-items": "center",
+                "z-index": "1000"
+            });
+
+            $(".receipt").css({
+                "background-color": "white",
+                "padding": "20px",
+                "border-radius": "8px",
+                "box-shadow": "0 4px 8px rgba(0, 0, 0, 0.2)",
+                "width": "80%",
+                "max-width": "500px",
+                "text-align": "left"
+            });
+
+            $(".close-receipt-button").click(function() {
+                $(".receipt-overlay").remove();
+                window.location.href = "history.html";
+            });
+                });
+
+
             const username = localStorage.getItem('uName');
             if (!username) {
                 window.location.href = 'login.html';
-            } else {
-                loadPurchaseData();
             }
-        });
+});
     </script>
 </head>
 <body>
@@ -224,7 +184,7 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="histroy.html">Histroy</a>
+                    <a href="history.html">Histroy</a>
                     <ul class="dropdown-content">
                     </ul>
                 </li>
@@ -242,7 +202,7 @@
     <div class="purchase-container">
         <div class="product-display">
             <div class="carousel">
-                <img src="" alt="Car Image" class="carousel-image">
+                <img src="/4506_source/product1_black.png" alt="Car Image" class="carousel-image">
                 <h3></h3>
                 <p></p>
                 <div class="price"></div>
