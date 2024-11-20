@@ -5,219 +5,217 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Legend Motor Company</title>
         <link rel="stylesheet" href="Viewmore.css">
+        <link rel="stylesheet" href="common.css">
         <script src="js/jquery-1.11.1.js"></script>
         <script>
             function addToCart(button) {
-
-    const username = localStorage.getItem('uName');
-    if (!username) {
-        alert('Please login to add items to wishlist');
-        window.location.href = 'login.html';
-        return;
-    }
-
-
-    const productCard = button.closest('.product-card');
-    
-
-    const item = {
-        id: Date.now(),
-        image: productCard.querySelector('img').src,
-        name: productCard.querySelector('h3').innerText,
-        year: productCard.querySelector('p').innerText.split('\n')[0].split(': ')[1],
-        mileage: productCard.querySelector('p').innerText.split('\n')[1].split(': ')[1],
-        engine: productCard.querySelector('p').innerText.split('\n')[2].split(': ')[1],
-        price: productCard.querySelector('.price').innerText
-    };
-
-    console.log('Adding item:', item);
-
-
-    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-    
-
-    if (!wishlist.some(wishlistItem => wishlistItem.name === item.name)) {
-        wishlist.push(item);
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        
-
-        const flyingImg = productCard.querySelector('img').cloneNode();
-        flyingImg.classList.add('flying-item');
-        
-        const startPos = productCard.querySelector('img').getBoundingClientRect();
-        const wishlistBtn = document.querySelector('.nav-links li:nth-child(3) a');
-        const endPos = wishlistBtn.getBoundingClientRect();
-        
-        flyingImg.style.position = 'fixed';
-        flyingImg.style.top = startPos.top + 'px';
-        flyingImg.style.left = startPos.left + 'px';
-        flyingImg.style.width = startPos.width + 'px';
-        flyingImg.style.height = startPos.height + 'px';
-        flyingImg.style.zIndex = '1000';
-        flyingImg.style.transition = 'all 0.8s ease';
-        
-        document.body.appendChild(flyingImg);
-        
-        setTimeout(() => {
-            flyingImg.style.top = endPos.top + 'px';
-            flyingImg.style.left = endPos.left + 'px';
-            flyingImg.style.width = '50px';
-            flyingImg.style.height = '50px';
-            flyingImg.style.opacity = '0.5';
-            
-            wishlistBtn.classList.add('wishlist-animation');
-            
-            setTimeout(() => {
-                flyingImg.remove();
-                wishlistBtn.classList.remove('wishlist-animation');
-                alert('Item added to wishlist successfully!');
-            }, 800);
-        }, 0);
-    } else {
-        alert('This item is already in your wishlist!');
-    }
-}
-        </script>
-        <script>
-        $(document).ready(function() {
-            function checkLoginState() {
                 const username = localStorage.getItem('uName');
-                if(username) {
-                    updateNavigation(username);
-                } else {
+                if (!username) {
+                    alert('Please login to add items to wishlist');
                     window.location.href = 'login.html';
+                    return;
                 }
-            }
+            
+                const productCard = button.closest('.product-card');
 
-            function updateNavigation(username) {
-                const loginRegisterLi = $('.dropdown:last');
-                if (username) {
-                    loginRegisterLi.html(`
-                        <a href="#" class="user-profile">${username} ▼</a>
-                        <ul class="dropdown-content">
-                            <li><a href="profile.html">Profile</a></li>
-                            <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
-                        </ul>
+                const item = {
+                    id: Date.now(),
+                    image: productCard.querySelector('img').src,
+                    name: productCard.querySelector('h3').innerText,
+                    year: productCard.querySelector('p').innerText.split('\n')[0].split(': ')[1],
+                    mileage: productCard.querySelector('p').innerText.split('\n')[1].split(': ')[1],
+                    engine: productCard.querySelector('p').innerText.split('\n')[2].split(': ')[1],
+                    price: productCard.querySelector('.price').innerText
+                };
+            
+                console.log('Adding item:', item);
+            
+            
+                let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            
+                if (!wishlist.some(wishlistItem => wishlistItem.name === item.name)) {
+                    wishlist.push(item);
+                    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+
+                
+                    const flyingImg = productCard.querySelector('img').cloneNode();
+                    flyingImg.classList.add('flying-item');
+
+                    const startPos = productCard.querySelector('img').getBoundingClientRect();
+                    const wishlistBtn = document.querySelector('.nav-links li:nth-child(3) a');
+                    const endPos = wishlistBtn.getBoundingClientRect();
+
+                    flyingImg.style.position = 'fixed';
+                    flyingImg.style.top = startPos.top + 'px';
+                    flyingImg.style.left = startPos.left + 'px';
+                    flyingImg.style.width = startPos.width + 'px';
+                    flyingImg.style.height = startPos.height + 'px';
+                    flyingImg.style.zIndex = '1000';
+                    flyingImg.style.transition = 'all 0.8s ease';
+
+                    document.body.appendChild(flyingImg);
+
+                    setTimeout(() => {
+                        flyingImg.style.top = endPos.top + 'px';
+                        flyingImg.style.left = endPos.left + 'px';
+                        flyingImg.style.width = '50px';
+                        flyingImg.style.height = '50px';
+                        flyingImg.style.opacity = '0.5';
+
+                        wishlistBtn.classList.add('wishlist-animation');
+
+                        setTimeout(() => {
+                            flyingImg.remove();
+                            wishlistBtn.classList.remove('wishlist-animation');
+                            alert('Item added to wishlist successfully!');
+                        }, 800);
+                    }, 0);
+                } else {
+                    alert('This item is already in your wishlist!');
+                }
+            }           
+                    </script>
+                    <script>
+                    $(document).ready(function() {
+                        function checkLoginState() {
+                            const username = localStorage.getItem('uName');
+                            if(username) {
+                                updateNavigation(username);
+                            } else {
+                                window.location.href = 'login.html';
+                            }
+                        }
+                    
+                        function updateNavigation(username) {
+                            const loginRegisterLi = $('.dropdown:last');
+                            if (username) {
+                                loginRegisterLi.html(`
+                                    <a href="#" class="user-profile">${username} ▼</a>
+                                    <ul class="dropdown-content">
+                                        <li><a href="profile.html">Profile</a></li>
+                                        <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
+                                    </ul>
+                                `);
+                            }
+                        }
+                    
+                function handleLogout(event) {
+                    event.preventDefault();
+                    localStorage.removeItem('loggedInUser');
+                    localStorage.removeItem('userType');
+                    localStorage.removeItem('email');
+                    localStorage.removeItem('permissions');
+                    updateNavigation(null);
+                    window.location.href = 'index.html';
+                }
+            
+                $('.dropdown').hover(
+                    function() {
+                        $(this).children('.dropdown-content').show();
+                    },
+                    function() {
+                        $(this).children('.dropdown-content').hide();
+                    }
+                );
+                
+                $("#searchBar").on("keyup",function(){
+                
+                    var searchValue = $('#searchBar').val().toLowerCase();
+                
+                
+                    $('.product-card').each(function() {
+                    
+                        var title = $(this).find('h3').text().toLowerCase();
+                        var matchesSearch = title.includes(searchValue);
+                        if (matchesSearch) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+            
+                $('#brandFilter, #priceFilter').change(function(){
+                    var selectedBrand = $('#brandFilter').val();
+                    var selectedPriceRange = $('#priceFilter').val();
+                
+                    $('.product-card').each(function() {
+                    
+                        var brand = $(this).data('brand');
+                        var priceText = $(this).find('.price').text().replace(/[^0-9]/g, '');
+                        var price = parseInt(priceText, 10);
+                    
+                    
+                        var matchesBrand = !selectedBrand || brand === selectedBrand;
+                        var matchesPrice = true;
+                    
+                        if (selectedPriceRange) {
+                            if (selectedPriceRange === "0-5000000") {
+                                matchesPrice = price < 5000000;
+                            } else if (selectedPriceRange === "5000000-10000000") {
+                                matchesPrice = price >= 5000000 && price <= 10000000;
+                            } else if (selectedPriceRange === "10000000") {
+                                matchesPrice = price > 10000000;
+                            }
+                        }
+                    
+                        if (matchesBrand && matchesPrice) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+            
+                $('.details-button').click(function() {
+                    var imagePath = $(this).data('image');
+                    var seating = $(this).data('seating');
+                    var fuel = $(this).data('fuel');
+                    var transmission = $(this).data('transmission');
+                    var engine = $(this).data('engine');
+                    var mileage = $(this).data('mileage');
+                
+                    $('#modalDetails').html(`
+                        <div class="modal-left">
+                            <img src="${imagePath}" alt="Car Image" class="modal-image">
+                        </div>
+                        <h3>Vehicle Details</h3>
+                        <p><strong>Seating Capacity:</strong> ${seating}</p>
+                        <p><strong>Fuel Type:</strong> ${fuel}</p>
+                        <p><strong>Transmission:</strong> ${transmission}</p>
+                        <p><strong>Engine:</strong> ${engine}</p>
+                        <p><strong>Mileage:</strong> ${mileage}</p>
                     `);
-                }
-            }
-
-    function handleLogout(event) {
-        event.preventDefault();
-        localStorage.removeItem('loggedInUser');
-        localStorage.removeItem('userType');
-        localStorage.removeItem('email');
-        localStorage.removeItem('permissions');
-        updateNavigation(null);
-        window.location.href = 'index.html';
-    }
-
-    $('.dropdown').hover(
-        function() {
-            $(this).children('.dropdown-content').show();
-        },
-        function() {
-            $(this).children('.dropdown-content').hide();
-        }
-    );
-
-    $("#searchBar").on("keyup",function(){
-
-        var searchValue = $('#searchBar').val().toLowerCase();
-
-
-        $('.product-card').each(function() {
-
-            var title = $(this).find('h3').text().toLowerCase();
-            var matchesSearch = title.includes(searchValue);
-            if (matchesSearch) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    });
-
-    $('#brandFilter, #priceFilter').change(function(){
-        var selectedBrand = $('#brandFilter').val();
-        var selectedPriceRange = $('#priceFilter').val();
-
-        $('.product-card').each(function() {
-
-            var brand = $(this).data('brand');
-            var priceText = $(this).find('.price').text().replace(/[^0-9]/g, '');
-            var price = parseInt(priceText, 10);
-
-
-            var matchesBrand = !selectedBrand || brand === selectedBrand;
-            var matchesPrice = true;
-
-            if (selectedPriceRange) {
-                if (selectedPriceRange === "0-5000000") {
-                    matchesPrice = price < 5000000;
-                } else if (selectedPriceRange === "5000000-10000000") {
-                    matchesPrice = price >= 5000000 && price <= 10000000;
-                } else if (selectedPriceRange === "10000000") {
-                    matchesPrice = price > 10000000;
-                }
-            }
-
-            if (matchesBrand && matchesPrice) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    });
-
-    $('.details-button').click(function() {
-        var imagePath = $(this).data('image');
-        var seating = $(this).data('seating');
-        var fuel = $(this).data('fuel');
-        var transmission = $(this).data('transmission');
-        var engine = $(this).data('engine');
-        var mileage = $(this).data('mileage');
-
-        $('#modalDetails').html(`
-            <div class="modal-left">
-                <img src="${imagePath}" alt="Car Image" class="modal-image">
-            </div>
-            <h3>Vehicle Details</h3>
-            <p><strong>Seating Capacity:</strong> ${seating}</p>
-            <p><strong>Fuel Type:</strong> ${fuel}</p>
-            <p><strong>Transmission:</strong> ${transmission}</p>
-            <p><strong>Engine:</strong> ${engine}</p>
-            <p><strong>Mileage:</strong> ${mileage}</p>
-        `);
-
-        $('#detailsModal').fadeIn();
-    });
-
-    $('.close').click(function() {
-        $('#detailsModal').fadeOut();
-    });
-
-    $(window).click(function(event) {
-        if ($(event.target).is('#detailsModal')) {
-            $('#detailsModal').fadeOut();
-        }
-    });
-
-    window.handleLogout = handleLogout;
-
-    checkLoginState();
-    function handleLogout(event) {
-            event.preventDefault();
-            localStorage.removeItem('uName');
-            localStorage.removeItem('userType');
-            localStorage.removeItem('email');
-            localStorage.removeItem('permissions');
-            localStorage.removeItem('staffNumber');
-            localStorage.removeItem('username');
-            localStorage.removeItem('wishlist');
-            window.location.href = 'index.html';
-        }
-});
+                    
+                    $('#detailsModal').fadeIn();
+                });
+            
+                $('.close').click(function() {
+                    $('#detailsModal').fadeOut();
+                });
+            
+                $(window).click(function(event) {
+                    if ($(event.target).is('#detailsModal')) {
+                        $('#detailsModal').fadeOut();
+                    }
+                });
+            
+                window.handleLogout = handleLogout;
+            
+                checkLoginState();
+                function handleLogout(event) {
+                        event.preventDefault();
+                        localStorage.removeItem('uName');
+                        localStorage.removeItem('userType');
+                        localStorage.removeItem('email');
+                        localStorage.removeItem('permissions');
+                        localStorage.removeItem('staffNumber');
+                        localStorage.removeItem('username');
+                        localStorage.removeItem('wishlist');
+                        window.location.href = 'index.html';
+                    }
+            });
         </script>
     </head>
     <body>
@@ -251,7 +249,7 @@
                 </li>
             </ul>
         </nav>
-
+        <h1>ViewMore</h1>
         <div class="search-container">
 
             <select id="brandFilter" class="filter-dropdown">

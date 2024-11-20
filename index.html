@@ -5,10 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Legend Motor Company</title>
         <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="common.css">
         <script src="js/jquery-1.11.1.js"></script>
         <script>
+        /*click the photo and start the animation*/
         function addToCart(container) {
-
             const username = localStorage.getItem('uName');
             if (!username) {
                 alert('Please login to add items to wishlist');
@@ -19,7 +20,6 @@
             const productImg = container.querySelector('.vehicle');
             const productDetails = container.querySelector('.description');
             
-
             const item = {
                 id: parseInt(productImg.dataset.id),
                 image: productImg.src,
@@ -75,6 +75,7 @@
             }
         }
             </script>
+
         <script>
         $(document).ready(function() {
 
@@ -89,7 +90,7 @@
                 if(username){
                 const loginRegisterLi = $('.dropdown:last');
                 loginRegisterLi.html(`
-                    <a href="#" class="user-profile">${username} ▼</a>
+                    <a href="#" class="user-profile">${username}</a>
                     <ul class="dropdown-content">
                         <li><a href="profile.html">Profile</a></li>
                         <li><a href="#" onclick="handleLogout(event)">Logout</a></li>

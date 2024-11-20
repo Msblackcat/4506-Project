@@ -4,16 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Legend Motor Company - Login</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="login.css">
-    <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
-    <script type="text/javascript">
-$(document).ready(function() {
-    $('#userType').change(function() {
-        const selectedType = $(this).val();
-        $('#staffNumberGroup').remove();
-        updateLoginDescription(selectedType);
+    
+    <!-- Scripts -->
+    <script src="js/jquery-1.11.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            // User type change handler
+            $('#userType').change(function() {
+                const selectedType = $(this).val();
+                $('#staffNumberGroup').remove();
+                updateLoginDescription(selectedType);
 
-        if (selectedType === 'vehicleSalesperson' || selectedType === 'insuranceSalesperson') {
+                if (selectedType === 'vehicleSalesperson' || selectedType === 'insuranceSalesperson') {
+                    addStaffNumberField(selectedType);
+                }
+            });
+
+            // Form submission handler
+            $("#loginForm").submit(function(event) {
+                event.preventDefault();
+                
+                if (validateLogin()) {
+                    handleSuccessfulLogin();
+                }
+            });
+
+            // Initialize description for default user type
+            updateLoginDescription('customer');
+        });
+
+        // Helper Functions
+        function updateLoginDescription(userType) {
+            const descriptions = {
+                customer: "Access your account to browse vehicles, request insurance quotes, and view your purchase history.",
+                vehicleSalesperson: "Login to manage customer orders, process sales inquiries, and interact with customers.",
+                insuranceSalesperson: "Access system to generate quotes, manage insurance offerings, and respond to customer inquiries."
+            };
+            $('#loginDescription').text(descriptions[userType]);
+        }
+
+        function addStaffNumberField(selectedType) {
             const prefix = selectedType === 'vehicleSalesperson' ? 'VS' : 'IS';
             const staffNumberField = `
                 <div class="form-group" id="staffNumberGroup">
@@ -22,69 +56,61 @@ $(document).ready(function() {
                            placeholder="Format: ${prefix}1234" required>
                     <div class="error-message"></div>
                 </div>`;
-
             $('#email').closest('.form-group').after(staffNumberField);
         }
-    });
 
-    function updateLoginDescription(userType) {
-        const descriptions = {
-            customer: "Access your account to browse vehicles, request insurance quotes, and view your purchase history.",
-            vehicleSalesperson: "Login to manage customer orders, process sales inquiries, and interact with customers.",
-            insuranceSalesperson: "Access system to generate quotes, manage insurance offerings, and respond to customer inquiries."
-        };
-        $('#loginDescription').text(descriptions[userType]);
-    }
+        function validateLogin() {
+            let isValid = true;
+            const userType = $('#userType').val();
+            const email = $('#email').val();
+            const password = $('#password').val();
 
-    function validateLogin() {
-        let isValid = true;
-        const userType = $('#userType').val();
-        const email = $('#email').val();
-        const password = $('#password').val();
+            $('.error-message').text('');
 
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                $('#email').siblings('.error-message').text('Please enter a valid email address');
+                isValid = false;
+            }
 
-        $('.error-message').text('');
+            // Password validation
+            if (password.length < 6) {
+                $('#password').siblings('.error-message').text('Password must be at least 6 characters long');
+                isValid = false;
+            }
 
+            // Staff number validation for employee types
+            if (userType === 'vehicleSalesperson' || userType === 'insuranceSalesperson') {
+                isValid = validateStaffNumber(userType);
+            }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            $('#email').siblings('.error-message').text('Please enter a valid email address');
-            isValid = false;
+            return isValid;
         }
 
-        if (password.length < 6) {
-            $('#password').siblings('.error-message').text('Password must be at least 6 characters long');
-            isValid = false;
-        }
-
-        if (userType === 'vehicleSalesperson' || userType === 'insuranceSalesperson') {
+        function validateStaffNumber(userType) {
             const staffNumber = $('#staffNumber').val();
             const prefix = userType === 'vehicleSalesperson' ? 'VS' : 'IS';
             const staffNumberRegex = new RegExp(`^${prefix}\\d{4}$`);
 
             if (!staffNumber) {
                 $('#staffNumber').siblings('.error-message').text('Staff number is required');
-                isValid = false;
-            } else if (!staffNumberRegex.test(staffNumber)) {
-                $('#staffNumber').siblings('.error-message').text(
-                    `Staff number must be in format ${prefix}1234`
-                );
-                isValid = false;
+                return false;
             }
+            if (!staffNumberRegex.test(staffNumber)) {
+                $('#staffNumber').siblings('.error-message').text(`Staff number must be in format ${prefix}1234`);
+                return false;
+            }
+            return true;
         }
 
-        return isValid;
-    }
-
-    $("#loginForm").submit(function(event) {
-        event.preventDefault();
-        
-        if (validateLogin()) {
+        function handleSuccessfulLogin() {
             const email = $("#email").val();
             const userType = $("#userType").val();
             const staffNumber = $("#staffNumber")?.val() || '';
             const username = email.split('@')[0];
 
+            // Store user data
             localStorage.setItem('uName', username);
             localStorage.setItem('email', email);
             localStorage.setItem('userType', userType);
@@ -92,55 +118,48 @@ $(document).ready(function() {
                 localStorage.setItem('staffNumber', staffNumber);
             }
 
+            // Update UI
             $('#login-register').text(username);
             $('#login-register').siblings('.dropdown-content').hide();
 
-
+            // Show success message
             alert(`Login Successful!\nWelcome ${username}\nRole: ${$("#userType option:selected").text()}`);
 
-
-            switch(userType) {
-                case 'customer':
-                    window.location.href = 'index.html';
-                    break;
-                case 'vehicleSalesperson':
-                    window.location.href = 'managerprocess.html';
-                    break;
-                case 'insuranceSalesperson':
-                    window.location.href = '';
-                    break;
-                default:
-                    window.location.href = 'index.html';
-            }
+            // Redirect based on user type
+            redirectUser(userType);
         }
-    });
 
-
-    updateLoginDescription('customer');
-});
+        function redirectUser(userType) {
+            const redirectPaths = {
+                customer: 'index.html',
+                vehicleSalesperson: 'managerprocess.html',
+                insuranceSalesperson: '',
+                default: 'index.html'
+            };
+            window.location.href = redirectPaths[userType] || redirectPaths.default;
+        }
     </script>
 </head>
+
 <body>
+    <!-- Header -->
     <header class="header"></header>
+
+    <!-- Navigation -->
     <nav class="navbar">
         <ul class="nav-links">
-            <li class="dropdown">
-                <a href="index.html">Home</a>
-            </li>
+            <li class="dropdown"><a href="index.html">Home</a></li>
             <li class="dropdown">
                 <a href="Viewmore.html">View some more</a>
-                <ul class="dropdown-content">
-                </ul>
+                <ul class="dropdown-content"></ul>
             </li>
             <li class="dropdown">
                 <a href="wishlist.html">Wish List</a>
-                <ul class="dropdown-content">
-                </ul>
+                <ul class="dropdown-content"></ul>
             </li>
             <li class="dropdown">
                 <a href="history.html">Histroy</a>
-                <ul class="dropdown-content">
-                </ul>
+                <ul class="dropdown-content"></ul>
             </li>
             <li class="dropdown">
                 <a id="login-register" href="login.html">Login/Register</a>
@@ -152,6 +171,7 @@ $(document).ready(function() {
         </ul>
     </nav>
 
+    <!-- Main Content -->
     <main class="main-content">
         <div class="login-section">
             <h2>Login to Your Account</h2>
@@ -166,33 +186,41 @@ $(document).ready(function() {
                         <option value="insuranceSalesperson">Insurance Salesperson</option>
                     </select>
                 </div>
+
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="Enter your email" required>
                     <div class="error-message"></div>
                 </div>
+
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" placeholder="Enter your password" required>
                     <div class="error-message"></div>
                 </div>
+
                 <div class="button-group">
                     <button type="submit" class="login-btn">Login</button>
                 </div>
+
                 <div class="or-divider">
                     <span>Or</span>
                 </div>
             </form>
-            <button onclick="window.location.href='register.html'" class="create-account">Create New Account</button>
+            
+            <button onclick="window.location.href='register.html'" class="create-account">
+                Create New Account
+            </button>
         </div>
     </main>
 
+    <!-- Footer -->
     <footer class="footer">
         <div class="footer-section">
             <h3>Contact us</h3>
             <p>Telephone: +852 2180000</p>
             <p>Email: Services@legendmotor.com</p>
-            <p>Address: No. 21 Yuen Wo Road,    Sha Tin, New Territories</p>
+            <p>Address: No. 21 Yuen Wo Road, Sha Tin, New Territories</p>
         </div>
         <div class="footer-section">
             <h3>Business Hours</h3>
