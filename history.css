@@ -137,48 +137,51 @@ font-size: 0.9em;
 margin-top: 10px;
 }
 
-/* Responsive Design */
-@media (max-width: 992px) {
-.history-item {
-    grid-template-columns: 200px 1fr;
-}
-}
-
-@media (max-width: 768px) {
 .history-container {
-    padding: 10px;
+    max-width: 800px;
     margin: 20px auto;
+    padding: 0 20px;
 }
 
 .history-item {
-    grid-template-columns: 1fr;
-    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.history-item img {
-    height: 180px;
+.transaction-id {
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 10px;
 }
 
-.history-details {
-    grid-template-columns: 1fr;
+.purchase-date {
+    color: #888;
+    margin-bottom: 15px;
 }
 
-.car-details, .purchase-details {
-    padding: 10px;
-}
+.car-details h3 {
+    color: #333;
+    margin-bottom: 10px;
 }
 
-/* Print Styles */
-@media print {
-.history-item {
-    break-inside: avoid;
-    box-shadow: none;
-    border: 1px solid var(--border-color);
+.car-details p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.no-history {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-style: italic;
 }
 
 .navbar, .footer {
     display: none;
-}
 }
 
 .footer {

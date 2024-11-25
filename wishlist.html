@@ -7,122 +7,7 @@
         <link rel="stylesheet" href="wishlist.css">
         <link rel="stylesheet" href="common.css">
         <script src="js/jquery-1.11.1.js"></script>
-        <script>
-        $(document).ready(function() {
-            function checkLoginState() {
-                const username = localStorage.getItem('uName');
-                if(username) {
-                    updateNavigation(username);
-                    loadWishlistItems();
-                } else {
-                    window.location.href = 'login.html';
-                }
-            }
-
-            function updateNavigation(username) {
-                const loginRegisterLi = $('.dropdown:last');
-                if (username) {
-                    loginRegisterLi.html(`
-                        <a href="#" class="user-profile">${username} ▼</a>
-                        <ul class="dropdown-content">
-                            <li><a href="profile.html">Profile</a></li>
-                            <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
-                        </ul>
-                    `);
-                }
-            }
-
-            function loadWishlistItems() {
-                const wishlistItems = JSON.parse(localStorage.getItem('wishlist')) || [];
-                const container = $('.wishlist-container');
-
-                if (wishlistItems.length === 0) {
-                    container.html(`
-                        <div class="empty-wishlist">
-                            <h2>Your wishlist is empty</h2>
-                            <p>Browse our collection and add some cars to your wishlist!</p>
-                            <a href="index.html" class="purchase-btn">Browse Cars</a>
-                        </div>
-                    `);
-                    return;
-                }
-
-                container.empty();
-                wishlistItems.forEach(item => {
-                    container.append(`
-                        <div class="wishlist-item" data-id="${item.id}">
-                            <div class="wishlist-photo">
-                                <img src="${item.image}" alt="${item.name}">
-                            </div>
-                            <div class="wishlist-details">
-                                <div>
-                                    <h3>${item.name}</h3>
-                                    <p>Year: ${item.year}</p>
-                                    <p>Mileage: ${item.mileage}</p>
-                                    <p>Engine: ${item.engine}</p>
-                                    <div class="price">${item.price}</div>
-                                </div>
-                                <div class="wishlist-actions">
-                                    <button class="remove-btn" onclick="removeFromWishlist(${item.id})">Remove</button>
-                                    <button class="purchase-btn" onclick="purchaseItem(${item.id})">Purchase</button>
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                });
-            }
-
-            $('.dropdown').hover(
-                function() {
-                    $(this).children('.dropdown-content').show();
-                },
-                function() {
-                    $(this).children('.dropdown-content').hide();
-                }
-            );
-
-            checkLoginState();
-            window.handleLogout = handleLogout;
-        });
-
-        function removeFromWishlist(itemId) {
-            const item = $(`.wishlist-item[data-id="${itemId}"]`);
-            item.addClass('delete-animation');
-            
-            setTimeout(() => {
-                let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-                wishlist = wishlist.filter(item => item.id !== itemId);
-                localStorage.setItem('wishlist', JSON.stringify(wishlist));
-                
-                item.remove();
-                
-                if (wishlist.length === 0) {
-                    $('.wishlist-container').html(`
-                        <div class="empty-wishlist">
-                            <h2>Your wishlist is empty</h2>
-                            <p>Browse our collection and add some cars to your wishlist!</p>
-                            <a href="index.html" class="purchase-btn" onclick="purchaseItem("this)">Browse Cars</a>
-                        </div>
-                    `);
-                }
-            }, 500);
-        }
-
-        function purchaseItem(itemId) {
-            window.location.href = 'purchase.html';
-        }
-
-        function handleLogout(event) {
-            event.preventDefault();
-            localStorage.removeItem('uName');
-            localStorage.removeItem('userType');
-            localStorage.removeItem('email');
-            localStorage.removeItem('permissions');
-            localStorage.removeItem('staffNumber');
-            localStorage.removeItem('username');
-            window.location.href = 'index.html';
-        }
-        </script>
+        <script src="wishlist.js"></script>
     </head>
 <body>
     <header class="header"></header>
@@ -159,6 +44,7 @@
     <main class="main-content">
         <h1>My Wishlist</h1>
         <div class="wishlist-container">
+            
         </div>
     </main>
 
