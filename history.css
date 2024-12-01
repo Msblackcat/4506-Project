@@ -292,3 +292,115 @@ margin-top: 10px;
     margin-top: 20px;
     color: var(--text-secondary);
 }
+
+.status-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    align-items: center;
+}
+
+.status-heading {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* Status label styles for regular users */
+.status-label {
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+}
+
+.status-accepted {
+    background-color: #e8f5e9;
+    color: #28a745;
+    border: 1px solid #28a745;
+}
+
+.status-declined {
+    background-color: #fde8e8;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.status-unchecked {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #6c757d;
+}
+
+/* Status button styles for sales managers */
+.status-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.status-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+}
+
+.status-btn.active {
+    opacity: 1;
+}
+
+.accept-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.decline-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.unchecked-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.status-btn:hover {
+    opacity: 0.9;
+}
+
+.history-item {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.transaction-id {
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.purchase-date {
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.car-details {
+    margin-bottom: 15px;
+}
+
+.car-details h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.car-details p {
+    margin: 5px 0;
+    color: #666;
+}

@@ -24,46 +24,106 @@
                 <a href="#" class="user-profile">${username} ▼</a>
                 <ul class="dropdown-content">
                     <li><a href="profile.html">Profile</a></li>
-                    <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
+                    <li><a href="index.html" onclick="handleLogout(event)">Logout</a></li>
                 </ul>
             `);
         }
     }
 
     function displayPurchaseHistory() {
-        const historyContainer = $('.history-container');
-        const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
+    const historyContainer = $('.history-container');
+    const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
+    const userType = localStorage.getItem('userType');
 
-        if (purchaseHistory.length === 0) {
-            historyContainer.html('<div class="no-history">No purchase history available</div>');
-            return;
-        }
-
-        let historyHTML = '';
-        purchaseHistory.forEach((purchase) => {
-            historyHTML += `
-                <div class="history-item">
-                    <div class="transaction-id">Transaction ID: ${purchase.transactionId}</div>
-                    <div class="purchase-date">Purchase Date: ${new Date(purchase.purchaseDate).toLocaleString()}</div>
-                    <div class="car-details">
-                        <h3>${purchase.item.name}</h3>
-                        <p>Year: ${purchase.item.year}</p>
-                        <p>Color: ${purchase.item.color}</p>
-                        <p>Engine: ${purchase.item.engine}</p>
-                        <p>Mileage: ${purchase.item.mileage}</p>
-                        <p>Price: $${purchase.item.price.toLocaleString()}</p>
-                        <p>Insurance: ${purchase.insurance}</p>
-                        <p>Warranty: ${purchase.warranty}</p>
-                        <p>Payment Method: ${purchase.paymentMethod}</p>
-                    </div>
-                </div>
-            `;
-        });
-
-        historyContainer.html(historyHTML);
+    if (purchaseHistory.length === 0) {
+        historyContainer.html('<div class="no-history">No purchase history available</div>');
+        return;
     }
 
-    // Sample data
+    let historyHTML = '';
+    purchaseHistory.forEach((purchase) => {
+        const status = purchase.status || 'unchecked';
+        
+        //let statusHTML;
+        //if (userType === 'sales_manager') {
+        //    statusHTML = `
+        //        <div class="status-buttons">
+        //            <button class="status-btn accept-btn ${status === 'accepted' ? 'active' : ''}" 
+        //                    data-transaction="${purchase.transactionId}" 
+        //                    onclick="updateStatus('${purchase.transactionId}', 'accepted')">
+        //                Accepted
+        //            </button>
+        //            <button class="status-btn decline-btn ${status === 'declined' ? 'active' : ''}" 
+        //                    data-transaction="${purchase.transactionId}" 
+        //                    onclick="updateStatus('${purchase.transactionId}', 'declined')">
+        //                Declined
+        //            </button>
+        //            <button class="status-btn unchecked-btn ${status === 'unchecked' ? 'active' : ''}" 
+        //                    data-transaction="${purchase.transactionId}" 
+        //                    onclick="updateStatus('${purchase.transactionId}', 'unchecked')">
+        //                Unchecked
+        //            </button>
+        //        </div>
+        //    `;
+        //} else {
+        //    let statusClass = '';
+        //    switch(status) {
+        //        case 'accepted':
+        //            statusClass = 'status-accepted';
+        //            break;
+        //        case 'declined':
+        //            statusClass = 'status-declined';
+        //            break;
+        //        default:
+        //            statusClass = 'status-unchecked';
+        //    }
+        //    statusHTML = `<div class="status-label ${statusClass}">${status.toUpperCase()}</div>`;
+        //}
+//
+        historyHTML += `
+            <div class="history-item">
+                <div class="transaction-id">Transaction ID: ${purchase.transactionId}</div>
+                <div class="purchase-date">Purchase Date: ${new Date(purchase.purchaseDate).toLocaleString()}</div>
+                <div class="car-details">
+                    <h3>${purchase.item.name}</h3>
+                    <p>Year: ${purchase.item.year}</p>
+                    <p>Color: ${purchase.item.color}</p>
+                    <p>Engine: ${purchase.item.engine}</p>
+                    <p>Mileage: ${purchase.item.mileage}</p>
+                    <p>Price: $${purchase.item.price.toLocaleString()}</p>
+                    <p>Insurance: ${purchase.insurance}</p>
+                    <p>Warranty: ${purchase.warranty}</p>
+                    <p>Payment Method: ${purchase.paymentMethod}</p>
+                    <span class="status-heading">Status:</span>
+                    ${statusHTML}
+                </div>
+            </div>
+        `;
+    });
+
+    historyContainer.html(historyHTML);
+}
+
+window.updateStatus = function(transactionId, newStatus) {
+    const userType = localStorage.getItem('userType');
+    if (userType !== 'sales_manager') {
+        alert('You do not have permission to change purchase status.');
+        return;
+    }
+
+    let purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
+    
+    purchaseHistory = purchaseHistory.map(purchase => {
+        if (purchase.transactionId === transactionId) {
+            return { ...purchase, status: newStatus };
+        }
+        return purchase;
+    });
+
+    localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
+    displayPurchaseHistory();
+};
+
     const samplePurchaseHistory = [
         {
             transactionId: "TX123456",
@@ -82,7 +142,6 @@
         }
     ];
     
-    // Store sample data
     localStorage.setItem('purchaseHistory', JSON.stringify(samplePurchaseHistory));
 
     const username = localStorage.getItem('uName');

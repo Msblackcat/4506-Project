@@ -54,7 +54,7 @@ function handleLogout(event) {
         return;
     }
 
-    $(".carousel-image").attr("src", currentCarPurchase.image);
+    $(".carousel-image").attr("src", `4506_source/product1_black.png`);
     $("#carName").text(currentCarPurchase.name);
     $("#carPrice").text(currentCarPurchase.price);
     $("#carSpecs").html(`
@@ -105,7 +105,7 @@ function handleLogout(event) {
 
         var color = $(this).data("color");
         if (color) {
-            $(".carousel-image").attr("src", `4506_source/product_${color}.png`);
+            $(".carousel-image").attr("src", `4506_source/product1_${color}.png`);
         }
     });
 
@@ -159,16 +159,16 @@ function handleLogout(event) {
                     <h2>Purchase Receipt</h2>
                     <p><strong>Transaction ID:</strong> ${transactionId}</p>
                     <p><strong>Purchase Date:</strong> ${purchaseDate}</p>
-                    <p><strong>Product:</strong> ${currentCarPurchase.name}</p>
-                    <p><strong>Price:</strong> ${currentCarPurchase.price}</p>
+                    <p><strong>Product:</strong>Ms go</p>
+                    <p><strong>Price:</strong> $20000</p>
                     <p><strong>Color:</strong> ${color}</p>
-                    <p><strong>Year:</strong> ${currentCarPurchase.year}</p>
-                    <p><strong>Mileage:</strong> ${currentCarPurchase.mileage}</p>
-                    <p><strong>Engine:</strong> ${currentCarPurchase.engine}</p>
+                    <p><strong>Year:</strong>2017</p>
+                    <p><strong>Mileage:</strong>0 kilometer</p>
+                    <p><strong>Engine:</strong>6.5 Ms V12</p>
                     <p><strong>Insurance Company:</strong> ${insurance}</p>
                     <p><strong>Warranty:</strong> ${warranty}</p>
                     <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-                    <button class="close-receipt-button">Close Receipt</button>
+                    <button class="confirm-receipt-button">confirm purchase</button>
                 </div>
             </div>
         `;
@@ -198,9 +198,84 @@ function handleLogout(event) {
             "text-align": "left"
         });
 
-        $(".close-receipt-button").click(function() {
-            $(".receipt-overlay").remove();
-            window.location.href = "history.html";
+        $(".confirm-receipt-button").click(function() {
+            const confirmationMessage = `Please confirm your payment details:
+    
+        Product: Ms go
+        Base Price: $200000
+        Insurance Plan: ${localStorage.getItem('selectedInsurancePlan')}
+        Total Price: $200000
+        Color: ${color}
+        Insurance Company: ${insurance}
+        Warranty: ${warranty}
+        Payment Method: ${paymentMethod}
+
+        Click OK to proceed with payment.`;
+
+    if (confirm(confirmationMessage)) {
+        const verificationCode = generateVerificationCode();
+        
+        alert(`Your verification code is: ${verificationCode}`);
+
+        const userInput = prompt("Please enter the verification code:");
+
+        if (userInput === verificationCode) {
+            const transactionId = 'TRX' + Date.now();
+            const purchaseDate = new Date().toISOString();
+            
+            window.location.href = "history.html"
+    }
+};
+    
+function generateVerificationCode() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+function processPurchase() {
+    const purchaseData = {
+        transactionId,
+        purchaseDate,
+        item: {
+            ...currentCarPurchase,
+            color: color,
+        },
+        insurance: insurance,
+        warranty: warranty,
+        paymentMethod: paymentMethod,
+    };
+
+    let purchaseHistory = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
+    purchaseHistory.push(purchaseData);
+    localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
+
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    wishlist = wishlist.filter(item => item.id !== currentCarPurchase.id);
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+    let receiptHtml = `
+        <div class="receipt-overlay">
+            <div class="receipt">
+                <h2>Purchase Receipt</h2>
+                <p><strong>Transaction ID:</strong> ${transactionId}</p>
+                <p><strong>Purchase Date:</strong> ${purchaseDate}</p>
+                <p><strong>Product:</strong> ${currentCarPurchase.name}</p>
+                <p><strong>Base Price:</strong> ${currentCarPurchase.price}</p>
+                <p><strong>Insurance Plan:</strong> ${localStorage.getItem('selectedInsurancePlan')}</p>
+                <p><strong>Total Price:</strong> $${parseFloat(localStorage.getItem('totalPurchasePrice')).toLocaleString()}</p>
+                <p><strong>Color:</strong> ${color}</p>
+                <p><strong>Year:</strong> ${currentCarPurchase.year}</p>
+                <p><strong>Mileage:</strong> ${currentCarPurchase.mileage}</p>
+                <p><strong>Engine:</strong> ${currentCarPurchase.engine}</p>
+                <p><strong>Insurance Company:</strong> ${insurance}</p>
+                <p><strong>Warranty:</strong> ${warranty}</p>
+                <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                <button class="close-receipt-button">Close Receipt</button>
+            </div>
+        </div>
+    `;
+}
+           //$(".receipt-overlay").remove();
+           ;
         });
     });
 });

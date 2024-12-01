@@ -152,3 +152,126 @@
     background-color: #383838;
     border-left-color: #0056b3;
 }
+
+.order-item {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 20px auto;  /* Centers each item and adds vertical spacing */
+    padding: 20px;
+    max-width: 900px;   /* Adjust this value based on your preference */
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.transaction-info h3 {
+    margin: 0;
+    color: #333;
+}
+
+.purchase-date {
+    color: #666;
+    margin: 0px;
+}
+
+.status-controls {
+    text-align: right;
+    align-items: center;
+    gap: 20px;
+}
+
+.status-buttons {
+    margin: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.status-btn {
+    padding: 8px 15px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.accept-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.decline-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.unchecked-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.status-btn.active {
+    opacity: 1;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor;
+}
+
+.status-btn:not(.active) {
+    opacity: 0.7;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.status-badge.accepted {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.declined {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.unchecked {
+    background-color: #e9ecef;
+    color: #383d41;
+}
+
+.order-details {
+    display: flex;
+    gap: 40px;
+}
+
+.car-info, .purchase-info {
+    flex: 1;
+}
+
+.car-info h4, .purchase-info h4 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.specs p, .purchase-info p {
+    margin: 8px 0;
+    color: #666;
+}
+
+.no-history {
+    text-align: center;
+    padding: 40px;
+    color: #383d41;
+    background-color: #e9ecef;
+    border-radius: 8px;
+    margin: 20px 0;
+}

@@ -37,7 +37,7 @@ const WishlistManager = {
                 <div class="empty-wishlist">
                     <h2>Your wishlist is empty</h2>
                     <p>Browse our collection and add some cars to your wishlist!</p>
-                    <a href="index.html" class="purchase-btn">Browse Cars</a>
+                    <a href="Viewmore.html" class="purchase-btn">Browse Cars</a>
                 </div>
             `);
             return;
@@ -92,7 +92,7 @@ function removeFromWishlist(itemId) {
                 <div class="empty-wishlist">
                     <h2>Your wishlist is empty</h2>
                     <p>Browse our collection and add some cars to your wishlist!</p>
-                    <a href="index.html" class="purchase-btn" onclick="purchaseItem("this)">Browse Cars</a>
+                    <a href="Viewmore.html" class="purchase-btn" onclick="purchaseItem("this)">Browse Cars</a>
                 </div>
             `);
         }
@@ -140,7 +140,7 @@ function removeFromWishlist(itemId) {
                 <div class="empty-wishlist">
                     <h2>Your wishlist is empty</h2>
                     <p>Browse our collection and add some cars to your wishlist!</p>
-                    <a href="index.html" class="purchase-btn">Browse Cars</a>
+                    <a href="Viewmore.html" class="purchase-btn">Browse Cars</a>
                 </div>
             `);
         }
