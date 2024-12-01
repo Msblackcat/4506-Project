@@ -116,23 +116,23 @@ function handleLogout(event) {
         const paymentMethod = $(".option-button[data-payment].selected").text();
         const transactionId = 'TRX' + Date.now();
         const purchaseDate = new Date().toISOString();
-
+    
         if (!color || !insurance || !warranty || !paymentMethod) {
             alert("Please complete all fields before confirming your purchase.");
             return;
         }
-
+    
         if (paymentMethod === "Visa") {
             const cardNumber = $("#card-number").val();
             const cardExpiry = $("#card-expiry").val();
             const cardCVV = $("#card-cvv").val();
-
+    
             if (!cardNumber || !cardExpiry || !cardCVV) {
                 alert("Please enter your credit card details for Visa payment.");
                 return;
             }
         }
-
+    
         const purchaseData = {
             transactionId,
             purchaseDate,
@@ -144,37 +144,42 @@ function handleLogout(event) {
             warranty: warranty,
             paymentMethod: paymentMethod,
         };
-
+    
         let purchaseHistory = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
         purchaseHistory.push(purchaseData);
         localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
-
-        let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-        wishlist = wishlist.filter(item => item.id !== currentCarPurchase.id);
-        localStorage.setItem("wishlist", JSON.stringify(wishlist));
-
+    
         let receiptHtml = `
             <div class="receipt-overlay">
                 <div class="receipt">
-                    <h2>Purchase Receipt</h2>
-                    <p><strong>Transaction ID:</strong> ${transactionId}</p>
-                    <p><strong>Purchase Date:</strong> ${purchaseDate}</p>
-                    <p><strong>Product:</strong>Ms go</p>
-                    <p><strong>Price:</strong> $20000</p>
-                    <p><strong>Color:</strong> ${color}</p>
-                    <p><strong>Year:</strong>2017</p>
-                    <p><strong>Mileage:</strong>0 kilometer</p>
-                    <p><strong>Engine:</strong>6.5 Ms V12</p>
-                    <p><strong>Insurance Company:</strong> ${insurance}</p>
-                    <p><strong>Warranty:</strong> ${warranty}</p>
-                    <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-                    <button class="confirm-receipt-button">confirm purchase</button>
+                    <h2 class="receipt-title">Purchase Receipt</h2>
+                    <div class="receipt-section">
+                        <p><strong>Transaction ID:</strong> ${transactionId}</p>
+                        <p><strong>Purchase Date:</strong> ${purchaseDate}</p>
+                    </div>
+                    <div class="receipt-section">
+                        <h3>Product Information</h3>
+                        <p><strong>Product:</strong> Ms go </p>
+                        <p><strong>Base Price:</strong> HK$20000 </p>
+                        <p><strong>Color:</strong> ${color}</p>
+                    </div>
+                    <div class="receipt-section">
+                        <h3>Insurance & Warranty</h3>
+                        <p><strong>Insurance Company:</strong> ${insurance}</p>
+                        <p><strong>Warranty:</strong> ${warranty}</p>
+                    </div>
+                    <div class="receipt-section">
+                        <h3>Payment Details</h3>
+                        <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                        <p><strong>Estimated Processing Time:</strong> 1-3 business days</p>
+                    </div>
+                    <button class="close-receipt-button">Close Receipt</button>
                 </div>
             </div>
         `;
-
+        
         $("body").append(receiptHtml);
-
+        
         $(".receipt-overlay").css({
             "position": "fixed",
             "top": "0",
@@ -187,95 +192,58 @@ function handleLogout(event) {
             "align-items": "center",
             "z-index": "1000"
         });
-
-        $(".receipt").css({
-            "background-color": "white",
-            "padding": "20px",
-            "border-radius": "8px",
-            "box-shadow": "0 4px 8px rgba(0, 0, 0, 0.2)",
-            "width": "80%",
-            "max-width": "500px",
-            "text-align": "left"
-        });
-
-        $(".confirm-receipt-button").click(function() {
-            const confirmationMessage = `Please confirm your payment details:
-    
-        Product: Ms go
-        Base Price: $200000
-        Insurance Plan: ${localStorage.getItem('selectedInsurancePlan')}
-        Total Price: $200000
-        Color: ${color}
-        Insurance Company: ${insurance}
-        Warranty: ${warranty}
-        Payment Method: ${paymentMethod}
-
-        Click OK to proceed with payment.`;
-
-    if (confirm(confirmationMessage)) {
-        const verificationCode = generateVerificationCode();
         
-        alert(`Your verification code is: ${verificationCode}`);
-
-        const userInput = prompt("Please enter the verification code:");
-
-        if (userInput === verificationCode) {
-            const transactionId = 'TRX' + Date.now();
-            const purchaseDate = new Date().toISOString();
-            
-            window.location.href = "history.html"
-    }
-};
+        $(".receipt").css({
+            "background-color": "#ffffff",
+            "padding": "20px",
+            "border-radius": "10px",
+            "box-shadow": "0 4px 10px rgba(0, 0, 0, 0.2)",
+            "width": "90%",
+            "max-width": "600px",
+            "font-family": "'Arial', sans-serif",
+            "text-align": "left",
+            "line-height": "1.6",
+        });
+        
+        $(".receipt-title").css({
+            "font-size": "1.8rem",
+            "font-weight": "bold",
+            "margin-bottom": "15px",
+            "color": "#2c5282",
+            "text-align": "center",
+        });
+        
+        $(".receipt-section").css({
+            "margin-bottom": "15px",
+            "padding-bottom": "10px",
+            "border-bottom": "1px solid #ccc",
+        });
+        
+        $(".receipt-section h3").css({
+            "font-size": "1.2rem",
+            "color": "#2c5282",
+            "margin-bottom": "10px",
+        });
+        
+        $(".close-receipt-button").css({
+            "background-color": "#007bff",
+            "color": "#ffffff",
+            "border": "none",
+            "padding": "10px 20px",
+            "border-radius": "5px",
+            "font-size": "1rem",
+            "cursor": "pointer",
+            "display": "block",
+            "margin": "20px auto 0",
+        });
+        
+        $(".close-receipt-button:hover").css({
+            "background-color": "#0056b3",
+        });
     
-function generateVerificationCode() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
-function processPurchase() {
-    const purchaseData = {
-        transactionId,
-        purchaseDate,
-        item: {
-            ...currentCarPurchase,
-            color: color,
-        },
-        insurance: insurance,
-        warranty: warranty,
-        paymentMethod: paymentMethod,
-    };
-
-    let purchaseHistory = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
-    purchaseHistory.push(purchaseData);
-    localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
-
-    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    wishlist = wishlist.filter(item => item.id !== currentCarPurchase.id);
-    localStorage.setItem("wishlist", JSON.stringify(wishlist));
-
-    let receiptHtml = `
-        <div class="receipt-overlay">
-            <div class="receipt">
-                <h2>Purchase Receipt</h2>
-                <p><strong>Transaction ID:</strong> ${transactionId}</p>
-                <p><strong>Purchase Date:</strong> ${purchaseDate}</p>
-                <p><strong>Product:</strong> ${currentCarPurchase.name}</p>
-                <p><strong>Base Price:</strong> ${currentCarPurchase.price}</p>
-                <p><strong>Insurance Plan:</strong> ${localStorage.getItem('selectedInsurancePlan')}</p>
-                <p><strong>Total Price:</strong> $${parseFloat(localStorage.getItem('totalPurchasePrice')).toLocaleString()}</p>
-                <p><strong>Color:</strong> ${color}</p>
-                <p><strong>Year:</strong> ${currentCarPurchase.year}</p>
-                <p><strong>Mileage:</strong> ${currentCarPurchase.mileage}</p>
-                <p><strong>Engine:</strong> ${currentCarPurchase.engine}</p>
-                <p><strong>Insurance Company:</strong> ${insurance}</p>
-                <p><strong>Warranty:</strong> ${warranty}</p>
-                <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-                <button class="close-receipt-button">Close Receipt</button>
-            </div>
-        </div>
-    `;
-}
-           //$(".receipt-overlay").remove();
-           ;
+    
+        $(".close-receipt-button").click(function() {
+            $(".receipt-overlay").remove();
         });
     });
 });

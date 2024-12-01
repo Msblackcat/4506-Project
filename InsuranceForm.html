@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legend Motor Company - Insurance Form</title>
+    <link rel="stylesheet" href="Insurance.css">
+    <link rel="stylesheet" href="common.css">
+    <script src="js/jquery-1.11.1.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectedPlan = localStorage.getItem('selectedInsurancePlan');
+            if (selectedPlan) {
+                document.getElementById('selectedPlan').innerText = selectedPlan;
+                document.getElementById('planInput').value = selectedPlan;
+            }
+        });
+
+    function submitForm(event) {
+            event.preventDefault();
+            const formData = new FormData(document.getElementById('insuranceForm'));
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            console.log("Form submitted with data: ", data);
+
+
+            localStorage.setItem('insuranceFormData', JSON.stringify(data));
+
+
+            alert("Insurance form submitted! Please continue filling out the purchase details.");
+            window.location.href = 'purchase.html';
+    }
+    </script>
+</head>
+<body>
+    <header class="header"></header>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a id="Back" href="Insurance.html">Back</a>
+            </li>
+        </ul>
+    </nav>
+    <main>
+        <div class="container">
+            <h1>Complete Your Insurance Application</h1>
+            <div class="insurance-plan-summary">
+                <h2>Selected Plan: <span id="selectedPlan">Loading...</span></h2>
+            </div>
+            <form id="insuranceForm" class="request-form" onsubmit="submitForm(event)">
+                <input type="hidden" id="planInput" name="insurancePlan">
+                <div class="form-group">
+                    <label for="fullName">Full Name:</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <textarea id="address" name="address" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="comments">Additional Comments (Optional):</label>
+                    <textarea id="comments" name="comments" rows="3"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Submit</button>
+            </form>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-section">
+            <h3>Contact us</h3>
+            <p>Telephone: +852 2180000</p>
+            <p>Email: Services@legen
