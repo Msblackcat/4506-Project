@@ -7,164 +7,7 @@
         <link rel="stylesheet" href="history.css">
         <link rel="stylesheet" href="common.css">
         <script src="js/jquery-1.11.1.js"></script>
-        <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
-        <script>
-        $(document).ready(function() {
-    checkLoginState();
-            
-    function checkLoginState() {
-        const username = localStorage.getItem('uName');
-        updateNavigation(username);
-    }
-
-    function updateNavigation(username) {
-        if(username){
-            const loginRegisterLi = $('.dropdown:last');
-            loginRegisterLi.html(`
-                <a href="#" class="user-profile">${username} ▼</a>
-                <ul class="dropdown-content">
-                    <li><a href="profile.html">Profile</a></li>
-                    <li><a href="index.html" onclick="handleLogout(event)">Logout</a></li>
-                </ul>
-            `);
-        }
-    }
-
-    function displayPurchaseHistory() {
-    const historyContainer = $('.history-container');
-    const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
-    const userType = localStorage.getItem('userType');
-
-    if (purchaseHistory.length === 0) {
-        historyContainer.html('<div class="no-history">No purchase history available</div>');
-        return;
-    }
-
-    let historyHTML = '';
-    purchaseHistory.forEach((purchase) => {
-        const status = purchase.status || 'unchecked';
-        
-        //let statusHTML;
-        //if (userType === 'sales_manager') {
-        //    statusHTML = `
-        //        <div class="status-buttons">
-        //            <button class="status-btn accept-btn ${status === 'accepted' ? 'active' : ''}" 
-        //                    data-transaction="${purchase.transactionId}" 
-        //                    onclick="updateStatus('${purchase.transactionId}', 'accepted')">
-        //                Accepted
-        //            </button>
-        //            <button class="status-btn decline-btn ${status === 'declined' ? 'active' : ''}" 
-        //                    data-transaction="${purchase.transactionId}" 
-        //                    onclick="updateStatus('${purchase.transactionId}', 'declined')">
-        //                Declined
-        //            </button>
-        //            <button class="status-btn unchecked-btn ${status === 'unchecked' ? 'active' : ''}" 
-        //                    data-transaction="${purchase.transactionId}" 
-        //                    onclick="updateStatus('${purchase.transactionId}', 'unchecked')">
-        //                Unchecked
-        //            </button>
-        //        </div>
-        //    `;
-        //} else {
-        //    let statusClass = '';
-        //    switch(status) {
-        //        case 'accepted':
-        //            statusClass = 'status-accepted';
-        //            break;
-        //        case 'declined':
-        //            statusClass = 'status-declined';
-        //            break;
-        //        default:
-        //            statusClass = 'status-unchecked';
-        //    }
-        //    statusHTML = `<div class="status-label ${statusClass}">${status.toUpperCase()}</div>`;
-        //}
-//
-        historyHTML += `
-            <div class="history-item">
-                <div class="transaction-id">Transaction ID: ${purchase.transactionId}</div>
-                <div class="purchase-date">Purchase Date: ${new Date(purchase.purchaseDate).toLocaleString()}</div>
-                <div class="car-details">
-                    <h3>${purchase.item.name}</h3>
-                    <p>Year: ${purchase.item.year}</p>
-                    <p>Color: ${purchase.item.color}</p>
-                    <p>Engine: ${purchase.item.engine}</p>
-                    <p>Mileage: ${purchase.item.mileage}</p>
-                    <p>Price: $${purchase.item.price.toLocaleString()}</p>
-                    <p>Insurance: ${purchase.insurance}</p>
-                    <p>Warranty: ${purchase.warranty}</p>
-                    <p>Payment Method: ${purchase.paymentMethod}</p>
-                    <span class="status-heading">Status:</span>
-                    ${statusHTML}
-                </div>
-            </div>
-        `;
-    });
-
-    historyContainer.html(historyHTML);
-}
-
-window.updateStatus = function(transactionId, newStatus) {
-    const userType = localStorage.getItem('userType');
-    if (userType !== 'sales_manager') {
-        alert('You do not have permission to change purchase status.');
-        return;
-    }
-
-    let purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
-    
-    purchaseHistory = purchaseHistory.map(purchase => {
-        if (purchase.transactionId === transactionId) {
-            return { ...purchase, status: newStatus };
-        }
-        return purchase;
-    });
-
-    localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
-    displayPurchaseHistory();
-};
-
-    const samplePurchaseHistory = [
-        {
-            transactionId: "TX123456",
-            purchaseDate: new Date().toISOString(),
-            insurance: "Full Coverage",
-            warranty: "3 Years Extended",
-            paymentMethod: "Credit Card",
-            item: {
-                name: "BMW M3",
-                year: 2023,
-                mileage: 0,
-                engine: "3.0L Twin-Turbo",
-                price: 75000,
-                color: "Alpine White"
-            }
-        }
-    ];
-    
-    localStorage.setItem('purchaseHistory', JSON.stringify(samplePurchaseHistory));
-
-    const username = localStorage.getItem('uName');
-    if (!username) {
-        window.location.href = 'login.html';
-    } else {
-        displayPurchaseHistory();
-    }
-
-    function handleLogout(event) {
-        event.preventDefault();
-        localStorage.removeItem('uName');
-        localStorage.removeItem('userType');
-        localStorage.removeItem('email');
-        localStorage.removeItem('permissions');
-        localStorage.removeItem('staffNumber');
-        localStorage.removeItem('username');
-        localStorage.removeItem('wishlist');
-        localStorage.removeItem('phone')
-        window.location.href = 'index.html';
-    }
-});
-    </script>
+        <script src="history.js"></script>
     </head>
 <body>
     <header class="header"></header>
@@ -178,7 +21,7 @@ window.updateStatus = function(transactionId, newStatus) {
                 <ul class="dropdown-content">
                 </ul>
             </li>
-            <li class="dropdown">
+            <li class="dropdown">   
                 <a href="wishlist.html">Wish List</a>
                 <ul class="dropdown-content">
                 </ul>
@@ -197,10 +40,13 @@ window.updateStatus = function(transactionId, newStatus) {
             </li>
         </ul>
     </nav>
-    <div>
-        <h1>History</h1>
-    </div> 
-    <div class="history-container"></div>
+
+    <div class="main-content">
+        <h1>Purchase History</h1>
+        <div class="history-container">
+        </div>
+    </div>
+
     <footer class="footer">
         <div class="footer-section">
             <h3>Contact us</h3>

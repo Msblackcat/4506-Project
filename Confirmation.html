@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Confirmation</title>
+    <link rel="stylesheet" href="Comfirmation.css">
+    <link rel="stylesheet" href="common.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const applicationData = JSON.parse(localStorage.getItem('insuranceApplicationData'));
+
+            if (applicationData) {
+                document.getElementById('applicantName').innerText = applicationData.fullName;
+                document.getElementById('selectedPlan').innerText = applicationData.insurancePlan;
+            }
+        });
+    </script>
+</head>
+<body>
+    <header class="header"></header>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a id="Back" href="purchase.html">Back</a>
+            </li>
+        </ul>
+    </nav>
+    <main>
+        <div class="container">
+            <h1>Application Confirmation</h1>
+
+            <div class="confirmation-details">
+                <h2>Dear <span id="applicantName">[Applicant Name]</span>,</h2>
+                <p>Thank you for submitting your insurance application for the <span id="selectedPlan">[Selected Plan]</span>.</p>
+                <p><strong>Estimated Processing Time:</strong> 1-3 business days.</p>
+                <p>Your application is now being processed. You can track the status of your application at any time.</p>
+                <p><a href="status.html">Click here to track your application status</a>.</p>
+            </div>        
+        </div>
+    </main>
+    <div class="footer">
+        <h3>Contact us</h3>
+        <p>Telephone: +852 2180000</p>
+        <p>Email: Services@legendmotor.com</p>
+    </div>
+</body>
+</html>

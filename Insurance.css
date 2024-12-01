@@ -94,6 +94,12 @@
     border-radius: 4px;
     cursor: pointer;
     width: 100%;
+    font-size: 1.25rem;
+    font-weight: bold; 
+}
+
+.submit-btn:hover {
+    background-color: #1a365d;
 }
 
 .submit-btn:hover {
@@ -110,4 +116,15 @@
     .insurance-plans {
         grid-template-columns: 1fr;
     }
+}
+
+.insurance-plan-summary {
+    padding: 2rem;
+    background-color: gray;
+    margin: 2rem 0;
+    color: #333;
+    border-radius: 8px;
+    text-align: center; 
+    font-size: 1.5rem;
+    font-weight: bold;
 }

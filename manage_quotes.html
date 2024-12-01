@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Quotes</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="manage_quotes.css">
+    <script src="js/jquery-1.11.1.js"></script>
+    <script src="manage_quotes.js" defer></script>
+</head>
+<body>
+    <header class="header"></header>
+
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li><a href="insurance_staff_home.html">Home</a></li>
+            <li><a href="insurance_staff.html">Manage Quotes</a></li>
+            <li class="dropdown">
+                <a id="login-register" href="login.html">Login/Register</a>
+                <ul class="dropdown-content"></ul>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <!-- Search and Filter Section -->
+        <section class="search-filter">
+            <input type="text" id="search-box" placeholder="Search by Customer Name or Quote ID" />
+            <select id="filter-status">
+                <option value="all">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+            </select>
+            <button id="search-button" class="btn">Search</button>
+        </section>
+
+        <!-- Quotes Section -->
+        <section class="quotes-container">
+            <!-- Cards will be dynamically generated here -->
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-section">
+            <h3>Contact us</h3>
+            <p>Telephone: +852 2180000</p>
+            <p>Email: Services@legendmotor.com</p>
+        </div>
+        <div class="footer-section">
+            <h3>Business Hours</h3>
+            <p>Monday - Friday: 09:00-21:00</p>
+            <p>Weekend: 10:00-20:00</p>
+        </div>
+    </footer>
+</body>
+</html>

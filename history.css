@@ -1,406 +1,79 @@
-/* Base Styles */
 body, html {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: gray;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
 }
 
 .main-content {
-    margin-top: 60px;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
 }
 
 .history-container {
-max-width: 1200px;
-margin: 40px auto;
-padding: 20px;
-animation: fadeIn 0.5s ease-in;
-}
-
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(20px); }
-to { opacity: 1; transform: translateY(0); }
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
 }
 
 .history-item {
-background: white;
-border-radius: 12px;
-box-shadow: 0 4px 6px var(--shadow-color);
-padding: 25px;
-margin-bottom: 30px;
-display: grid;
-grid-template-columns: 300px 1fr;
-gap: 30px;
-transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .history-item:hover {
-transform: translateY(-5px);
-box-shadow: 0 6px 12px var(--shadow-color);
-}
-
-.history-item img {
-width: 100%;
-height: 200px;
-object-fit: cover;
-border-radius: 8px;
-box-shadow: 0 2px 4px var(--shadow-color);
-}
-
-.history-details {
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 20px;
-}
-
-.car-details, .purchase-details {
-padding: 15px;
-background-color: var(--background-color);
-border-radius: 8px;
-box-shadow: inset 0 2px 4px var(--shadow-color);
-}
-
-.car-details h3, .purchase-details h3 {
-color: var(--primary-color);
-margin-top: 0;
-margin-bottom: 15px;
-font-size: 1.2em;
-border-bottom: 2px solid var(--primary-color);
-padding-bottom: 8px;
-}
-
-.car-details p, .purchase-details p {
-margin: 8px 0;
-line-height: 1.6;
-color: var(--text-secondary);
-}
-
-.transaction-id {
-color: var(--primary-color);
-font-weight: bold;
-font-size: 1.1em;
-padding: 10px;
-background-color: rgba(0, 123, 255, 0.1);
-border-radius: 6px;
-margin-bottom: 10px;
-grid-column: 1 / -1;
-}
-
-.purchase-date {
-color: var(--text-secondary);
-font-style: italic;
-padding: 5px 10px;
-background-color: var(--background-color);
-border-radius: 6px;
-margin-bottom: 15px;
-grid-column: 1 / -1;
-}
-
-.no-history {
-text-align: center;
-padding: 100px 50px;
-font-size: 1.4em;
-color: var(--secondary-color);
-background: white;
-border-radius: 12px;
-box-shadow: 0 4px 6px var(--shadow-color);
-}
-
-/* Price Highlight */
-.car-details p:last-child {
-color: var(--success-color);
-font-weight: bold;
-font-size: 1.2em;
-padding: 8px;
-background-color: rgba(40, 167, 69, 0.1);
-border-radius: 6px;
-display: inline-block;
-}
-
-/* Status Badge */
-.status-badge {
-display: inline-block;
-padding: 5px 10px;
-background-color: var(--success-color);
-color: white;
-border-radius: 20px;
-font-size: 0.9em;
-margin-top: 10px;
-}
-
-.history-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 0 20px;
-}
-
-.history-item {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .transaction-id {
     font-weight: bold;
-    color: #666;
     margin-bottom: 10px;
+    color: #333;
 }
 
 .purchase-date {
-    color: #888;
-    margin-bottom: 15px;
-}
-
-.car-details h3 {
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.car-details p {
-    margin: 5px 0;
-    color: #555;
-}
-
-.no-history {
-    text-align: center;
-    padding: 40px;
-    color: #666;
-    font-style: italic;
-}
-
-.navbar, .footer {
-    display: none;
-}
-
-.footer {
-    background-color: #333;
-    color: white;
-    display: flex;
-    justify-content: space-around;
-    padding: 20px;
-    margin-top: auto;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
-}
-
-.footer-section {
-    max-width: 200px;
-}
-
-.footer-section h3 {
-    margin-bottom: 10px;
-    font-size: 18px;
-    border-bottom: 1px solid #555;
-    padding-bottom: 5px;
-}
-
-.footer-section p {
-    margin: 5px 0;
-    font-size: 14px;
-}
-
-.footer-section p:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.status-timeline {
-    margin: 20px 0;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px var(--shadow-color);
-}
-
-.timeline-steps {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.timeline-steps::before {
-    content: '';
-    position: absolute;
-    height: 4px;
-    background-color: #e0e0e0;
-    width: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
-}
-
-.progress-bar {
-    position: absolute;
-    height: 4px;
-    background-color: #28a745;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-    transition: width 0.5s ease;
-    width: 0;
-}
-
-.step {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: #e0e0e0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 3;
-    transition: background-color 0.3s ease;
-}
-
-.step.active {
-    background-color: #28a745;
-    color: white;
-}
-
-.step-label {
-    position: absolute;
-    top: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
     font-size: 0.9em;
-    color: var(--text-secondary);
+    color: #777;
+    margin-bottom: 15px;
 }
 
-.step.active .step-label {
-    color: #28a745;
+.processing-time {
+    margin-bottom: 15px;
+    font-size: 1em;
+}
+
+.processing-time .highlight {
+    color: #2c5282;
     font-weight: bold;
+    background-color: rgba(44, 82, 130, 0.1);
+    padding: 2px 4px;
+    border-radius: 4px;
 }
 
-.timer {
-    text-align: center;
-    font-size: 1.2em;
-    margin-top: 20px;
-    color: var(--text-secondary);
-}
-
-.status-section {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
-    display: flex;
-    align-items: center;
-}
-
-.status-heading {
-    font-weight: bold;
-    margin-right: 10px;
-}
-
-/* Status label styles for regular users */
-.status-label {
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-weight: bold;
-    text-align: center;
-    display: inline-block;
-}
-
-.status-accepted {
-    background-color: #e8f5e9;
-    color: #28a745;
-    border: 1px solid #28a745;
-}
-
-.status-declined {
-    background-color: #fde8e8;
-    color: #dc3545;
-    border: 1px solid #dc3545;
-}
-
-.status-unchecked {
-    background-color: #f8f9fa;
-    color: #6c757d;
-    border: 1px solid #6c757d;
-}
-
-/* Status button styles for sales managers */
-.status-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.status-btn {
-    padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    opacity: 0.6;
-}
-
-.status-btn.active {
-    opacity: 1;
-}
-
-.accept-btn {
-    background-color: #28a745;
-    color: white;
-}
-
-.decline-btn {
-    background-color: #dc3545;
-    color: white;
-}
-
-.unchecked-btn {
-    background-color: #6c757d;
-    color: white;
-}
-
-.status-btn:hover {
-    opacity: 0.9;
-}
-
-.history-item {
-    background-color: white;
-    padding: 20px;
+.history-section {
     margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px;
+    border-left: 4px solid #2c5282;
+    background-color: rgba(44, 82, 130, 0.05);
+    border-radius: 4px;
 }
 
-.transaction-id {
-    font-weight: bold;
-    color: #666;
+.history-section h3 {
+    margin-top: 0;
+    font-size: 1.1em;
+    color: #2c5282;
     margin-bottom: 10px;
 }
 
-.purchase-date {
-    color: #888;
-    margin-bottom: 15px;
-}
-
-.car-details {
-    margin-bottom: 15px;
-}
-
-.car-details h3 {
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.car-details p {
+.history-section p {
     margin: 5px 0;
-    color: #666;
+    font-size: 0.9em;
+    color: #555;
 }
