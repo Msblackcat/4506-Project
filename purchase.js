@@ -24,7 +24,7 @@ $(document).ready(function() {
             <a href="#" class="user-profile">${username} ▼</a>
             <ul class="dropdown-content">
                 <li><a href="profile.html">Profile</a></li>
-                <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
+                <li><a href="login.html" onclick="handleLogout(event)">Logout</a></li>
             </ul>
         `);
         }
