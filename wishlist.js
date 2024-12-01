@@ -155,6 +155,7 @@ function handleLogout(event) {
     localStorage.removeItem('permissions');
     localStorage.removeItem('staffNumber');
     localStorage.removeItem('username');
+    localStorage.removeItem('phone')
     window.location.href = 'index.html';
 }
 

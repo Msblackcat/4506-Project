@@ -187,6 +187,7 @@ function handleLogout(event) {
     localStorage.removeItem('staffNumber');
     localStorage.removeItem('username');
     localStorage.removeItem('wishlist');
+    localStorage.removeItem('phone')
     window.location.href = 'index.html';
 }
     const wishlistManager = new WishlistManager();

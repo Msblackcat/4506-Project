@@ -8,6 +8,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+function handleLogout(event) {
+    event.preventDefault();
+    localStorage.removeItem('uName');
+    localStorage.removeItem('userType');
+    localStorage.removeItem('email');
+    localStorage.removeItem('permissions');
+    localStorage.removeItem('staffNumber');
+    localStorage.removeItem('username');
+    localStorage.removeItem('wishlist');
+    localStorage.removeItem('phone');
+    window.location.href = 'index.html';
+}
+
 $(document).ready(function() {
 
     checkLoginState();
@@ -31,17 +44,7 @@ $(document).ready(function() {
     }
 
 
-function handleLogout(event) {
-    event.preventDefault();
-    localStorage.removeItem('uName');
-    localStorage.removeItem('userType');
-    localStorage.removeItem('email');
-    localStorage.removeItem('permissions');
-    localStorage.removeItem('staffNumber');
-    localStorage.removeItem('username');
-    localStorage.removeItem('wishlist');
-    window.location.href = 'index.html';
-}
+
 
     const username = localStorage.getItem('uName');
     if (!username) {

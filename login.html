@@ -4,16 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Legend Motor Company - Login</title>
-    
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="login.css">
-    
-    <!-- Scripts -->
     <script src="js/jquery-1.11.1.js"></script>
     <script>
         $(document).ready(function() {
-            // User type change handler
             $('#userType').change(function() {
                 const selectedType = $(this).val();
                 $('#staffNumberGroup').remove();
@@ -24,7 +19,6 @@
                 }
             });
 
-            // Form submission handler
             $("#loginForm").submit(function(event) {
                 event.preventDefault();
                 
@@ -33,11 +27,9 @@
                 }
             });
 
-            // Initialize description for default user type
             updateLoginDescription('customer');
         });
 
-        // Helper Functions
         function updateLoginDescription(userType) {
             const descriptions = {
                 customer: "Access your account to browse vehicles, request insurance quotes, and view your purchase history.",
@@ -66,21 +58,17 @@
             const password = $('#password').val();
 
             $('.error-message').text('');
-
-            // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 $('#email').siblings('.error-message').text('Please enter a valid email address');
                 isValid = false;
             }
 
-            // Password validation
             if (password.length < 6) {
                 $('#password').siblings('.error-message').text('Password must be at least 6 characters long');
                 isValid = false;
             }
 
-            // Staff number validation for employee types
             if (userType === 'vehicleSalesperson' || userType === 'insuranceSalesperson') {
                 isValid = validateStaffNumber(userType);
             }
@@ -110,22 +98,18 @@
             const staffNumber = $("#staffNumber")?.val() || '';
             const username = email.split('@')[0];
 
-            // Store user data
             localStorage.setItem('uName', username);
             localStorage.setItem('email', email);
-            localStorage.setItem('userType', userType);
+            localStorage.setItem('userType',userType);
             if (staffNumber) {
                 localStorage.setItem('staffNumber', staffNumber);
             }
 
-            // Update UI
             $('#login-register').text(username);
             $('#login-register').siblings('.dropdown-content').hide();
 
-            // Show success message
             alert(`Login Successful!\nWelcome ${username}\nRole: ${$("#userType option:selected").text()}`);
 
-            // Redirect based on user type
             redirectUser(userType);
         }
 
@@ -142,10 +126,7 @@
 </head>
 
 <body>
-    <!-- Header -->
     <header class="header"></header>
-
-    <!-- Navigation -->
     <nav class="navbar">
         <ul class="nav-links">
             <li class="dropdown"><a href="index.html">Home</a></li>
@@ -171,7 +152,6 @@
         </ul>
     </nav>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="login-section">
             <h2>Login to Your Account</h2>
@@ -214,7 +194,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-section">
             <h3>Contact us</h3>
