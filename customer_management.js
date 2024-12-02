@@ -11,9 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (editBtn) {
             const row = event.target.closest("tr"); 
             const inputFields = row.querySelectorAll("input");
-            inputFields.forEach(input => {
-                input.removeAttribute("readonly");
-            });
+            for (let i = 0; i < inputFields.length; i++) {
+                inputFields[i].removeAttribute("readonly");
+            }
 
 
             row.querySelector(".edit-btn").style.display = "none";
@@ -29,10 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (saveBtn) {
             const row = event.target.closest("tr"); 
             const inputFields = row.querySelectorAll("input");
-            inputFields.forEach(input => {
-                input.setAttribute("readonly", "true");
-            });
-
+            for (let i = 0; i < inputFields.length; i++) {
+                inputFields[i].setAttribute("readonly", "true");
+            }
 
             row.querySelector(".save-btn").style.display = "none";
             row.querySelector(".edit-btn").style.display = "inline-block";

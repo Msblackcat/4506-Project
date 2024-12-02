@@ -61,8 +61,10 @@ function displayPurchaseHistory() {
     }
 
     let historyHTML = '';
-    purchaseHistory.forEach((purchase) => {
+    for (let i = 0; i < purchaseHistory.length; i++) {
+        const purchase = purchaseHistory[i];
         let statusHTML = '';
+        
         if (userType === 'Vehicle Salesperson' || userType === 'Insurance Salesperson') {
             statusHTML = `
                 <select onchange="updateStatus('${purchase.transactionId}', this.value)">
@@ -73,7 +75,7 @@ function displayPurchaseHistory() {
         } else {
             statusHTML = `<span class="status ${purchase.status || 'pending'}">${purchase.status || 'Pending'}</span>`;
         }
-
+    
         historyHTML += `
             <div class="history-item">
                 <div class="transaction-id">Transaction ID: ${purchase.transactionId}</div>
@@ -104,7 +106,7 @@ function displayPurchaseHistory() {
                 </div>
             </div>
         `;
-    });
+    }
 
     historyContainer.html(historyHTML);
 }

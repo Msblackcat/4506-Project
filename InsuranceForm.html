@@ -20,9 +20,12 @@
             event.preventDefault();
             const formData = new FormData(document.getElementById('insuranceForm'));
             const data = {};
-            formData.forEach((value, key) => {
+            for (let i = 0; i < formData.entries().length; i++) {
+                const entry = formData.entries().next().value;
+                const key = entry[0];
+                const value = entry[1];
                 data[key] = value;
-            });
+            }
             console.log("Form submitted with data: ", data);
 
 

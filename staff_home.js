@@ -34,9 +34,9 @@ $(document).ready(function () {
         "New insurance policy updates are available."
     ];
 
-    notifications.forEach((notification) => {
-        $('#notification-list').append(`<li>${notification}</li>`);
-    });
+    for (let i = 0; i < notifications.length; i++) {
+        $('#notification-list').append(`<li>${notifications[i]}</li>`);
+    }
 
 
     $("#chat-box").addClass("minimized");

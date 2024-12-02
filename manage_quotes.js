@@ -146,9 +146,9 @@ $(document).ready(function () {
         "New insurance policy updates are available."
     ];
 
-    notifications.forEach((notification) => {
-        $('#notification-list').append(`<li>${notification}</li>`);
-    });
+    for (let i = 0; i < notifications.length; i++) {
+        $('#notification-list').append(`<li>${notifications[i]}</li>`);
+    }
     const autoQuotes = [
         {
             id: "A001",
@@ -200,9 +200,10 @@ $(document).ready(function () {
             return true;
         });
 
-        filteredQuotes.forEach((quote, index) => {
+        for (let i = 0; i < filteredQuotes.length; i++) {
+            const quote = filteredQuotes[i];
             container.append(`
-                <div class="quote-card" data-index="${index}">
+                <div class="quote-card" data-index="${i}">
                     <h3>${quote.customer}</h3>
                     <p><strong>Quote ID:</strong> ${quote.id}</p>
                     <p><strong>License Plate:</strong> ${quote.licensePlate}</p>
@@ -215,7 +216,7 @@ $(document).ready(function () {
                     </div>
                 </div>
             `);
-        });
+        }
 
         attachButtonListeners();
     }
