@@ -9,163 +9,210 @@
     <script src="js/jquery-1.11.1.js"></script>    
     <script>
     $(document).ready(function() {
-        function checkLoginState() {
-            const username = localStorage.getItem('uName');
-            if(username) {
-                updateNavigation(username);
-            }
+    function checkLoginState() {
+        const username = localStorage.getItem('uName');
+        if(username) {
+            updateNavigation(username);
         }
-
-        function updateNavigation(username) {
-            const loginRegisterLi = $('.dropdown:last');
-
-            if (username) {
-                loginRegisterLi.html(`
-                    <a href="#" class="user-profile">${username} ▼</a>
-                    <ul class="dropdown-content">
-                        <li><a href="profile.html">Profile</a></li>
-                        <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
-                    </ul>
-                `);
-            } else {
-                loginRegisterLi.html(`
-                    <a id="login-register" href="login.html">Login/Register</a>
-                    <ul class="dropdown-content">
-                        <li><a href="login.html">Login</a></li>
-                        <li><a href="register.html">Register</a></li>
-                    </ul>
-                `);
-            }
-        }
-
-        function handleLogout(event) {
-            event.preventDefault();
-            localStorage.removeItem('uName');
-            localStorage.removeItem('userType');
-            localStorage.removeItem('email');
-            localStorage.removeItem('permissions');
-            localStorage.removeItem('staffNumber');
-            localStorage.removeItem('username');
-            localStorage.removeItem('phone')
-            updateNavigation(null);
-            window.location.href = 'index.html';
-        }
-
-        $('.dropdown').hover(
-            function() {
-                $(this).children('.dropdown-content').show();
-            },
-            function() {
-                $(this).children('.dropdown-content').hide();
-            }
-        );
-        
-        checkLoginState();
-        
-        window.handleLogout = handleLogout;
-        
-        function displayOrderManagement() {
-        const historyContainer = $('.history-container');
-        const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
-
-        if (purchaseHistory.length === 0) {
-            historyContainer.html('<div class="no-history">No orders available</div>');
-            return;
-        }
-
-        let historyHTML = '';
-        purchaseHistory.forEach((purchase) => {
-            const status = purchase.status || 'unchecked';
-            
-            historyHTML += `
-    <div class="order-item ${status}">
-        <div class="order-header">
-            <div class="transaction-info">
-                <h3>Transaction ID: ${purchase.transactionId}</h3>
-                <p class="purchase-date">Date: ${new Date(purchase.purchaseDate).toLocaleString()}</p>
-            </div>
-            <div class="status-controls">
-                <div class="status-buttons">
-                    <button class="status-btn accept-btn ${status === 'accepted' ? 'active' : ''}" 
-                            onclick="updateStatus('${purchase.transactionId}', 'accepted')">
-                        Accept
-                    </button>
-                    <button class="status-btn decline-btn ${status === 'declined' ? 'active' : ''}" 
-                            onclick="updateStatus('${purchase.transactionId}', 'declined')">
-                        Decline
-                    </button>
-                    <button class="status-btn unchecked-btn ${status === 'unchecked' ? 'active' : ''}" 
-                            onclick="updateStatus('${purchase.transactionId}', 'unchecked')">
-                        Pending
-                    </button>
-                </div>
-                <div class="current-status">
-                    <span class="status-badge ${status}">${status.toUpperCase()}</span>
-                </div>
-            </div>
-        </div>
-        <div class="order-details">
-            <div class="car-info">
-                <h4>${purchase.item.name}</h4>
-                <div class="specs">
-                    <p><strong>Year:</strong> ${purchase.item.year}</p>
-                    <p><strong>Color:</strong> ${purchase.item.color}</p>
-                    <p><strong>Engine:</strong> ${purchase.item.engine}</p>
-                    <p><strong>Mileage:</strong> ${purchase.item.mileage}</p>
-                    <p><strong>Price:</strong> $${purchase.item.price.toLocaleString()}</p>
-                </div>
-            </div>
-            <div class="purchase-info">
-                <h4>Purchase Details</h4>
-                <p><strong>Insurance:</strong> ${purchase.insurance}</p>
-                <p><strong>Warranty:</strong> ${purchase.warranty}</p>
-                <p><strong>Payment Method:</strong> ${purchase.paymentMethod}</p>
-            </div>
-        </div>
-    </div>
-`;
-        });
-
-        historyContainer.html(historyHTML);
     }
 
+    function updateNavigation(username) {
+        const loginRegisterLi = $('.dropdown:last');
+        if (username) {
+            loginRegisterLi.html(`
+                <a href="#" class="user-profile">${username} ▼</a>
+                <ul class="dropdown-content">
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
+                </ul>
+            `);
+        } else {
+            loginRegisterLi.html(`
+                <a id="login-register" href="login.html">Login/Register</a>
+                <ul class="dropdown-content">
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            `);
+        }
+    }
+
+    function handleLogout(event) {
+        event.preventDefault();
+        localStorage.removeItem('uName');
+        localStorage.removeItem('userType');
+        localStorage.removeItem('email');
+        localStorage.removeItem('permissions');
+        localStorage.removeItem('staffNumber');
+        localStorage.removeItem('username');
+        updateNavigation(null);
+        window.location.href = 'index.html';
+    }
+
+    // Sample purchase data
+    const samplePurchaseHistory = [
+        {
+            transactionId: "TRX" + Date.now(),
+            purchaseDate: new Date().toISOString(),
+            status: "unchecked",
+            item: {
+                name: "Ms go",
+                year: 2017,
+                mileage: 0,
+                engine: "6.5 Ms V12",
+                price: 20000,
+                color: "Black"
+            },
+            insurance: "Full Coverage",
+            warranty: "3 Years Extended",
+            paymentMethod: "Credit Card"
+        },
+        {
+            transactionId: "TRX" + (Date.now() - 86400000),
+            purchaseDate: new Date(Date.now() - 86400000).toISOString(),
+            status: "accepted",
+            item: {
+                name: "Ms safe",
+                year: 2018,
+                mileage: 50,
+                engine: "7.0 Ms V13",
+                price: 250000,
+                color: "Black"
+            },
+            insurance: "Premium Coverage",
+            warranty: "2 Years Standard",
+            paymentMethod: "Bank Transfer"
+        },
+        {
+            transactionId: "TRX" + (Date.now() - 172800000),
+            purchaseDate: new Date(Date.now() - 172800000).toISOString(),
+            status: "declined",
+            item: {
+                name: "Koala Gum",
+                year: 2017,
+                mileage: 100,
+                engine: "6.5 C18",
+                price: 300000,
+                color: "Gray"
+            },
+            insurance: "Basic Coverage",
+            warranty: "1 Year Standard",
+            paymentMethod: "FPS"
+        }
+    ];
+    localStorage.setItem('purchaseHistory', JSON.stringify(samplePurchaseHistory));
+
+    function displayOrderManagement() {
+    const historyContainer = $('.history-container');
+    const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
+
+    if (purchaseHistory.length === 0) {
+        historyContainer.html('<div class="no-history">No orders available</div>');
+        return;
+    }
+
+    let historyHTML = '';
+    purchaseHistory.forEach((purchase) => {
+        const status = purchase.status || 'unchecked';
+        historyHTML += `
+            <div class="order-item ${status}">
+                <div class="order-header">
+                    <div class="transaction-info">
+                        <h3>Transaction ID: ${purchase.transactionId}</h3>
+                        <p class="purchase-date">Date: ${new Date(purchase.purchaseDate).toLocaleString()}</p>
+                    </div>
+                    <div class="status-controls">
+                        <div class="status-buttons">
+                            <button class="status-btn accept-btn ${status === 'accepted' ? 'active' : ''}" 
+                                    onclick="updateStatus('${purchase.transactionId}', 'accepted')">
+                                Accept
+                            </button>
+                            <button class="status-btn decline-btn ${status === 'declined' ? 'active' : ''}" 
+                                    onclick="updateStatus('${purchase.transactionId}', 'declined')">
+                                Decline
+                            </button>
+                            <button class="status-btn unchecked-btn ${status === 'unchecked' ? 'active' : ''}" 
+                                    onclick="updateStatus('${purchase.transactionId}', 'unchecked')">
+                                Pending
+                            </button>
+                        </div>
+                        <div class="current-status">
+                            <span class="status-badge ${status}">${status.toUpperCase()}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-details">
+                    <div class="car-info">
+                        <h4>${purchase.item.name}</h4>
+                        <div class="specs">
+                            <p><strong>Year:</strong> ${purchase.item.year}</p>
+                            <p><strong>Color:</strong> ${purchase.item.color}</p>
+                            <p><strong>Engine:</strong> ${purchase.item.engine}</p>
+                            <p><strong>Mileage:</strong> ${purchase.item.mileage}</p>
+                            <p><strong>Price:</strong> $${purchase.item.price.toLocaleString()}</p>
+                        </div>
+                    </div>
+                    <div class="purchase-info">
+                        <h4>Purchase Details</h4>
+                        <p><strong>Insurance:</strong> ${purchase.insurance}</p>
+                        <p><strong>Warranty:</strong> ${purchase.warranty}</p>
+                        <p><strong>Payment Method:</strong> ${purchase.paymentMethod}</p>
+                    </div>
+                </div>
+                <div class="order-chat">
+                    <button class="chat-button" onclick="toggleOrderChat('${purchase.transactionId}')">
+                        💬 Chat about this order
+                    </button>
+                    <div id="chat-${purchase.transactionId}" class="order-chat-box">
+                        <div class="chat-header">
+                            <h3>Chat - Order ${purchase.transactionId}</h3>
+                            <button class="close-chat" onclick="toggleOrderChat('${purchase.transactionId}')">×</button>
+                        </div>
+                        <div class="chat-messages" id="messages-${purchase.transactionId}">
+                            <div class="message received">
+                                <p>How can we help you with this order?</p>
+                                <span class="timestamp">Just now</span>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="input-${purchase.transactionId}" 
+                                   placeholder="Type your message..."
+                                   onkeypress="if(event.key === 'Enter') sendOrderMessage('${purchase.transactionId}')">
+                            <button onclick="sendOrderMessage('${purchase.transactionId}')">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    historyContainer.html(historyHTML);
+}
+
+    // Single updateStatus function
     window.updateStatus = function(transactionId, newStatus) {
         let purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
-        
         purchaseHistory = purchaseHistory.map(purchase => {
             if (purchase.transactionId === transactionId) {
                 return { ...purchase, status: newStatus };
             }
             return purchase;
         });
-
         localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
         displayOrderManagement();
     };
 
-    // Call the display function when the page loads
+    // Initialize event handlers and display
+    $('.dropdown').hover(
+        function() { $(this).children('.dropdown-content').show(); },
+        function() { $(this).children('.dropdown-content').hide(); }
+    );
+
+    window.handleLogout = handleLogout;
+    checkLoginState();
     displayOrderManagement();
+});
 
-    // Add the status update function to the window object
-    window.updateStatus = function(transactionId, newStatus) {
-        let purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
-        
-        purchaseHistory = purchaseHistory.map(purchase => {
-            if (purchase.transactionId === transactionId) {
-                return { ...purchase, status: newStatus };
-            }
-            return purchase;
-        });
-
-        localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
-        displayOrderManagement();
-    };
-
-    displayOrderManagement();
-
-
-        localStorage.setItem('purchaseHistory', JSON.stringify(samplePurchaseHistory));
-        });
     </script>
 </head>
 <body>
@@ -184,7 +231,9 @@
     <div>
         <h1>Order Management</h1>
     </div> 
-    <div class="history-container"></div>
+    <div class="history-container">
+        
+    </div>
 
     <footer class="footer">
         <div class="footer-section">

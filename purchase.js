@@ -141,7 +141,7 @@ $(document).ready(function() {
                 <div class="verification-box">
                     <h3>Verification Code</h3>
                     <p>Please enter the verification code: <strong>${verificationCode}</strong></p>
-                    <input type="text" id="verification-input" placeholder="輸入4位數驗證碼">
+                    <input type="text" id="verification-input" placeholder="Verification code">
                     <div class="verification-buttons">
                         <button id="verify-button">Verify</button>
                         <button id="cancel-verification">Cancel</button>
@@ -267,6 +267,7 @@ $(document).ready(function() {
                     const purchaseData = {
                         transactionId,
                         purchaseDate,
+                        status: "pending",
                         item: {
                             ...currentCarPurchase,
                             color: color,
@@ -281,36 +282,51 @@ $(document).ready(function() {
                     localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
 
                     let receiptHtml = `
-                        <div class="receipt-overlay">
-                            <div class="receipt">
-                                <h2 class="receipt-title">Purchase Receipt</h2>
-                                <div class="receipt-section">
-                                    <p><strong>Transaction ID:</strong> ${transactionId}</p>
-                                    <p><strong>Purchase Date:</strong> ${purchaseDate}</p>
-                                </div>
-                                <div class="receipt-section">
-                                    <h3>Product Information</h3>
-                                    <p><strong>Product:</strong> Ms go </p>
-                                    <p><strong>Base Price:</strong> HK$20000 </p>
-                                    <p><strong>Color:</strong> ${color}</p>
-                                </div>
-                                <div class="receipt-section">
-                                    <h3>Insurance & Warranty</h3>
-                                    <p><strong>Insurance Company:</strong> ${insurance}</p>
-                                    <p><strong>Warranty:</strong> ${warranty}</p>
-                                </div>
-                                <div class="receipt-section">
-                                    <h3>Payment Details</h3>
-                                    <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-                                    <p><strong>Estimated Processing Time:</strong> 1-3 business days</p>
-                                </div>
-                                <button class="close-receipt-button">Close Receipt</button>
-                            </div>
-                        </div>
-                    `;
+    <div class="receipt-overlay">
+        <div class="receipt">
+            <h2 class="receipt-title">Purchase Receipt</h2>
+            <div class="receipt-section">
+                <p><strong>Transaction ID:</strong> ${transactionId}</p>
+                <p><strong>Purchase Date:</strong> ${purchaseDate}</p>
+                <p><strong>Status:</strong> <span class="status pending">Pending</span></p>
+            </div>
+            <div class="receipt-section">
+                <h3>Product Information</h3>
+                <p><strong>Product:</strong> Ms go </p>
+                <p><strong>Base Price:</strong> HK$20000 </p>
+                <p><strong>Color:</strong> ${color}</p>
+            </div>
+            <div class="receipt-section">
+                <h3>Insurance & Warranty</h3>
+                <p><strong>Insurance Company:</strong> ${insurance}</p>
+                <p><strong>Warranty:</strong> ${warranty}</p>
+            </div>
+            <div class="receipt-section">
+                <h3>Payment Details</h3>
+                <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                <p><strong>Estimated Processing Time:</strong> 1-3 business days</p>
+            </div>
+            <button class="close-receipt-button">Close Receipt</button>
+        </div>
+    </div>
+`;
         
         $("body").append(receiptHtml);
         
+        $("<style>")
+            .prop("type", "text/css")
+            .html(`
+                .status {
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    font-weight: bold;
+                }
+                .status.pending {
+                    background-color: #fff3cd;
+                    color: #856404;
+                }
+            `)
+            .appendTo("head");
         $(".receipt-overlay").css({
             "position": "fixed",
             "top": "0",
@@ -375,7 +391,7 @@ $(document).ready(function() {
     
         $(".close-receipt-button").click(function() {
             $(".receipt-overlay").remove();
-                window.location.href = 'history.html'; // Redirect to history page after closing receipt
+                window.location.href = 'history.html';
                 });
             }, 2000);
         } else {
