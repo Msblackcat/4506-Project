@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management - Legend Motor Company</title>
+    <link rel="stylesheet" href="managerprocess.css">
+    <link rel="stylesheet" href="common.css">
+    <script src="js/jquery-1.11.1.js"></script>    
+    <script>
+    $(document).ready(function() {
+    function checkLoginState() {
+        const username = localStorage.getItem('uName');
+        if(username) {
+            updateNavigation(username);
+        }
+    }
+
+    function updateNavigation(username) {
+        const loginRegisterLi = $('.dropdown:last');
+        if (username) {
+            loginRegisterLi.html(`
+                <a href="#" class="user-profile">${username} ▼</a>
+                <ul class="dropdown-content">
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="#" onclick="handleLogout(event)">Logout</a></li>
+                </ul>
+            `);
+        } else {
+            loginRegisterLi.html(`
+                <a id="login-register" href="login.html">Login/Register</a>
+                <ul class="dropdown-content">
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            `);
+        }
+    }
+
+    function handleLogout(event) {
+        event.preventDefault();
+        localStorage.removeItem('uName');
+        localStorage.removeItem('userType');
+        localStorage.removeItem('email');
+        localStorage.removeItem('permissions');
+        localStorage.removeItem('staffNumber');
+        localStorage.removeItem('username');
+        updateNavigation(null);
+        window.location.href = 'index.html';
+    }
+
+    // Sample purchase data
+    const samplePurchaseHistory = [
+        {
+            transactionId: "TRX" + Date.now(),
+            purchaseDate: new Date().toISOString(),
+            status: "unchecked",
+            item: {
+                name: "Ms go",
+                year: 2017,
+                mileage: 0,
+                engine: "6.5 Ms V12",
+                price: 20000,
+                color: "Black"
+            },
+            insurance: "Full Coverage",
+            warranty: "3 Years Extended",
+            paymentMethod: "Credit Card"
+        },
+        {
+            transactionId: "TRX" + (Date.now() - 86400000),
+            purchaseDate: new Date(Date.now() - 86400000).toISOString(),
+            status: "accepted",
+            item: {
+                name: "Ms safe",
+                year: 2018,
+                mileage: 50,
+                engine: "7.0 Ms V13",
+                price: 250000,
+                color: "Black"
+            },
+            insurance: "Premium Coverage",
+            warranty: "2 Years Standard",
+            paymentMethod: "Bank Transfer"
+        },
+        {
+            transactionId: "TRX" + (Date.now() - 172800000),
+            purchaseDate: new Date(Date.now() - 172800000).toISOString(),
+            status: "declined",
+            item: {
+                name: "Koala Gum",
+                year: 2017,
+                mileage: 100,
+                engine: "6.5 C18",
+                price: 300000,
+                color: "Gray"
+            },
+            insurance: "Basic Coverage",
+            warranty: "1 Year Standard",
+            paymentMethod: "FPS"
+        }
+    ];
+    localStorage.setItem('purchaseHistory', JSON.stringify(samplePurchaseHistory));
+
+    function displayOrderManagement() {
+    const historyContainer = $('.history-container');
+    const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
+
+    if (purchaseHistory.length === 0) {
+        historyContainer.html('<div class="no-history">No orders available</div>');
+        return;
+    }
+
+    let historyHTML = '';
+    purchaseHistory.forEach((purchase) => {
+        const status = purchase.status || 'unchecked';
+        historyHTML += `
+            <div class="order-item ${status}">
+                <div class="order-header">
+                    <div class="transaction-info">
+                        <h3>Transaction ID: ${purchase.transactionId}</h3>
+                        <p class="purchase-date">Date: ${new Date(purchase.purchaseDate).toLocaleString()}</p>
+                    </div>
+                    <div class="status-controls">
+                        <div class="status-buttons">
+                            <button class="status-btn accept-btn ${status === 'accepted' ? 'active' : ''}" 
+                                    onclick="updateStatus('${purchase.transactionId}', 'accepted')">
+                                Accept
+                            </button>
+                            <button class="status-btn decline-btn ${status === 'declined' ? 'active' : ''}" 
+                                    onclick="updateStatus('${purchase.transactionId}', 'declined')">
+                                Decline
+                            </button>
+                            <button class="status-btn unchecked-btn ${status === 'unchecked' ? 'active' : ''}" 
+                                    onclick="updateStatus('${purchase.transactionId}', 'unchecked')">
+                                Pending
+                            </button>
+                        </div>
+                        <div class="current-status">
+                            <span class="status-badge ${status}">${status.toUpperCase()}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-details">
+                    <div class="car-info">
+                        <h4>${purchase.item.name}</h4>
+                        <div class="specs">
+                            <p><strong>Year:</strong> ${purchase.item.year}</p>
+                            <p><strong>Color:</strong> ${purchase.item.color}</p>
+                            <p><strong>Engine:</strong> ${purchase.item.engine}</p>
+                            <p><strong>Mileage:</strong> ${purchase.item.mileage}</p>
+                            <p><strong>Price:</strong> $${purchase.item.price.toLocaleString()}</p>
+                        </div>
+                    </div>
+                    <div class="purchase-info">
+                        <h4>Purchase Details</h4>
+                        <p><strong>Insurance:</strong> ${purchase.insurance}</p>
+                        <p><strong>Warranty:</strong> ${purchase.warranty}</p>
+                        <p><strong>Payment Method:</strong> ${purchase.paymentMethod}</p>
+                    </div>
+                </div>
+                <div class="order-chat">
+                    <button class="chat-button" onclick="toggleOrderChat('${purchase.transactionId}')">
+                        💬 Chat about this order
+                    </button>
+                    <div id="chat-${purchase.transactionId}" class="order-chat-box">
+                        <div class="chat-header">
+                            <h3>Chat - Order ${purchase.transactionId}</h3>
+                            <button class="close-chat" onclick="toggleOrderChat('${purchase.transactionId}')">×</button>
+                        </div>
+                        <div class="chat-messages" id="messages-${purchase.transactionId}">
+                            <div class="message received">
+                                <p>How can we help you with this order?</p>
+                                <span class="timestamp">Just now</span>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="input-${purchase.transactionId}" 
+                                   placeholder="Type your message..."
+                                   onkeypress="if(event.key === 'Enter') sendOrderMessage('${purchase.transactionId}')">
+                            <button onclick="sendOrderMessage('${purchase.transactionId}')">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    historyContainer.html(historyHTML);
+}
+
+    window.updateStatus = function(transactionId, newStatus) {
+        let purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
+        purchaseHistory = purchaseHistory.map(purchase => {
+            if (purchase.transactionId === transactionId) {
+                return { ...purchase, status: newStatus };
+            }
+            return purchase;
+        });
+        localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
+        displayOrderManagement();
+    };
+
+    $('.dropdown').hover(
+        function() { $(this).children('.dropdown-content').show(); },
+        function() { $(this).children('.dropdown-content').hide(); }
+    );
+
+    window.handleLogout = handleLogout;
+    checkLoginState();
+    displayOrderManagement();
+});
+window.toggleOrderChat = function(orderId) {
+    const chatBox = document.getElementById(`chat-${orderId}`);
+    const allChatBoxes = document.querySelectorAll('.order-chat-box');
+    
+    allChatBoxes.forEach(box => {
+        if (box.id !== `chat-${orderId}`) {
+            box.style.display = 'none';
+        }
+    });
+
+    if (chatBox.style.display === 'none' || !chatBox.style.display) {
+        chatBox.style.display = 'flex';
+        loadOrderMessages(orderId);
+    } else {
+        chatBox.style.display = 'none';
+    }
+};
+
+window.loadOrderMessages = function(orderId) {
+    let orderMessages = JSON.parse(localStorage.getItem(`messages-${orderId}`)) || [];
+    
+    if (orderMessages.length === 0) {
+        orderMessages = [{
+            text: "Customer service messages will appear here.",
+            timestamp: new Date().toISOString(),
+            type: 'system'
+        }];
+        localStorage.setItem(`messages-${orderId}`, JSON.stringify(orderMessages));
+    }
+
+    displayMessages(orderId, orderMessages);
+};
+
+window.displayMessages = function(orderId, messages) {
+    const chatMessages = document.getElementById(`messages-${orderId}`);
+    let messagesHTML = '';
+
+    messages.forEach(msg => {
+        const time = new Date(msg.timestamp).toLocaleTimeString();
+        const messageClass = msg.type === 'system' ? 'system' : 'received';
+        
+        messagesHTML += `
+            <div class="message ${messageClass}">
+                <p>${msg.text}</p>
+                <span class="timestamp">${time}</span>
+            </div>
+        `;
+    });
+
+    chatMessages.innerHTML = messagesHTML;
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+};
+
+window.sendOrderMessage = function(orderId) {
+    const input = document.getElementById(`input-${orderId}`);
+    const message = input.value.trim();
+    
+    if (message) {
+        let orderMessages = JSON.parse(localStorage.getItem(`messages-${orderId}`)) || [];
+        
+        const newMessage = {
+            text: message,
+            timestamp: new Date().toISOString(),
+            type: 'received'
+        };
+        
+        orderMessages.push(newMessage);
+        
+        localStorage.setItem(`messages-${orderId}`, JSON.stringify(orderMessages));
+        
+        input.value = '';
+        displayMessages(orderId, orderMessages);
+    }
+};
+    </script>
+</head>
+<body>
+    <header class="header"></header>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a id="login-register" href="login.html"></a>
+                <ul class="dropdown-content">
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div>
+        <h1>Order Management</h1>
+    </div> 
+    <div class="history-container">
+        
+    </div>
+
+    <footer class="footer">
+        <div class="footer-section">
+            <h3>Contact us</h3>
+            <p>Telephone: +852 2180000</p>
+            <p>Email: Services@legendmotor.com</p>
+            <p>Address: No. 21 Yuen Wo Road,    Sha Tin, New Territories</p>
+        </div>
+        <div class="footer-section">
+            <h3>Business Hours</h3>
+            <p>Monday - Friday: 09:00-21:00</p>
+            <p>Weekend: 10:00-20:00</p>
+        </div>
+        <div class="footer-section">
+            <h3>Follow us</h3>
+            <p>Facebook</p>
+            <p>Instagram</p>
+            <p>LINE</p>
+        </div>
+    </footer>
+</body>
+</html>

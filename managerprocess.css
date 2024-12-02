@@ -1,0 +1,411 @@
+.main-content {
+    margin-top: 60px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.login-section {
+    background-color: #2a2a2a;
+    padding: 3rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #f0f0f0;
+    font-size: 1.5rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.form-group label {
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.75rem;
+    border: 1px solid #555;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    width: 100%;
+    background-color: #333;
+    color: #f0f0f0;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.login-btn, .register-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    background-color: grey;
+    color: white;
+    max-width: 200px;
+    width: 100%;
+}
+
+.login-btn:hover {
+    background-color: lightgray;
+}
+
+.trouble-link {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #ccc;
+    text-decoration: none;
+}
+
+.trouble-link:hover {
+    text-decoration: underline;
+}
+
+.or-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    color: #888;
+}
+
+.or-divider::before,
+.or-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #555;
+    margin: 0 10px;
+}
+
+.create-account {
+    padding: 12px 20px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #f0f0f0;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 600;
+}
+
+.create-account:hover {
+    background-color: #555;
+}
+
+.login-description {
+    color: #ccc;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 25px 0;
+    padding: 10px 15px;
+    background-color: #333;
+    border-left: 3px solid #007bff;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.login-description:hover {
+    background-color: #383838;
+    border-left-color: #0056b3;
+}
+
+.order-item {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 20px auto; 
+    padding: 20px;
+    max-width: 900px; 
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.transaction-info h3 {
+    margin: 0;
+    color: #333;
+}
+
+.purchase-date {
+    color: #666;
+    margin: 0px;
+}
+
+.status-controls {
+    text-align: right;
+    align-items: center;
+    gap: 20px;
+}
+
+.status-buttons {
+    margin: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.status-btn {
+    padding: 8px 15px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.accept-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.decline-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.unchecked-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.status-btn.active {
+    opacity: 1;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor;
+}
+
+.status-btn:not(.active) {
+    opacity: 0.7;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.status-badge.accepted {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.declined {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.unchecked {
+    background-color: #e9ecef;
+    color: #383d41;
+}
+
+.order-details {
+    display: flex;
+    gap: 40px;
+}
+
+.car-info, .purchase-info {
+    flex: 1;
+}
+
+.car-info h4, .purchase-info h4 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.specs p, .purchase-info p {
+    margin: 8px 0;
+    color: #666;
+}
+
+.no-history {
+    text-align: center;
+    padding: 40px;
+    color: #383d41;
+    background-color: #e9ecef;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.order-chat {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.chat-button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.chat-button:hover {
+    background-color: #0056b3;
+}
+
+.order-chat-box {
+    display: none;
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.chat-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px 10px 0 0;
+}
+
+.chat-header h3 {
+    margin: 0;
+    font-size: 14px;
+}
+
+.close-chat {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+}
+
+.message {
+    margin-bottom: 10px;
+    max-width: 80%;
+    clear: both;
+}
+
+.message p {
+    margin: 0;
+    padding: 8px 12px;
+    border-radius: 15px;
+    word-wrap: break-word;
+}
+
+.message .timestamp {
+    font-size: 11px;
+    color: #666;
+    margin-top: 3px;
+    display: block;
+}
+
+.received {
+    float: left;
+}
+
+.received p {
+    background-color: white;
+    border: 1px solid #e9ecef;
+}
+
+.sent {
+    float: right;
+}
+
+.sent p {
+    background-color: #007bff;
+    color: white;
+}
+
+.chat-input {
+    padding: 10px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+}
+
+.chat-input input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+}
+
+.chat-input button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.chat-input button:hover {
+    background-color: #0056b3;
+}
+}
