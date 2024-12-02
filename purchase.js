@@ -248,7 +248,7 @@ $(document).ready(function() {
                     "margin": "20px auto"
                 });
     
-                // Add spinning animation
+
                 $("<style>")
                     .prop("type", "text/css")
                     .html(`
@@ -375,7 +375,7 @@ $(document).ready(function() {
     
         $(".close-receipt-button").click(function() {
             $(".receipt-overlay").remove();
-                window.location.href = 'history.html'; // Redirect to history page after closing receipt
+                window.location.href = 'history.html';
                 });
             }, 2000);
         } else {

@@ -1,10 +1,10 @@
 $(document).ready(function () {
 
     $("#add-quote-btn").on("click", function () {
-        $("#quote-form-section").show(); // 顯示表單
+        $("#quote-form-section").show(); 
     });
 
-    // 提交報價
+
     $("#submit-quote-btn").on("click", function () {
         const customerName = $("#customer-name").val();
         const licensePlate = $("#license-plate").val();
@@ -12,21 +12,20 @@ $(document).ready(function () {
         const estimatedValue = parseFloat($("#estimated-value").val());
         const insurancePlan = $("#insurance-plan").val();
 
-        // 校驗輸入
+
         if (!customerName || !licensePlate || !carModel || isNaN(estimatedValue) || !insurancePlan) {
             alert("Please fill in all fields!");
             return;
         }
 
-        // 計算報價金額
+
         let quoteAmount = 0;
         if (insurancePlan === "comprehensive") {
-            quoteAmount = estimatedValue * 0.05; // 5% for comprehensive insurance
-        } else {
-            quoteAmount = estimatedValue * 0.03; // 3% for third-party insurance
+            quoteAmount = estimatedValue * 0.05; 
+            quoteAmount = estimatedValue * 0.03; 
         }
 
-        // 將表單數據添加到 autoQuotes
+
         const newQuote = {
              id: "A004",
             customer: customerName,
@@ -34,31 +33,29 @@ $(document).ready(function () {
             model: carModel,
             estimatedValue: `$${estimatedValue.toLocaleString()}`,
             insurancePlan: insurancePlan,
-            expiryDate: "2024-12-31", // 設定到期日期
+            expiryDate: "2024-12-31",
             status: "Pending"
         };
 
-        // 將新報價加入 autoQuotes 陣列
         autoQuotes.push(newQuote);
 
-        // 清空表單
+
         $("#customer-name").val("");
         $("#license-plate").val("");
         $("#car-model").val("");
         $("#estimated-value").val("");
         $("#insurance-plan").val("comprehensive");
 
-        // 隱藏表單
+
         $("#quote-form-section").hide();
 
-        // 重新渲染所有報價卡片
+
         renderQuotes();
     });
 
-    // 取消表單並隱藏
+
     $("#cancel-btn").on("click", function () {
-        $("#quote-form-section").hide(); // 隱藏表單
-        // 清空輸入欄位
+        $("#quote-form-section").hide();
         $("#customer-name").val("");
         $("#license-plate").val("");
         $("#car-model").val("");
