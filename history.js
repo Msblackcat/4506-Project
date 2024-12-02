@@ -1,25 +1,26 @@
 $(document).ready(function() {
     checkLoginState();
-    
-    // Initialize sample data if no history exists
+    initializeHistory();
+});
+
+function initializeHistory() {
     if (!localStorage.getItem('purchaseHistory')) {
         const samplePurchaseHistory = [{
             transactionId: "TX123456",
             purchaseDate: new Date().toISOString(),
             insurance: "Full Coverage",
-            warranty: "3 Years Extended",
+            warranty: "2 Years",
             paymentMethod: "Credit Card",
             status: "pending",
             item: {
-                name: "BMW M3",
-                year: 2023,
+                name: "Ms Go",
+                year: 2024,
                 mileage: 0,
                 engine: "3.0L Twin-Turbo",
-                price: 75000,
-                color: "Alpine White"
+                price: 20000,
+                color: "White"
             }
         }];
-        
         localStorage.setItem('purchaseHistory', JSON.stringify(samplePurchaseHistory));
     }
 
@@ -29,7 +30,7 @@ $(document).ready(function() {
     } else {
         displayPurchaseHistory();
     }
-});
+}
 
 function checkLoginState() {
     const username = localStorage.getItem('uName');
@@ -61,7 +62,6 @@ function displayPurchaseHistory() {
 
     let historyHTML = '';
     purchaseHistory.forEach((purchase) => {
-        // Generate status HTML based on user type
         let statusHTML = '';
         if (userType === 'Vehicle Salesperson' || userType === 'Insurance Salesperson') {
             statusHTML = `
@@ -78,20 +78,29 @@ function displayPurchaseHistory() {
             <div class="history-item">
                 <div class="transaction-id">Transaction ID: ${purchase.transactionId}</div>
                 <div class="purchase-date">Purchase Date: ${new Date(purchase.purchaseDate).toLocaleString()}</div>
-                <div class="car-details">
-                    <h3>${purchase.item.name}</h3>
-                    <p>Year: ${purchase.item.year}</p>
-                    <p>Color: ${purchase.item.color}</p>
-                    <p>Engine: ${purchase.item.engine}</p>
-                    <p>Mileage: ${purchase.item.mileage}</p>
-                    <p>Price: $${purchase.item.price.toLocaleString()}</p>
-                    <p>Insurance: ${purchase.insurance}</p>
-                    <p>Warranty: ${purchase.warranty}</p>
-                    <p>Payment Method: ${purchase.paymentMethod}</p>
-                    <div class="status-container">
-                        <span class="status-heading">Status: </span>
-                        ${statusHTML}
-                    </div>
+                <div class="processing-time">
+                    <strong>Estimated Processing Time:</strong> 
+                    <span class="highlight">1-3 business days</span>
+                </div>
+                <div class="history-section">
+                    <h3>Product Information</h3>
+                    <p><strong>Model:</strong> ${purchase.item.name}</p>
+                    <p><strong>Color:</strong> ${purchase.item.color}</p>
+                    <p><strong>Engine:</strong> ${purchase.item.engine}</p>
+                    <p><strong>Price:</strong> $${purchase.item.price.toLocaleString()}</p>
+                </div>
+                <div class="history-section">
+                    <h3>Insurance & Warranty</h3>
+                    <p><strong>Insurance:</strong> ${purchase.insurance}</p>
+                    <p><strong>Warranty:</strong> ${purchase.warranty}</p>
+                </div>
+                <div class="history-section">
+                    <h3>Payment Information</h3>
+                    <p><strong>Payment Method:</strong> ${purchase.paymentMethod}</p>
+                </div>
+                <div class="status-container">
+                    <span class="status-heading">Status: </span>
+                    ${statusHTML}
                 </div>
             </div>
         `;
@@ -102,14 +111,12 @@ function displayPurchaseHistory() {
 
 function updateStatus(transactionId, newStatus) {
     let purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
-    
     purchaseHistory = purchaseHistory.map(purchase => {
         if (purchase.transactionId === transactionId) {
             return { ...purchase, status: newStatus };
         }
         return purchase;
     });
-
     localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
     displayPurchaseHistory();
 }
@@ -122,5 +129,6 @@ function handleLogout(event) {
     localStorage.removeItem('permissions');
     localStorage.removeItem('staffNumber');
     localStorage.removeItem('wishlist');
+    localStorage.removeItem('phone');
     window.location.href = 'index.html';
 }

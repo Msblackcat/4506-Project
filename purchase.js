@@ -117,9 +117,7 @@ $(document).ready(function() {
         const insurance = $("#insurance-company").val();
         const warranty = $(".option-button[data-warranty].selected").text();
         const paymentMethod = $(".option-button[data-payment].selected").text();
-        const transactionId = 'TRX' + Date.now();
-        const purchaseDate = new Date().toISOString();
-    
+        
         if (!color || !insurance || !warranty || !paymentMethod) {
             alert("Please complete all fields before confirming your purchase.");
             return;
@@ -136,50 +134,180 @@ $(document).ready(function() {
             }
         }
     
-        const purchaseData = {
-            transactionId,
-            purchaseDate,
-            item: {
-                ...currentCarPurchase,
-                color: color,
-            },
-            insurance: insurance,
-            warranty: warranty,
-            paymentMethod: paymentMethod,
-        };
-    
-        let purchaseHistory = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
-        purchaseHistory.push(purchaseData);
-        localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
-    
-        let receiptHtml = `
-            <div class="receipt-overlay">
-                <div class="receipt">
-                    <h2 class="receipt-title">Purchase Receipt</h2>
-                    <div class="receipt-section">
-                        <p><strong>Transaction ID:</strong> ${transactionId}</p>
-                        <p><strong>Purchase Date:</strong> ${purchaseDate}</p>
+        const verificationCode = Math.floor(1000 + Math.random() * 9000);
+        
+        const verificationHtml = `
+            <div class="verification-overlay">
+                <div class="verification-box">
+                    <h3>Verification Code</h3>
+                    <p>Please enter the verification code: <strong>${verificationCode}</strong></p>
+                    <input type="text" id="verification-input" placeholder="輸入4位數驗證碼">
+                    <div class="verification-buttons">
+                        <button id="verify-button">Verify</button>
+                        <button id="cancel-verification">Cancel</button>
                     </div>
-                    <div class="receipt-section">
-                        <h3>Product Information</h3>
-                        <p><strong>Product:</strong> Ms go </p>
-                        <p><strong>Base Price:</strong> HK$20000 </p>
-                        <p><strong>Color:</strong> ${color}</p>
-                    </div>
-                    <div class="receipt-section">
-                        <h3>Insurance & Warranty</h3>
-                        <p><strong>Insurance Company:</strong> ${insurance}</p>
-                        <p><strong>Warranty:</strong> ${warranty}</p>
-                    </div>
-                    <div class="receipt-section">
-                        <h3>Payment Details</h3>
-                        <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-                        <p><strong>Estimated Processing Time:</strong> 1-3 business days</p>
-                    </div>
-                    <button class="close-receipt-button">Close Receipt</button>
                 </div>
             </div>
         `;
+    
+        $("body").append(verificationHtml);
+    
+        $(".verification-overlay").css({
+            "position": "fixed",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "100%",
+            "background-color": "rgba(0, 0, 0, 0.5)",
+            "display": "flex",
+            "justify-content": "center",
+            "align-items": "center",
+            "z-index": "1000"
+        });
+    
+        $(".verification-box").css({
+            "background-color": "#ffffff",
+            "padding": "20px",
+            "border-radius": "10px",
+            "box-shadow": "0 4px 10px rgba(0, 0, 0, 0.2)",
+            "text-align": "center",
+            "width": "300px"
+        });
+    
+        $("#verification-input").css({
+            "width": "150px",
+            "padding": "8px",
+            "margin": "15px 0",
+            "text-align": "center",
+            "font-size": "18px"
+        });
+    
+        $(".verification-buttons button").css({
+            "margin": "5px",
+            "padding": "8px 20px",
+            "border": "none",
+            "border-radius": "5px",
+            "cursor": "pointer"
+        });
+    
+        $("#verify-button").css({
+            "background-color": "#007bff",
+            "color": "white"
+        });
+    
+        $("#cancel-verification").css({
+            "background-color": "#dc3545",
+            "color": "white"
+        });
+    
+        $("#verify-button").click(function() {
+            const inputCode = $("#verification-input").val();
+            if (inputCode == verificationCode) {
+                $(".verification-overlay").remove();
+                
+                const processingHtml = `
+                    <div class="processing-overlay">
+                        <div class="processing-box">
+                            <h3>Processing Your Purchase</h3>
+                            <p>Please wait while we process your transaction...</p>
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                `;
+    
+                $("body").append(processingHtml);
+    
+                $(".processing-overlay").css({
+                    "position": "fixed",
+                    "top": "0",
+                    "left": "0",
+                    "width": "100%",
+                    "height": "100%",
+                    "background-color": "rgba(0, 0, 0, 0.5)",
+                    "display": "flex",
+                    "justify-content": "center",
+                    "align-items": "center",
+                    "z-index": "1000"
+                });
+    
+                $(".processing-box").css({
+                    "background-color": "#ffffff",
+                    "padding": "20px",
+                    "border-radius": "10px",
+                    "text-align": "center",
+                    "box-shadow": "0 4px 10px rgba(0, 0, 0, 0.2)"
+                });
+    
+                $(".spinner").css({
+                    "border": "4px solid #f3f3f3",
+                    "border-top": "4px solid #007bff",
+                    "border-radius": "50%",
+                    "width": "40px",
+                    "height": "40px",
+                    "animation": "spin 1s linear infinite",
+                    "margin": "20px auto"
+                });
+    
+                // Add spinning animation
+                $("<style>")
+                    .prop("type", "text/css")
+                    .html(`
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    `)
+                    .appendTo("head");
+    
+                setTimeout(function() {
+                    $(".processing-overlay").remove();
+                    
+                    const transactionId = 'TRX' + Date.now();
+                    const purchaseDate = new Date().toISOString();
+                    const purchaseData = {
+                        transactionId,
+                        purchaseDate,
+                        item: {
+                            ...currentCarPurchase,
+                            color: color,
+                        },
+                        insurance: insurance,
+                        warranty: warranty,
+                        paymentMethod: paymentMethod,
+                    };
+    
+                    let purchaseHistory = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
+                    purchaseHistory.push(purchaseData);
+                    localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
+
+                    let receiptHtml = `
+                        <div class="receipt-overlay">
+                            <div class="receipt">
+                                <h2 class="receipt-title">Purchase Receipt</h2>
+                                <div class="receipt-section">
+                                    <p><strong>Transaction ID:</strong> ${transactionId}</p>
+                                    <p><strong>Purchase Date:</strong> ${purchaseDate}</p>
+                                </div>
+                                <div class="receipt-section">
+                                    <h3>Product Information</h3>
+                                    <p><strong>Product:</strong> Ms go </p>
+                                    <p><strong>Base Price:</strong> HK$20000 </p>
+                                    <p><strong>Color:</strong> ${color}</p>
+                                </div>
+                                <div class="receipt-section">
+                                    <h3>Insurance & Warranty</h3>
+                                    <p><strong>Insurance Company:</strong> ${insurance}</p>
+                                    <p><strong>Warranty:</strong> ${warranty}</p>
+                                </div>
+                                <div class="receipt-section">
+                                    <h3>Payment Details</h3>
+                                    <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                                    <p><strong>Estimated Processing Time:</strong> 1-3 business days</p>
+                                </div>
+                                <button class="close-receipt-button">Close Receipt</button>
+                            </div>
+                        </div>
+                    `;
         
         $("body").append(receiptHtml);
         
@@ -247,6 +375,16 @@ $(document).ready(function() {
     
         $(".close-receipt-button").click(function() {
             $(".receipt-overlay").remove();
+                window.location.href = 'history.html'; // Redirect to history page after closing receipt
+                });
+            }, 2000);
+        } else {
+            alert("");
+            }
+        });
+
+            $("#cancel-verification").click(function() {
+            $(".verification-overlay").remove();
         });
     });
 });
