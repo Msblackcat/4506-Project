@@ -15,7 +15,6 @@
     <nav class="navbar">
         <ul class="nav-links">
             <li><a href="insurance_staff_home.html">Home</a></li>
-            <li><a href="manage_quotes.html">Insurance Dashboard</a></li>
             <li class="dropdown">
                 <a id="login-register" href="login.html">Login/Register</a>
                 <ul class="dropdown-content"></ul>
@@ -63,6 +62,21 @@
                 <p id="revenue">$25,000</p>
             </div>
         </section>
+
+
+        <div id="chat-box">
+            <div id="chat-header">
+                <h3 id="chat-title">John Doe</h3>  <!-- 用戶名稱顯示 -->
+                <button id="minimize-chat">-</button>  <!-- 最小化/放大按鈕 -->
+            </div>
+            <div id="chat-window">
+                <div id="messages" class="messages">
+                    <!-- 聊天消息會顯示在這裡 -->
+                </div>
+            </div>
+            <textarea id="message-input" placeholder="Enter your message..." rows="3"></textarea>
+            <button id="send-message">Send</button>
+        </div>
     </main>
 
 </body>
