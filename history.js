@@ -37,9 +37,58 @@ function loadPurchaseHistory() {
     addStatusStyles();
     
     let historyHTML = '';
+<<<<<<< HEAD
     purchaseHistory.forEach((purchase) => {
         historyHTML += generatePurchaseHistoryItem(purchase, userType);
     });
+=======
+    for (let i = 0; i < purchaseHistory.length; i++) {
+        const purchase = purchaseHistory[i];
+        let statusHTML = '';
+        
+        if (userType === 'Vehicle Salesperson' || userType === 'Insurance Salesperson') {
+            statusHTML = `
+                <select onchange="updateStatus('${purchase.transactionId}', this.value)">
+                    <option value="pending" ${purchase.status === 'pending' ? 'selected' : ''}>Pending</option>
+                    <option value="processing" ${purchase.status === 'processing' ? 'selected' : ''}>Processing</option>
+                    <option value="completed" ${purchase.status === 'completed' ? 'selected' : ''}>Completed</option>
+                </select>`;
+        } else {
+            statusHTML = `<span class="status ${purchase.status || 'pending'}">${purchase.status || 'Pending'}</span>`;
+        }
+    
+        historyHTML += `
+            <div class="history-item">
+                <div class="transaction-id">Transaction ID: ${purchase.transactionId}</div>
+                <div class="purchase-date">Purchase Date: ${new Date(purchase.purchaseDate).toLocaleString()}</div>
+                <div class="processing-time">
+                    <strong>Estimated Processing Time:</strong> 
+                    <span class="highlight">1-3 business days</span>
+                </div>
+                <div class="history-section">
+                    <h3>Product Information</h3>
+                    <p><strong>Model:</strong> ${purchase.item.name}</p>
+                    <p><strong>Color:</strong> ${purchase.item.color}</p>
+                    <p><strong>Engine:</strong> ${purchase.item.engine}</p>
+                    <p><strong>Price:</strong> $${purchase.item.price.toLocaleString()}</p>
+                </div>
+                <div class="history-section">
+                    <h3>Insurance & Warranty</h3>
+                    <p><strong>Insurance:</strong> ${purchase.insurance}</p>
+                    <p><strong>Warranty:</strong> ${purchase.warranty}</p>
+                </div>
+                <div class="history-section">
+                    <h3>Payment Information</h3>
+                    <p><strong>Payment Method:</strong> ${purchase.paymentMethod}</p>
+                </div>
+                <div class="status-container">
+                    <span class="status-heading">Status: </span>
+                    ${statusHTML}
+                </div>
+            </div>
+        `;
+    }
+>>>>>>> b7de2e6e68c1ebdeced7f7da57f9093d3d258483
 
     historyContainer.html(historyHTML);
 }

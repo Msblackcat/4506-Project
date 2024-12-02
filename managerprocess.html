@@ -189,7 +189,6 @@
     historyContainer.html(historyHTML);
 }
 
-    // Single updateStatus function
     window.updateStatus = function(transactionId, newStatus) {
         let purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
         purchaseHistory = purchaseHistory.map(purchase => {
@@ -202,7 +201,6 @@
         displayOrderManagement();
     };
 
-    // Initialize event handlers and display
     $('.dropdown').hover(
         function() { $(this).children('.dropdown-content').show(); },
         function() { $(this).children('.dropdown-content').hide(); }
@@ -212,7 +210,80 @@
     checkLoginState();
     displayOrderManagement();
 });
+window.toggleOrderChat = function(orderId) {
+    const chatBox = document.getElementById(`chat-${orderId}`);
+    const allChatBoxes = document.querySelectorAll('.order-chat-box');
+    
+    allChatBoxes.forEach(box => {
+        if (box.id !== `chat-${orderId}`) {
+            box.style.display = 'none';
+        }
+    });
 
+    if (chatBox.style.display === 'none' || !chatBox.style.display) {
+        chatBox.style.display = 'flex';
+        loadOrderMessages(orderId);
+    } else {
+        chatBox.style.display = 'none';
+    }
+};
+
+window.loadOrderMessages = function(orderId) {
+    let orderMessages = JSON.parse(localStorage.getItem(`messages-${orderId}`)) || [];
+    
+    if (orderMessages.length === 0) {
+        orderMessages = [{
+            text: "Customer service messages will appear here.",
+            timestamp: new Date().toISOString(),
+            type: 'system'
+        }];
+        localStorage.setItem(`messages-${orderId}`, JSON.stringify(orderMessages));
+    }
+
+    displayMessages(orderId, orderMessages);
+};
+
+window.displayMessages = function(orderId, messages) {
+    const chatMessages = document.getElementById(`messages-${orderId}`);
+    let messagesHTML = '';
+
+    messages.forEach(msg => {
+        const time = new Date(msg.timestamp).toLocaleTimeString();
+        const messageClass = msg.type === 'system' ? 'system' : 'received';
+        
+        messagesHTML += `
+            <div class="message ${messageClass}">
+                <p>${msg.text}</p>
+                <span class="timestamp">${time}</span>
+            </div>
+        `;
+    });
+
+    chatMessages.innerHTML = messagesHTML;
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+};
+
+window.sendOrderMessage = function(orderId) {
+    const input = document.getElementById(`input-${orderId}`);
+    const message = input.value.trim();
+    
+    if (message) {
+        let orderMessages = JSON.parse(localStorage.getItem(`messages-${orderId}`)) || [];
+        
+        const newMessage = {
+            text: message,
+            timestamp: new Date().toISOString(),
+            type: 'received'
+        };
+        
+        orderMessages.push(newMessage);
+        
+        localStorage.setItem(`messages-${orderId}`, JSON.stringify(orderMessages));
+        
+        input.value = '';
+        displayMessages(orderId, orderMessages);
+    }
+};
     </script>
 </head>
 <body>

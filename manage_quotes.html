@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Quotes</title>
+    <title>Manage Auto Insurance Quotes</title>
     <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="manage_quotes.css">
     <script src="js/jquery-1.11.1.js"></script>
@@ -15,7 +15,6 @@
     <nav class="navbar">
         <ul class="nav-links">
             <li><a href="insurance_staff_home.html">Home</a></li>
-            <li><a href="insurance_staff.html">Manage Quotes</a></li>
             <li class="dropdown">
                 <a id="login-register" href="login.html">Login/Register</a>
                 <ul class="dropdown-content"></ul>
@@ -26,7 +25,7 @@
     <main class="main-content">
         <!-- Search and Filter Section -->
         <section class="search-filter">
-            <input type="text" id="search-box" placeholder="Search by Customer Name or Quote ID" />
+            <input type="text" id="search-box" placeholder="Search by Customer Name or License Plate" />
             <select id="filter-status">
                 <option value="all">All Statuses</option>
                 <option value="pending">Pending</option>
@@ -36,23 +35,52 @@
             <button id="search-button" class="btn">Search</button>
         </section>
 
+        <button id="add-quote-btn" class="add-btn">Add New Quote</button>
+
+        <div id="quote-form-section" style="display: none;">
+            <h2>Fill in Quote Form</h2>
+            <label for="customer-name">Customer Name:</label>
+            <input type="text" id="customer-name" name="customer-name" required>
+
+            <label for="license-plate">License Plate:</label>
+            <input type="text" id="license-plate" name="license-plate" required>
+
+            <label for="car-model">Car Model:</label>
+            <input type="text" id="car-model" name="car-model" required>
+
+            <label for="estimated-value">Estimated Value:</label>
+            <input type="number" id="estimated-value" name="estimated-value" required>
+
+            <label for="insurance-plan">Insurance Plan:</label>
+            <select id="insurance-plan" name="insurance-plan" required>
+                <option value="comprehensive">Comprehensive</option>
+                <option value="third-party">Third-Party</option>
+            </select>
+
+            <button type="button" id="submit-quote-btn">Submit Quote</button>
+            <button type="button" id="cancel-btn">Cancel</button>
+        </div>
         <!-- Quotes Section -->
         <section class="quotes-container">
-            <!-- Cards will be dynamically generated here -->
+            <!-- 卡片將動態生成 -->
         </section>
+
+        <div id="chat-box">
+            <div id="chat-header">
+                <h3 id="chat-title">John Doe</h3>  <!-- 用戶名稱顯示 -->
+                <button id="minimize-chat">-</button>  <!-- 最小化/放大按鈕 -->
+            </div>
+            <div id="chat-window">
+                <div id="messages" class="messages">
+                    <!-- 聊天消息會顯示在這裡 -->
+                </div>
+            </div>
+            <textarea id="message-input" placeholder="Enter your message..." rows="3"></textarea>
+            <button id="send-message">Send</button>
+        </div>
+        
     </main>
 
-    <footer class="footer">
-        <div class="footer-section">
-            <h3>Contact us</h3>
-            <p>Telephone: +852 2180000</p>
-            <p>Email: Services@legendmotor.com</p>
-        </div>
-        <div class="footer-section">
-            <h3>Business Hours</h3>
-            <p>Monday - Friday: 09:00-21:00</p>
-            <p>Weekend: 10:00-20:00</p>
-        </div>
-    </footer>
 </body>
+<footer></footer>
 </html>

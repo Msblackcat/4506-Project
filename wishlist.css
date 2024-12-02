@@ -121,7 +121,7 @@
     transform: scale(1);
 }
 
-/* Your existing content container styles */
+
 .photo {
     flex: 1;
     max-width: 600px;
@@ -309,7 +309,7 @@
     }
 }
 
-/* General button styles */
+
 .action-btn {
     position: relative;
     padding: 12px 28px;
@@ -329,7 +329,7 @@
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Primary button (Contact Seller) */
+
 .contact-btn {
     background: linear-gradient(135deg, #2B4C7E, #1a3b6d);
     color: white;
@@ -350,7 +350,7 @@
     font-size: 18px;
 }
 
-/* Remove button */
+
 .remove-btn {
     background: white;
     color: #e74c3c;
@@ -385,7 +385,7 @@
     transform: translateY(0);
 }
 
-/* Add to Wishlist button */
+
 .wishlist-btn {
     background: white;
     color: #ff4b4b;
@@ -414,7 +414,7 @@
     color: white;
 }
 
-/* Loading state */
+
 .action-btn.loading {
     position: relative;
     pointer-events: none;
@@ -437,7 +437,7 @@
     }
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
     .action-btn {
         width: 100%;

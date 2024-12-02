@@ -248,7 +248,7 @@ $(document).ready(function() {
                     "margin": "20px auto"
                 });
     
-                // Add spinning animation
+
                 $("<style>")
                     .prop("type", "text/css")
                     .html(`

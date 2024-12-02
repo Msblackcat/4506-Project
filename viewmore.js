@@ -242,16 +242,16 @@ function handleLogout(event) {
             const title = card.find('h3').text().toLowerCase();
             const price = parseInt(card.find('.price').text().replace(/[^0-9]/g, ''));
     
-            // Check if the title matches the selected brand
+           
             const matchesBrand = selectedBrand === 'All' || 
                 (selectedBrand === 'Ms' && title.includes('ms')) ||
                 (selectedBrand === 'Koala' && title.includes('koala')) ||
                 (selectedBrand === 'McQueen' && title.includes('mcqueen'));
     
-            // Check if price is within selected range
+          
             const matchesPrice = checkPriceRange(price, selectedPriceRange);
     
-            // Check if title matches search input
+       
             const matchesSearch = searchValue === '' || title.includes(searchValue);
     
             card.toggle(matchesSearch && matchesBrand && matchesPrice);
