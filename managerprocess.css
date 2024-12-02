@@ -64,7 +64,6 @@
     box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
 }
 
-/* Button Styles */
 .button-group {
     display: flex;
     justify-content: center;
@@ -91,7 +90,6 @@
     background-color: lightgray;
 }
 
-/* Additional Elements Styles */
 .trouble-link {
     margin-bottom: 20px;
     font-size: 14px;
@@ -157,10 +155,9 @@
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin: 20px auto;  /* Centers each item and adds vertical spacing */
+    margin: 20px auto; 
     padding: 20px;
-    max-width: 900px;   /* Adjust this value based on your preference */
-}
+    max-width: 900px; 
 
 .order-header {
     display: flex;
